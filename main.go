@@ -1,10 +1,13 @@
 package main
 
 import (
+	"bestHabit/component"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 
+	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
@@ -25,8 +28,20 @@ func ConnectToDB(dns string) *sqlx.DB {
 	return db
 }
 
-func runServer() {
-	fmt.Print("cc")
+func runServer(db *sqlx.DB, secretKey string) {
+
+	appCtx := component.NewAppContext(db, secretKey)
+	fmt.Print(appCtx)
+
+	router := gin.Default()
+
+	router.GET("/ping", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{
+			"message": "Ping OK!",
+		})
+	})
+
+	router.Run(":8080")
 }
 
 func main() {
@@ -36,7 +51,8 @@ func main() {
 	}
 
 	dns := os.Getenv("DB_CONNECTION_STR")
+	secretKet := os.Getenv("SECRET_KEY")
 
 	db := ConnectToDB(dns)
-	fmt.Println(db)
+	runServer(db, secretKet)
 }
