@@ -2,6 +2,7 @@ package main
 
 import (
 	"bestHabit/component"
+	"bestHabit/middleware"
 	"fmt"
 	"log"
 	"net/http"
@@ -34,6 +35,8 @@ func runServer(db *sqlx.DB, secretKey string) {
 	fmt.Print(appCtx)
 
 	router := gin.Default()
+
+	router.Use(middleware.Recover(appCtx))
 
 	router.GET("/ping", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{

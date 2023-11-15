@@ -5,28 +5,27 @@ USE besthabit;
 -- Bảng User
 DROP TABLE IF EXISTS users;
 
-CREATE TABLE users (
-    `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `email` VARCHAR(255) NOT NULL,
-    `phone` VARCHAR(20) NOT NULL,
-    `password` VARCHAR(255) NOT NULL,
-    `name` VARCHAR(100) NOT NULL,
-    `fb_id` VARCHAR(255),
-    `gg_id` VARCHAR(255),
-    `salt` VARCHAR(255),
-    `avatar` json,
-    `level` INT DEFAULT 1,
-    `experience` INT DEFAULT 0,
-    `settings` json,
+CREATE TABLE `users` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+    `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+    `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+    `name` varchar(100) NOT NULL,
+    `fb_id` varchar(255) DEFAULT NULL,
+    `gg_id` varchar(255) DEFAULT NULL,
+    `salt` varchar(255) DEFAULT NULL,
+    `avatar` json DEFAULT NULL,
+    `level` int DEFAULT '1',
+    `experience` int DEFAULT '0',
+    `settings` json DEFAULT NULL,
     `role` enum('user', 'admin') DEFAULT 'user',
-    `habit_count` INT DEFAULT 0,
-    `task_count` INT DEFAULT 0,
-    `challenge_count` INT DEFAULT 0,
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
--- Bảng Habits
+    `habit_count` int DEFAULT '0',
+    `task_count` int DEFAULT '0',
+    `challenge_count` int DEFAULT '0',
+    `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng Habits
 DROP TABLE IF EXISTS habits;
 
 CREATE TABLE habits (
