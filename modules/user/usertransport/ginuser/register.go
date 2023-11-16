@@ -30,6 +30,6 @@ func BasicRegister(appCtx component.AppContext) gin.HandlerFunc {
 
 		data.Mask(false)
 
-		c.JSON(http.StatusOK, common.SimpleSuccessResponse(data))
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse(data.FakeID.String()))
 	}
 }

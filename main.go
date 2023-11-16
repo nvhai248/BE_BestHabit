@@ -48,6 +48,7 @@ func runServer(db *sqlx.DB, secretKey string) {
 	log_and_register := router.Group("/")
 	{
 		log_and_register.POST("/register", ginuser.BasicRegister(appCtx))
+		log_and_register.POST("/login", ginuser.BasicLogin(appCtx))
 	}
 
 	router.Run(":8080")
