@@ -6,3 +6,11 @@ const (
 	DbTypeTask      = 3
 	DbTypeChallenge = 4
 )
+
+const CurrentUser = "user"
+
+type Requester interface {
+	GetId() int
+	GetEmail() string
+	GetRole() string
+}

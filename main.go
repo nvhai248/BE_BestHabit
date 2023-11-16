@@ -51,6 +51,11 @@ func runServer(db *sqlx.DB, secretKey string) {
 		log_and_register.POST("/login", ginuser.BasicLogin(appCtx))
 	}
 
+	user := router.Group("/user", middleware.RequireAuth(appCtx))
+	{
+		user.GET("/profile", ginuser.GetProfile(appCtx))
+	}
+
 	router.Run(":8080")
 }
 

@@ -27,3 +27,19 @@ type UserFind struct {
 func (UserFind) TableName() string {
 	return UserCreate{}.TableName()
 }
+
+func (user *UserFind) Mask(isAdminOrOwner bool) {
+	user.GenUID(common.DbTypeUser)
+}
+
+func (user *UserFind) GetId() int {
+	return user.Id
+}
+
+func (user *UserFind) GetRole() string {
+	return *user.Role
+}
+
+func (user *UserFind) GetEmail() string {
+	return *user.Email
+}
