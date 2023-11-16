@@ -3,6 +3,7 @@ package main
 import (
 	"bestHabit/component"
 	"bestHabit/middleware"
+	"bestHabit/modules/user/usertransport/ginuser"
 	"fmt"
 	"log"
 	"net/http"
@@ -43,6 +44,11 @@ func runServer(db *sqlx.DB, secretKey string) {
 			"message": "Ping OK!",
 		})
 	})
+
+	log_and_register := router.Group("/")
+	{
+		log_and_register.POST("/register", ginuser.BasicRegister(appCtx))
+	}
 
 	router.Run(":8080")
 }

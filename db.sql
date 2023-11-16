@@ -22,10 +22,13 @@ CREATE TABLE `users` (
     `habit_count` int DEFAULT '0',
     `task_count` int DEFAULT '0',
     `challenge_count` int DEFAULT '0',
+    `status` int DEFAULT '1',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng Habits
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci 
+
+-- Bảng Habits
 DROP TABLE IF EXISTS habits;
 
 CREATE TABLE habits (
@@ -83,16 +86,18 @@ CREATE TABLE habit_logs (
 -- Bảng Challenges
 DROP TABLE IF EXISTS challenges;
 
-CREATE TABLE challenges (
-    `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(100) NOT NULL,
-    `description` TEXT,
-    `start_date` DATE,
-    `end_date` DATE,
-    `experience_point` INT NOT NULL,
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+CREATE TABLE `challenges` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `name` varchar(100) NOT NULL,
+    `description` text,
+    `start_date` date DEFAULT NULL,
+    `end_date` date DEFAULT NULL,
+    `experience_point` int DEFAULT NULL,
+    `status` int DEFAULT '1',
+    `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci 
 
 -- Bảng Participants
 DROP TABLE IF EXISTS participants;
