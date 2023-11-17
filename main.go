@@ -2,6 +2,7 @@ package main
 
 import (
 	"bestHabit/component"
+	"bestHabit/component/uploadprovider"
 	"bestHabit/middleware"
 	"bestHabit/modules/user/usertransport/ginuser"
 	"fmt"
@@ -30,9 +31,9 @@ func ConnectToDB(dns string) *sqlx.DB {
 	return db
 }
 
-func runServer(db *sqlx.DB, secretKey string) {
+func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.UploadProvider) {
 
-	appCtx := component.NewAppContext(db, secretKey)
+	appCtx := component.NewAppContext(db, secretKey, s3upProvider)
 	fmt.Print(appCtx)
 
 	router := gin.Default()
@@ -67,7 +68,13 @@ func main() {
 
 	dns := os.Getenv("DB_CONNECTION_STR")
 	secretKet := os.Getenv("SECRET_KEY")
+	s3BucketName := os.Getenv("S3BucketName")
+	s3Region := os.Getenv("S3Region")
+	s3ApiKey := os.Getenv("S3ApiKey")
+	s3Secret := os.Getenv("S3Secret")
+	s3Domain := os.Getenv("S3Domain")
+	s3upProvider := uploadprovider.NewS3Provider(s3BucketName, s3Region, s3ApiKey, s3Secret, s3Domain)
 
 	db := ConnectToDB(dns)
-	runServer(db, secretKet)
+	runServer(db, secretKet, s3upProvider)
 }
