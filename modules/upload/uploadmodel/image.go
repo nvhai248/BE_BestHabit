@@ -4,6 +4,7 @@ import "bestHabit/common"
 
 type ImageUpload struct {
 	common.Image `json:", inline"`
+	CreatedBy    int `json:"created_by" db:"created_by"`
 }
 
 func (ImageUpload) TableName() string { return "images" }

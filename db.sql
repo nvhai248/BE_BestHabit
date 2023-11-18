@@ -26,9 +26,7 @@ CREATE TABLE `users` (
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci 
-
--- Bảng Habits
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng Habits
 DROP TABLE IF EXISTS habits;
 
 CREATE TABLE habits (
@@ -97,9 +95,7 @@ CREATE TABLE `challenges` (
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci 
-
--- Bảng Participants
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng Participants
 DROP TABLE IF EXISTS participants;
 
 CREATE TABLE participants (
@@ -114,13 +110,14 @@ CREATE TABLE participants (
 -- Bảng images
 DROP TABLE IF EXISTS images;
 
-CREATE TABLE images (
+CREATE TABLE `images` (
     `id` int NOT NULL AUTO_INCREMENT,
     `url` varchar(255) DEFAULT NULL,
     `width` int DEFAULT NULL,
     `height` int DEFAULT NULL,
     `cloud_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
     `extension` varchar(255) DEFAULT NULL,
+    `created_by` int NOT NULL,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)

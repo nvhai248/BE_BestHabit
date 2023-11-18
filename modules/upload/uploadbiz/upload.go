@@ -1,20 +1,17 @@
 package uploadbiz
 
 import (
-	"bestHabit/common"
 	"bestHabit/component/uploadprovider"
 	"bestHabit/modules/upload/uploadmodel"
-	"bytes"
 	"context"
 	"fmt"
-	"image"
 	"path/filepath"
 	"strings"
 	"time"
 )
 
 type CreateStorage interface {
-	Create(ctx context.Context, data *common.Image) error
+	Create(ctx context.Context, data *uploadmodel.ImageUpload) error
 }
 
 type uploadBiz struct {
@@ -26,17 +23,18 @@ func NewUploadBiz(store CreateStorage, upProvider uploadprovider.UploadProvider)
 	return &uploadBiz{store: store, upProvider: upProvider}
 }
 
-func (biz *uploadBiz) Upload(ctx context.Context, data []byte, folder, fileName string) (*common.Image, error) {
-	reader := bytes.NewReader(data)
+func (biz *uploadBiz) Upload(ctx context.Context, data []byte, folder, fileName string, userId int) (*uploadmodel.ImageUpload, error) {
+	/* reader := bytes.NewReader(data)
 
-	imgConfig, _, err := image.DecodeConfig(reader)
+	imgConfig, _, err := image.Decode(reader)
 
 	if err != nil {
 		return nil, uploadmodel.ErrFileIsNotImage(err)
 	}
+	imgConfig.Bounds().Dx() */
 
-	w := imgConfig.Width
-	h := imgConfig.Height
+	w := 0
+	h := 0
 
 	if strings.TrimSpace(folder) == "" {
 		folder = "img"
@@ -53,13 +51,21 @@ func (biz *uploadBiz) Upload(ctx context.Context, data []byte, folder, fileName 
 
 	img.Width = w
 	img.Height = h
-	img.CloudName = "s3" //should be set in provider
 	img.Extension = fileExt
 
-	if err := biz.store.Create(ctx, img); err != nil {
+	var dataSave uploadmodel.ImageUpload
+
+	dataSave.CloudName = img.CloudName
+	dataSave.Extension = img.Extension
+	dataSave.Width = img.Width
+	dataSave.Height = img.Height
+	dataSave.Url = img.Url
+	dataSave.CreatedBy = userId
+
+	if err := biz.store.Create(ctx, &dataSave); err != nil {
 		// delete image S3
 		return nil, uploadmodel.ErrCannotSaveFile(err)
 	}
 
-	return img, nil
+	return &dataSave, nil
 }

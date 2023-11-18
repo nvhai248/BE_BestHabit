@@ -38,7 +38,8 @@ func Upload(appCtx component.AppContext) func(*gin.Context) {
 		imgStore := uploadstorage.NewSQLStore(db)
 		biz := uploadbiz.NewUploadBiz(imgStore, appCtx.UploadProvider())
 
-		img, err := biz.Upload(c.Request.Context(), dataBytes, folder, fileHeader.Filename)
+		user := c.MustGet(common.CurrentUser).(common.Requester)
+		img, err := biz.Upload(c.Request.Context(), dataBytes, folder, fileHeader.Filename, user.GetId())
 
 		if err != nil {
 			panic(err)

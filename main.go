@@ -4,6 +4,7 @@ import (
 	"bestHabit/component"
 	"bestHabit/component/uploadprovider"
 	"bestHabit/middleware"
+	"bestHabit/modules/upload/uploadtransport/ginupload"
 	"bestHabit/modules/user/usertransport/ginuser"
 	"fmt"
 	"log"
@@ -55,6 +56,7 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 	user := router.Group("/user", middleware.RequireAuth(appCtx))
 	{
 		user.GET("/profile", ginuser.GetProfile(appCtx))
+		user.POST("/upload", ginupload.Upload(appCtx))
 	}
 
 	router.Run(":8080")
