@@ -29,13 +29,13 @@ CREATE TABLE `users` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng Habits
 DROP TABLE IF EXISTS habits;
 
-CREATE TABLE habits (
-    `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `user_id` INT NOT NULL,
-    `name` VARCHAR(100) NOT NULL,
-    `description` TEXT,
-    `start_date` DATETIME,
-    `end_date` DATETIME,
+CREATE TABLE `habits` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `user_id` int NOT NULL,
+    `name` varchar(100) NOT NULL,
+    `description` text,
+    `start_date` datetime DEFAULT NULL,
+    `end_date` datetime DEFAULT NULL,
     `type` enum(
         'health',
         'work_and_study',
@@ -43,32 +43,27 @@ CREATE TABLE habits (
         'social_and_relational',
         'personal'
     ) DEFAULT 'personal',
-    `days` json,
-    -- ghi lại các ngày làm thói quen này theo kiểu {"monday":1, "tuesday":0,...}
-    `is_count_based` BOOLEAN DEFAULT TRUE,
-    -- kiểm tra xem là loại số lượng hay thời gian
-    `reminder` TIME,
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
--- Bảng Tasks
+    `days` json DEFAULT NULL,
+    `is_count_based` tinyint(1) DEFAULT '1',
+    `reminder` timestamp NULL DEFAULT NULL,
+    `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng Tasks
 DROP TABLE IF EXISTS tasks;
 
-CREATE TABLE tasks (
-    `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `user_id` INT NOT NULL,
-    `name` VARCHAR(100) NOT NULL,
-    `description` TEXT,
-    `deadline` DATETIME,
-    `reminder` TIME,
-    -- thời gian nhắc nhở, báo thức
+CREATE TABLE `tasks` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `user_id` int NOT NULL,
+    `name` varchar(100) NOT NULL,
+    `description` text,
+    `deadline` datetime DEFAULT NULL,
+    `reminder` timestamp NULL DEFAULT NULL,
     `status` enum('pending', 'completed', 'overdue') DEFAULT 'pending',
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
--- Bảng habit_logs
+    `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng habit_logs
 DROP TABLE IF EXISTS habit_logs;
 
 CREATE TABLE habit_logs (

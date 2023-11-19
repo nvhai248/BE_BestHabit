@@ -4,6 +4,7 @@ import (
 	"bestHabit/component"
 	"bestHabit/component/uploadprovider"
 	"bestHabit/middleware"
+	"bestHabit/modules/task/tasktransport/gintask"
 	"bestHabit/modules/upload/uploadtransport/ginupload"
 	"bestHabit/modules/user/usertransport/ginuser"
 	"fmt"
@@ -53,10 +54,15 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 		log_and_register.POST("/login", ginuser.BasicLogin(appCtx))
 	}
 
-	user := router.Group("/user", middleware.RequireAuth(appCtx))
+	user := router.Group("/users", middleware.RequireAuth(appCtx))
 	{
 		user.GET("/profile", ginuser.GetProfile(appCtx))
 		user.POST("/upload", ginupload.Upload(appCtx))
+	}
+
+	task := router.Group("/tasks", middleware.RequireAuth(appCtx))
+	{
+		task.POST("/", gintask.CreateTask(appCtx))
 	}
 
 	router.Run(":8080")
