@@ -2,7 +2,9 @@ package taskmodel
 
 import "bestHabit/common"
 
-type TaskCreate struct {
+const EntityName = "Task"
+
+type Task struct {
 	common.SQLModel `json:",inline"`
 	UserId          int    `json:"-" db:"user_id"`
 	Name            string `json:"name" db:"name"`
@@ -12,18 +14,10 @@ type TaskCreate struct {
 	Status          string `json:"status" db:"status"`
 }
 
-func (TaskCreate) TableName() string {
-	return Task{}.TableName()
+func (Task) TableName() string {
+	return "tasks"
 }
 
-func (t *TaskCreate) Validate() error {
-	if t.Name == "" {
-		return ErrNameNotBeBlank
-	}
-
-	if t.Deadline == "" {
-		return ErrDeadlineNotBeBlank
-	}
-
-	return nil
+func (t *Task) Mask(isAdminOrOwner bool) {
+	t.GenUID(common.DbTypeTask)
 }

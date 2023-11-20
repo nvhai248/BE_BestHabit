@@ -9,15 +9,15 @@ type CreateTaskStore interface {
 	Create(ctx context.Context, data *taskmodel.TaskCreate) error
 }
 
-type taskBiz struct {
+type createTaskBiz struct {
 	store CreateTaskStore
 }
 
-func NewTaskBiz(store CreateTaskStore) *taskBiz {
-	return &taskBiz{store: store}
+func NewCreateTaskBiz(store CreateTaskStore) *createTaskBiz {
+	return &createTaskBiz{store: store}
 }
 
-func (b *taskBiz) CreateTask(ctx context.Context, data *taskmodel.TaskCreate, userId int) error {
+func (b *createTaskBiz) CreateTask(ctx context.Context, data *taskmodel.TaskCreate, userId int) error {
 	if err := data.Validate(); err != nil {
 		return err
 	}
