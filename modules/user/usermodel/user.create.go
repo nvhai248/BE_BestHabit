@@ -25,7 +25,7 @@ func (UserCreate) TableName() string {
 	return "users"
 }
 
-func (u *UserCreate) validate() error {
+func (u *UserCreate) Validate() error {
 	u.Name = strings.TrimSpace(u.Name)
 
 	if len(u.Name) == 0 {

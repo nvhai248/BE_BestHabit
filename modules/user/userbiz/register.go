@@ -36,6 +36,10 @@ func (biz *basicRegisterBiz) BasicRegister(ctx context.Context, data *usermodel.
 		return common.ErrEmailExisted
 	}
 
+	if err := data.Validate(); err != nil {
+		return usermodel.ErrNameCannotBeEmpty
+	}
+
 	salt := common.GenSalt(50)
 
 	data.Password = biz.hasher.Hash(data.Password + salt)

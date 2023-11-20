@@ -61,6 +61,7 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 
 	user := router.Group("/users", middleware.RequireAuth(appCtx))
 	{
+		user.PATCH("/profile", ginuser.UpdateProfile(appCtx))
 		user.GET("/profile", ginuser.GetProfile(appCtx))
 		user.POST("/upload", ginupload.Upload(appCtx))
 	}
