@@ -21,7 +21,7 @@ func CreateTask(appCtx component.AppContext) gin.HandlerFunc {
 
 		db := appCtx.GetMainDBConnection()
 		store := taskstorage.NewSQLStore(db)
-		biz := taskbiz.NewCreateTaskBiz(store)
+		biz := taskbiz.NewCreateTaskBiz(store, appCtx.GetPubSub())
 
 		user := ctx.MustGet(common.CurrentUser).(common.Requester)
 		err := biz.CreateTask(ctx.Request.Context(), &taskData, user.GetId())

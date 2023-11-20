@@ -64,12 +64,5 @@ func (biz *basicLoginBiz) Login(ctx context.Context, data *usermodel.UserLogin) 
 		return nil, common.ErrInternal(err)
 	}
 
-	/* refreshToken, err := biz.tokenProvider.Generate(payload, biz.expiry)
-	if err != nil {
-		return nil, common.ErrInternal(err)
-	}
-
-	account := studentmodel.NewAccount(accessToken) */
-
 	return accessToken, nil
 }

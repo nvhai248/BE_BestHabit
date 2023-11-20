@@ -7,6 +7,8 @@ import (
 	"bestHabit/modules/task/tasktransport/gintask"
 	"bestHabit/modules/upload/uploadtransport/ginupload"
 	"bestHabit/modules/user/usertransport/ginuser"
+	"bestHabit/pubsub/pblocal"
+	"bestHabit/subscriber"
 	"fmt"
 	"log"
 	"net/http"
@@ -35,21 +37,24 @@ func ConnectToDB(dns string) *sqlx.DB {
 
 func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.UploadProvider) {
 
-	appCtx := component.NewAppContext(db, secretKey, s3upProvider)
-	fmt.Print(appCtx)
+	appCtx := component.NewAppContext(db, secretKey, s3upProvider, pblocal.NewPubSub())
 
 	router := gin.Default()
 
 	router.Use(middleware.Recover(appCtx))
 
-	router.GET("/ping", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{
-			"message": "Ping OK!",
-		})
-	})
+	// start subscriber
+	if err := subscriber.NewEngine(appCtx).Start(); err != nil {
+		log.Fatal(err)
+	}
 
 	log_and_register := router.Group("/")
 	{
+		log_and_register.GET("/ping", func(ctx *gin.Context) {
+			ctx.JSON(http.StatusOK, gin.H{
+				"message": "Ping OK!",
+			})
+		})
 		log_and_register.POST("/register", ginuser.BasicRegister(appCtx))
 		log_and_register.POST("/login", ginuser.BasicLogin(appCtx))
 	}

@@ -9,8 +9,8 @@ import (
 func (s *sqlStore) Create(ctx context.Context, data *taskmodel.TaskCreate) error {
 	db := s.db
 
-	query := `INSERT INTO tasks (name, user_id, description, deadline, reminder, status) 
-	VALUES (?,?,?,?,?,?)`
+	query := `INSERT INTO tasks (name, user_id, description, deadline, reminder) 
+	VALUES (?,?,?,?,?)`
 
 	deadlineDate, err := common.ParseStringToDate(data.Deadline)
 	if err != nil {
@@ -22,7 +22,7 @@ func (s *sqlStore) Create(ctx context.Context, data *taskmodel.TaskCreate) error
 		return common.ErrInternal(err)
 	}
 
-	if _, err := db.Exec(query, data.Name, data.UserId, data.Description, deadlineDate, reminderTime, data.Status); err != nil {
+	if _, err := db.Exec(query, data.Name, data.UserId, data.Description, deadlineDate, reminderTime); err != nil {
 		return common.ErrDB(err)
 	}
 

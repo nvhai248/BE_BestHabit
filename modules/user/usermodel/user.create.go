@@ -9,15 +9,13 @@ import (
 const EntityName = "User"
 
 type UserCreate struct {
-	common.SQLModel `json:", inline"`
-
 	Email    string           `json:"email" db:"email"`
 	Phone    string           `json:"phone" db:"phone"`
-	Password string           `json:"password" db:"password"`
+	Password string           `json:"-" db:"password"`
 	Name     string           `json:"name" db:"name"`
-	FbID     string           `json:"fb_id" db:"fb_id"`
-	GgID     string           `json:"gg_id" db:"gg_id"`
-	Salt     string           `json:"salt" db:"salt"`
+	FbID     string           `json:"-" db:"fb_id"`
+	GgID     string           `json:"-" db:"gg_id"`
+	Salt     string           `json:"-" db:"salt"`
 	Avatar   *common.Image    `json:"avatar" db:"avatar"`
 	Settings *common.Settings `json:"settings" db:"settings"`
 	Role     string           `json:"role" db:"role"`
@@ -35,8 +33,4 @@ func (u *UserCreate) validate() error {
 	}
 
 	return nil
-}
-
-func (user *UserCreate) Mask(isAdminOrOwner bool) {
-	user.GenUID(common.DbTypeUser)
 }

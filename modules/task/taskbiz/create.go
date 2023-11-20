@@ -1,7 +1,9 @@
 package taskbiz
 
 import (
+	"bestHabit/common"
 	"bestHabit/modules/task/taskmodel"
+	"bestHabit/pubsub"
 	"context"
 )
 
@@ -10,11 +12,12 @@ type CreateTaskStore interface {
 }
 
 type createTaskBiz struct {
-	store CreateTaskStore
+	store  CreateTaskStore
+	pubsub pubsub.Pubsub
 }
 
-func NewCreateTaskBiz(store CreateTaskStore) *createTaskBiz {
-	return &createTaskBiz{store: store}
+func NewCreateTaskBiz(store CreateTaskStore, pubsub pubsub.Pubsub) *createTaskBiz {
+	return &createTaskBiz{store: store, pubsub: pubsub}
 }
 
 func (b *createTaskBiz) CreateTask(ctx context.Context, data *taskmodel.TaskCreate, userId int) error {
@@ -22,12 +25,12 @@ func (b *createTaskBiz) CreateTask(ctx context.Context, data *taskmodel.TaskCrea
 		return err
 	}
 
-	data.Status = "pending"
 	data.UserId = userId
 
 	if err := b.store.Create(ctx, data); err != nil {
 		return err
 	}
 
+	b.pubsub.Publish(ctx, common.TopicUserCreateNewTask, pubsub.NewMessage(data))
 	return nil
 }
