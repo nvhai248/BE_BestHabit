@@ -22,7 +22,7 @@ func (j *Image) Scan(value interface{}) error {
 	bytes, ok := value.([]byte)
 
 	if !ok {
-		errors.New(fmt.Sprint("Failed to unmarshal JSONB value: ", value))
+		_ = errors.New(fmt.Sprint("Failed to unmarshal JSONB value: ", value))
 	}
 
 	var img Image
@@ -48,7 +48,7 @@ func (j *Images) Scan(value interface{}) error {
 	bytes, ok := value.([]byte)
 
 	if !ok {
-		errors.New(fmt.Sprint("Failed to unmarshal JSONB value: ", value))
+		_ = errors.New(fmt.Sprint("Failed to unmarshal JSONB value: ", value))
 	}
 
 	var img []Image

@@ -45,7 +45,8 @@ CREATE TABLE `habits` (
     ) DEFAULT 'personal',
     `days` json DEFAULT NULL,
     `is_count_based` tinyint(1) DEFAULT '1',
-    `reminder` timestamp NULL DEFAULT NULL,
+    `reminder` time DEFAULT NULL,
+    `status` int DEFAULT '1',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)

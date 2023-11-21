@@ -19,3 +19,12 @@ func ParseStringToDate(data string) (*time.Time, error) {
 
 	return &result, nil
 }
+
+func ParseStringToTime(data string) (*time.Time, error) {
+	result, err := time.Parse("15:04:05", data)
+	if err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
