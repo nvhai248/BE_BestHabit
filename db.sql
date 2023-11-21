@@ -59,11 +59,11 @@ CREATE TABLE `tasks` (
     `description` text,
     `deadline` datetime DEFAULT NULL,
     `reminder` timestamp NULL DEFAULT NULL,
-    `status` enum('pending', 'completed', 'overdue') DEFAULT 'pending',
+    `status` enum('pending', 'completed', 'overdue', 'deleted') DEFAULT 'pending',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng habit_logs
+) ENGINE = InnoDB AUTO_INCREMENT = 8 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng habit_logs
 DROP TABLE IF EXISTS habit_logs;
 
 CREATE TABLE habit_logs (

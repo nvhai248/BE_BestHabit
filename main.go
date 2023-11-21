@@ -70,6 +70,7 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 	{
 		task.POST("/", gintask.CreateTask(appCtx))
 		task.GET("/", gintask.ListTaskByConditions(appCtx))
+		task.GET("/:id", gintask.FindTask(appCtx))
 	}
 
 	router.Run(":8080")

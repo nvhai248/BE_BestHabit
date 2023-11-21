@@ -22,6 +22,7 @@ type UserFind struct {
 	HabitCount     int              `json:"habit_count" db:"habit_count"`
 	TaskCount      int              `json:"task_count" db:"task_count"`
 	ChallengeCount int              `json:"challenge_count" db:"challenge_count"`
+	Status         int              `json:"status" db:"status"`
 }
 
 func (UserFind) TableName() string {
