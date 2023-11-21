@@ -34,6 +34,10 @@ func (b *updateTaskBiz) Update(ctx context.Context, newInfo *taskmodel.TaskUpdat
 		return common.ErrEntityDeleted(taskmodel.EntityName, err)
 	}
 
+	if newInfo.Status == nil {
+		newInfo.Status = &oldData.Status
+	}
+
 	if newInfo.Name == nil {
 		newInfo.Name = &oldData.Name
 	}

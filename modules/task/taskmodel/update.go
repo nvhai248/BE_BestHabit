@@ -5,6 +5,7 @@ type TaskUpdate struct {
 	Description *string `json:"description" db:"description"`
 	Deadline    *string `json:"deadline" db:"deadline"`
 	Reminder    *string `json:"reminder" db:"reminder"`
+	Status      *string `json:"status" db:"status"`
 }
 
 func (TaskUpdate) TableName() string {
