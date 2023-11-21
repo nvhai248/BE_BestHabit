@@ -27,6 +27,9 @@ func (b *updateProfileBiz) UpdateProfile(ctx context.Context,
 	userId int) error {
 	oldData, err := b.store.FindById(ctx, userId)
 	if err != nil {
+		if err == common.ErrorNoRows {
+			return common.ErrEntityNotFound(usermodel.EntityName, err)
+		}
 		return common.ErrCannotGetEntity(usermodel.EntityName, err)
 	}
 

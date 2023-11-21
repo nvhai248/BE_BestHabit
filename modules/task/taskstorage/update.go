@@ -6,7 +6,7 @@ import (
 	"context"
 )
 
-func (s *sqlStore) UpdateTaskInfo(ctx context.Context, newInfo taskmodel.TaskUpdate, id int) error {
+func (s *sqlStore) UpdateTaskInfo(ctx context.Context, newInfo *taskmodel.TaskUpdate, id int) error {
 	db := s.db
 
 	if _, err := db.Exec("UPDATE tasks SET name = ?, description = ?, deadline = ?, reminder = ? WHERE id = ?",
