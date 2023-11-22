@@ -59,6 +59,10 @@ func (b *updateHabitBiz) Update(ctx context.Context, newInfo *habitmodel.HabitUp
 		newInfo.Type = &oldData.Type
 	}
 
+	if newInfo.Days == nil {
+		newInfo.Days = oldData.Days
+	}
+
 	err = b.store.UpdateHabitInfo(ctx, newInfo, id)
 
 	if err != nil {
