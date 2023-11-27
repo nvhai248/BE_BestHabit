@@ -4,7 +4,7 @@ import (
 	"bestHabit/component"
 	"bestHabit/component/uploadprovider"
 	"bestHabit/middleware"
-	"bestHabit/modules/habit/habiztransport/ginhabit"
+	"bestHabit/modules/habit/habittransport/ginhabit"
 	"bestHabit/modules/task/tasktransport/gintask"
 	"bestHabit/modules/upload/uploadtransport/ginupload"
 	"bestHabit/modules/user/usertransport/ginuser"
@@ -82,6 +82,7 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 		habit.GET("/:id", ginhabit.FindHabit(appCtx))
 		habit.PATCH("/:id", ginhabit.UpdateTask(appCtx))
 		habit.DELETE("/:id", ginhabit.SoftDeleteTask(appCtx))
+		habit.POST("/:id/confirm-completed", ginhabit.AddCompletedDate(appCtx))
 	}
 
 	router.Run(":8080")

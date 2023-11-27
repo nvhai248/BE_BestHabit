@@ -46,11 +46,12 @@ CREATE TABLE `habits` (
     `days` json DEFAULT NULL,
     `is_count_based` tinyint(1) DEFAULT '1',
     `reminder` time DEFAULT NULL,
+    `count_completed` int DEFAULT '0',
     `status` int DEFAULT '1',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng Tasks
+) ENGINE = InnoDB AUTO_INCREMENT = 3 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng Tasks
 DROP TABLE IF EXISTS tasks;
 
 CREATE TABLE `tasks` (
@@ -67,17 +68,15 @@ CREATE TABLE `tasks` (
 ) ENGINE = InnoDB AUTO_INCREMENT = 8 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng habit_logs
 DROP TABLE IF EXISTS habit_logs;
 
-CREATE TABLE habit_logs (
-    `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `user_id` INT NOT NULL,
-    `habit_id` INT,
-    `complete_day` json,
-    -- lưu lại các ngày hoàn thành dưới dạng json {'d1':'timestamp string', 'd2':'timestamp string', 'd3', 'd4',...}
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
--- Bảng Challenges
+CREATE TABLE `habit_logs` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `user_id` int NOT NULL,
+    `habit_id` int NOT NULL,
+    `complete_day` json DEFAULT NULL,
+    `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng Challenges
 DROP TABLE IF EXISTS challenges;
 
 CREATE TABLE `challenges` (

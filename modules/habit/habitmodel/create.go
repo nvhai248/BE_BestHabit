@@ -3,14 +3,15 @@ package habitmodel
 import "bestHabit/common"
 
 type HabitCreate struct {
-	UserId      int          `json:"user_id" db:"user_id"`
-	Name        string       `json:"name" db:"name"`
-	Description string       `json:"description" db:"description"`
-	StartDate   string       `json:"start_date" db:"start_date"`
-	EndDate     string       `json:"end_date" db:"end_date"`
-	Type        string       `json:"type" db:"type"`
-	Reminder    string       `json:"reminder" db:"reminder"`
-	Days        *common.Days `json:"days" db:"days"`
+	UserId         int           `json:"user_id" db:"user_id"`
+	Name           string        `json:"name" db:"name"`
+	Description    string        `json:"description" db:"description"`
+	StartDate      string        `json:"start_date" db:"start_date"`
+	EndDate        string        `json:"end_date" db:"end_date"`
+	Type           string        `json:"type" db:"type"`
+	Reminder       string        `json:"reminder" db:"reminder"`
+	Days           *common.Days  `json:"days" db:"days"`
+	CompletedDates *common.Dates `json:"completed_dates" db:"completed_dates"`
 }
 
 func (HabitCreate) TableName() string {

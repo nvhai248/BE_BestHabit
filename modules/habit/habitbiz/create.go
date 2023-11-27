@@ -26,6 +26,8 @@ func (b *createHabitBiz) CreateHabit(ctx context.Context, data *habitmodel.Habit
 	}
 
 	data.UserId = userId
+	data.CompletedDates = &common.Dates{}
+	data.CompletedDates.Init()
 
 	if err := b.store.Create(ctx, data); err != nil {
 		return err
