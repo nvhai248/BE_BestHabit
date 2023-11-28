@@ -29,6 +29,15 @@ func (b *createHabitBiz) CreateHabit(ctx context.Context, data *habitmodel.Habit
 	data.CompletedDates = &common.Dates{}
 	data.CompletedDates.Init()
 
+	if data.Days == nil {
+		data.Days = &common.Days{}
+		data.Days.Init()
+	}
+
+	if data.Target == nil {
+		data.Target = common.NewDefaultTarget()
+	}
+
 	if err := b.store.Create(ctx, data); err != nil {
 		return err
 	}

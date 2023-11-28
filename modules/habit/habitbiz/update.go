@@ -55,12 +55,20 @@ func (b *updateHabitBiz) Update(ctx context.Context, newInfo *habitmodel.HabitUp
 		newInfo.Reminder = &oldData.Reminder
 	}
 
+	if newInfo.IsCountBased == nil {
+		newInfo.IsCountBased = &oldData.IsCountBased
+	}
+
 	if newInfo.Type == nil {
 		newInfo.Type = &oldData.Type
 	}
 
 	if newInfo.Days == nil {
 		newInfo.Days = oldData.Days
+	}
+
+	if newInfo.Target == nil {
+		newInfo.Target = oldData.Target
 	}
 
 	err = b.store.UpdateHabitInfo(ctx, newInfo, id)

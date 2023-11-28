@@ -60,3 +60,7 @@ func (j *Days) Value() (driver.Value, error) {
 
 	return json.Marshal(j)
 }
+
+func (j *Days) Init() {
+	*j = make(Days, 0)
+}

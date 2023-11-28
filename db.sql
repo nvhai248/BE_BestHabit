@@ -46,12 +46,13 @@ CREATE TABLE `habits` (
     `days` json DEFAULT NULL,
     `is_count_based` tinyint(1) DEFAULT '1',
     `reminder` time DEFAULT NULL,
-    `count_completed` int DEFAULT '0',
+    `target` json DEFAULT NULL,
+    `completed_dates` json DEFAULT NULL,
     `status` int DEFAULT '1',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 3 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng Tasks
+) ENGINE = InnoDB AUTO_INCREMENT = 6 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng Tasks
 DROP TABLE IF EXISTS tasks;
 
 CREATE TABLE `tasks` (
@@ -85,7 +86,7 @@ CREATE TABLE `challenges` (
     `description` text,
     `start_date` date DEFAULT NULL,
     `end_date` date DEFAULT NULL,
-    `experience_point` int DEFAULT NULL,
+    `experience_point` int DEFAULT '0',
     `status` int DEFAULT '1',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

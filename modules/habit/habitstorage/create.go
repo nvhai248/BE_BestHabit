@@ -9,8 +9,8 @@ import (
 func (s *sqlStore) Create(ctx context.Context, data *habitmodel.HabitCreate) error {
 	db := s.db
 
-	query := `INSERT INTO habits (name, user_id, description, start_date, end_date, type, reminder, days, completed_dates) 
-	VALUES (?,?,?,?,?,?,?,?,?)`
+	query := `INSERT INTO habits (name, user_id, description, start_date, end_date, type, reminder, days, completed_dates, target, is_count_based) 
+	VALUES (?,?,?,?,?,?,?,?,?,?,?)`
 
 	if _, err := db.Exec(query,
 		data.Name,
@@ -22,6 +22,8 @@ func (s *sqlStore) Create(ctx context.Context, data *habitmodel.HabitCreate) err
 		data.Reminder,
 		data.Days,
 		data.CompletedDates,
+		data.Target,
+		data.IsCountBased,
 	); err != nil {
 		return common.ErrDB(err)
 	}
