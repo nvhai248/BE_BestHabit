@@ -30,7 +30,9 @@ func (b *createTaskBiz) CreateTask(ctx context.Context, data *taskmodel.TaskCrea
 	if err := b.store.Create(ctx, data); err != nil {
 		return err
 	}
-
-	b.pubsub.Publish(ctx, common.TopicUserCreateNewTask, pubsub.NewMessage(data))
+	go func() {
+		defer common.AppRecover()
+		b.pubsub.Publish(ctx, common.TopicUserCreateNewTask, pubsub.NewMessage(data))
+	}()
 	return nil
 }

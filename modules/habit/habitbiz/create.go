@@ -41,7 +41,9 @@ func (b *createHabitBiz) CreateHabit(ctx context.Context, data *habitmodel.Habit
 	if err := b.store.Create(ctx, data); err != nil {
 		return err
 	}
-
-	b.pubsub.Publish(ctx, common.TopicUserCreateNewHabit, pubsub.NewMessage(data))
+	go func() {
+		defer common.AppRecover()
+		b.pubsub.Publish(ctx, common.TopicUserCreateNewHabit, pubsub.NewMessage(data))
+	}()
 	return nil
 }

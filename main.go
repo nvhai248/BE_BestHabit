@@ -74,6 +74,7 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 		task.GET("/", gintask.ListTaskByConditions(appCtx))
 		task.GET("/:id", gintask.FindTask(appCtx))
 		task.PATCH("/:id", gintask.UpdateTask(appCtx))
+		task.DELETE("/:id", gintask.SoftDeleteTask(appCtx))
 	}
 
 	habit := router.Group("/habits", middleware.RequireAuth(appCtx))
@@ -82,7 +83,7 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 		habit.GET("/", ginhabit.ListHabitByConditions(appCtx))
 		habit.GET("/:id", ginhabit.FindHabit(appCtx))
 		habit.PATCH("/:id", ginhabit.UpdateTask(appCtx))
-		habit.DELETE("/:id", ginhabit.SoftDeleteTask(appCtx))
+		habit.DELETE("/:id", ginhabit.SoftDeleteHabit(appCtx))
 		habit.POST("/:id/confirm-completed", ginhabit.AddCompletedDate(appCtx))
 	}
 

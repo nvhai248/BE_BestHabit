@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SoftDeleteTask(appCtx component.AppContext) gin.HandlerFunc {
+func SoftDeleteHabit(appCtx component.AppContext) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		uid, err := common.FromBase58(ctx.Param("id"))
 
@@ -19,7 +19,7 @@ func SoftDeleteTask(appCtx component.AppContext) gin.HandlerFunc {
 		}
 
 		store := habitstorage.NewSQLStore(appCtx.GetMainDBConnection())
-		biz := habitbiz.NewSoftDeleteHabitBiz(store)
+		biz := habitbiz.NewSoftDeleteHabitBiz(store, appCtx.GetPubSub())
 
 		if err := biz.SoftDeleteHabit(ctx.Request.Context(), int(uid.GetLocalID())); err != nil {
 			panic(err)

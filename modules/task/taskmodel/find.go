@@ -19,3 +19,7 @@ func (TaskFind) TableName() string {
 func (t *TaskFind) Mask(isAdminOrOwner bool) {
 	t.GenUID(common.DbTypeTask)
 }
+
+func (t *TaskFind) GetUserId() int {
+	return t.UserId
+}

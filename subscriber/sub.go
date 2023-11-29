@@ -35,6 +35,18 @@ func (engine *consumerEngine) Start() error {
 		RunIncreaseHabitCountAfterUserCreateNewHabit(engine.appCtx),
 	)
 
+	engine.startSubTopic(
+		common.TopicUserDeleteTask,
+		true,
+		RunDecreaseTaskCountAfterUserDeleteTask(engine.appCtx),
+	)
+
+	engine.startSubTopic(
+		common.TopicUserDeleteHabit,
+		true,
+		RunDecreaseHabitCountAfterUserDeleteHabit(engine.appCtx),
+	)
+
 	return nil
 }
 

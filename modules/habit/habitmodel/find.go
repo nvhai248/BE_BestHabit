@@ -25,3 +25,7 @@ func (HabitFind) TableName() string {
 func (t *HabitFind) Mask(isAdminOrOwner bool) {
 	t.GenUID(common.DbTypeTask)
 }
+
+func (h *HabitFind) GetUserId() int {
+	return h.UserId
+}
