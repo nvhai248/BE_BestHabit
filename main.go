@@ -4,6 +4,7 @@ import (
 	"bestHabit/component"
 	"bestHabit/component/uploadprovider"
 	"bestHabit/middleware"
+	"bestHabit/modules/challenge/challengetransport/ginchallenge"
 	"bestHabit/modules/habit/habittransport/ginhabit"
 	"bestHabit/modules/task/tasktransport/gintask"
 	"bestHabit/modules/upload/uploadtransport/ginupload"
@@ -83,6 +84,15 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 		habit.PATCH("/:id", ginhabit.UpdateTask(appCtx))
 		habit.DELETE("/:id", ginhabit.SoftDeleteTask(appCtx))
 		habit.POST("/:id/confirm-completed", ginhabit.AddCompletedDate(appCtx))
+	}
+
+	challenge := router.Group("/challenges", middleware.RequireAuth(appCtx), middleware.RequireRoles(appCtx, "admin"))
+	{
+		challenge.POST("/", ginchallenge.CreateChallenge(appCtx))
+		challenge.GET("/", ginchallenge.ListChallengeByConditions(appCtx))
+		challenge.GET("/:id", ginchallenge.FindChallenge(appCtx))
+		challenge.PATCH("/:id", ginchallenge.UpdateChallenge(appCtx))
+		challenge.DELETE("/:id", ginchallenge.DeleteChallenge(appCtx))
 	}
 
 	router.Run(":8080")

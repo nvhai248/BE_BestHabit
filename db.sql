@@ -87,23 +87,23 @@ CREATE TABLE `challenges` (
     `start_date` date DEFAULT NULL,
     `end_date` date DEFAULT NULL,
     `experience_point` int DEFAULT '0',
-    `status` int DEFAULT '1',
+    `status` tinyint(1) DEFAULT '1',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng Participants
 DROP TABLE IF EXISTS participants;
 
-CREATE TABLE participants (
-    `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `user_id` INT NOT NULL,
-    `challenge_id` INT NOT NULL,
+CREATE TABLE `participants` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `user_id` int NOT NULL,
+    `challenge_id` int NOT NULL,
+    `challenge_name` varchar(255) NOT NULL,
     `status` enum('joined', 'completed', 'failed') DEFAULT 'joined',
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
--- Bảng images
+    `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng images
 DROP TABLE IF EXISTS images;
 
 CREATE TABLE `images` (
