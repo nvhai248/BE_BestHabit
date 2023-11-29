@@ -56,6 +56,13 @@ func (s *sqlStore) ListHabitByConditions(ctx context.Context,
 		conditionsAndMore += "name LIKE " + "'%" + v + "%'"
 	}
 
+	// add status
+	if len(conditions) > 0 {
+		conditionsAndMore += " AND status in (1)"
+	} else {
+		conditionsAndMore += " WHERE status in (1)"
+	}
+
 	var habits []habitmodel.Habit
 	limit := paging.Limit
 
