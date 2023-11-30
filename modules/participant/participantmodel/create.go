@@ -8,3 +8,11 @@ type ParticipantCreate struct {
 func (ParticipantCreate) TableName() string {
 	return Participant{}.TableName()
 }
+
+func (p *ParticipantCreate) GetUserId() int {
+	return p.UserId
+}
+
+func (p *ParticipantCreate) GetChallengeId() int {
+	return p.ChallengeId
+}

@@ -47,6 +47,20 @@ func (engine *consumerEngine) Start() error {
 		RunDecreaseHabitCountAfterUserDeleteHabit(engine.appCtx),
 	)
 
+	engine.startSubTopic(
+		common.TopicUserJoinChallenge,
+		true,
+		RunIncreaseChallengeCountAfterUserJoinChallenge(engine.appCtx),
+		RunIncreaseUserJoinedCountAfterUserJoinedChallenge(engine.appCtx),
+	)
+
+	engine.startSubTopic(
+		common.TopicUserCancelChallenge,
+		true,
+		RunDecreaseChallengeCountAfterUserCancelChallenge(engine.appCtx),
+		RunDecreaseUserJoinedCountAfterUserCancelChallenge(engine.appCtx),
+	)
+
 	return nil
 }
 

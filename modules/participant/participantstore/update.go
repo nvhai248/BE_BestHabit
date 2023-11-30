@@ -9,7 +9,7 @@ import (
 func (s *sqlStore) UpdateParticipantInfo(ctx context.Context, newInfo *participantmodel.ParticipantUpdate, id int) error {
 	db := s.db
 
-	if _, err := db.Exec("UPDATE challenges SET status = ? WHERE id = ?",
+	if _, err := db.Exec("UPDATE participants SET status = ? WHERE id = ?",
 		newInfo.Status, id); err != nil {
 		return common.ErrDB(err)
 	}

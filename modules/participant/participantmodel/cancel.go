@@ -8,3 +8,11 @@ type ParticipantCancel struct {
 func (ParticipantCancel) TableName() string {
 	return Participant{}.TableName()
 }
+
+func (p *ParticipantCancel) GetUserId() int {
+	return p.UserId
+}
+
+func (p *ParticipantCancel) GetChallengeId() int {
+	return p.ChallengeId
+}

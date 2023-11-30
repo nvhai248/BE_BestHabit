@@ -14,7 +14,7 @@ import (
 func CreateParticipant(appCtx component.AppContext) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		// get cl id
-		uid, err := common.FromBase58(ctx.Param(":id"))
+		uid, err := common.FromBase58(ctx.Param("id"))
 		user := ctx.MustGet(common.CurrentUser).(common.Requester)
 
 		participant := &participantmodel.ParticipantCreate{

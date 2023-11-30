@@ -13,7 +13,7 @@ import (
 func FindParticipant(appCtx component.AppContext) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		// get cl id
-		uid, err := common.FromBase58(ctx.Param(":id"))
+		uid, err := common.FromBase58(ctx.Param("id"))
 
 		db := appCtx.GetMainDBConnection()
 		store := participantstore.NewSQLStore(db)
@@ -24,6 +24,8 @@ func FindParticipant(appCtx component.AppContext) gin.HandlerFunc {
 		if err != nil {
 			panic(err)
 		}
+
+		result.Mask(false)
 
 		ctx.JSON(http.StatusOK, common.SimpleSuccessResponse(result))
 	}

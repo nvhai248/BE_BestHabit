@@ -18,3 +18,14 @@ func (s *sqlStore) Create(ctx context.Context, data *participantmodel.Participan
 
 	return nil
 }
+
+func (s *sqlStore) Rejoin(ctx context.Context, data *participantmodel.ParticipantCreate) error {
+	db := s.db
+
+	if _, err := db.Exec("UPDATE participants SET status = 'joined' WHERE user_id = ? AND challenge_id = ?",
+		data.UserId, data.ChallengeId); err != nil {
+		return common.ErrDB(err)
+	}
+
+	return nil
+}
