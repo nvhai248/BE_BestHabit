@@ -98,8 +98,7 @@ CREATE TABLE `participants` (
     `id` int NOT NULL AUTO_INCREMENT,
     `user_id` int NOT NULL,
     `challenge_id` int NOT NULL,
-    `challenge_name` varchar(255) NOT NULL,
-    `status` enum('joined', 'completed', 'failed') DEFAULT 'joined',
+    `status` enum('joined', 'completed', 'failed', 'cancel') DEFAULT 'joined',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)

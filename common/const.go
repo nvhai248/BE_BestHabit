@@ -5,6 +5,7 @@ const (
 	DbTypeHabit     = 2
 	DbTypeTask      = 3
 	DbTypeChallenge = 4
+	DbParticipant   = 5
 )
 
 const CurrentUser = "user"

@@ -6,6 +6,7 @@ import (
 	"bestHabit/middleware"
 	"bestHabit/modules/challenge/challengetransport/ginchallenge"
 	"bestHabit/modules/habit/habittransport/ginhabit"
+	"bestHabit/modules/participant/participanttransport/ginparticipant"
 	"bestHabit/modules/task/tasktransport/gintask"
 	"bestHabit/modules/upload/uploadtransport/ginupload"
 	"bestHabit/modules/user/usertransport/ginuser"
@@ -87,13 +88,23 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 		habit.POST("/:id/confirm-completed", ginhabit.AddCompletedDate(appCtx))
 	}
 
-	challenge := router.Group("/challenges", middleware.RequireAuth(appCtx), middleware.RequireRoles(appCtx, "admin"))
+	challenge := router.Group("/challenges", middleware.RequireAuth(appCtx))
 	{
-		challenge.POST("/", ginchallenge.CreateChallenge(appCtx))
 		challenge.GET("/", ginchallenge.ListChallengeByConditions(appCtx))
 		challenge.GET("/:id", ginchallenge.FindChallenge(appCtx))
-		challenge.PATCH("/:id", ginchallenge.UpdateChallenge(appCtx))
-		challenge.DELETE("/:id", ginchallenge.DeleteChallenge(appCtx))
+
+		challenge.POST("/:id/user-join", ginparticipant.CreateParticipant(appCtx))
+		challenge.DELETE("/:id/user-cancel", ginparticipant.CancelParticipant(appCtx))
+		challenge.GET("/participants", ginparticipant.ListChallengeJoined(appCtx))
+		challenge.PATCH("/participants/:id", ginparticipant.UpdateParticipant(appCtx))
+		challenge.GET("/participants/:id", ginparticipant.FindParticipant(appCtx))
+	}
+
+	challengeAdmin := router.Group("/challenges", middleware.RequireAuth(appCtx), middleware.RequireRoles(appCtx, "admin"))
+	{
+		challengeAdmin.POST("/", ginchallenge.CreateChallenge(appCtx))
+		challengeAdmin.PATCH("/:id", ginchallenge.UpdateChallenge(appCtx))
+		challengeAdmin.DELETE("/:id", ginchallenge.DeleteChallenge(appCtx))
 	}
 
 	router.Run(":8080")
