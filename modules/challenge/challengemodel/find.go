@@ -10,6 +10,7 @@ type ChallengeFind struct {
 	EndDate         string `json:"end_date" db:"end_date"`
 	ExperiencePoint int    `json:"experience_point" db:"experience_point"`
 	Status          bool   `json:"status" db:"status"`
+	CountUserJoined int    `json:"count_user_joined" db:"count_user_joined"`
 }
 
 func (ChallengeFind) TableName() string {

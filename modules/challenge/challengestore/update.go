@@ -16,3 +16,25 @@ func (s *sqlStore) UpdateChallengesInfo(ctx context.Context, newInfo *challengem
 
 	return nil
 }
+
+func (s *sqlStore) IncreaseCountUserJoined(ctx context.Context, id int) error {
+	db := s.db
+
+	if _, err := db.Exec("UPDATE challenges SET count_user_joined = count_user_joined + 1 WHERE id = ?",
+		id); err != nil {
+		return common.ErrDB(err)
+	}
+
+	return nil
+}
+
+func (s *sqlStore) DecreaseCountUserJoined(ctx context.Context, id int) error {
+	db := s.db
+
+	if _, err := db.Exec("UPDATE challenges SET count_user_joined = count_user_joined - 1 WHERE id = ?",
+		id); err != nil {
+		return common.ErrDB(err)
+	}
+
+	return nil
+}
