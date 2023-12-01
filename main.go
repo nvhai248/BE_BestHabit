@@ -11,6 +11,7 @@ import (
 	"bestHabit/modules/upload/uploadtransport/ginupload"
 	"bestHabit/modules/user/usertransport/ginuser"
 	"bestHabit/pubsub/pblocal"
+	"bestHabit/skio"
 	"bestHabit/subscriber"
 	"fmt"
 	"log"
@@ -49,6 +50,12 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 	// start subscriber
 	if err := subscriber.NewEngine(appCtx).Start(); err != nil {
 		log.Fatal(err)
+	}
+
+	rtEngine := skio.NewEngine()
+
+	if err := rtEngine.Run(appCtx, router); err != nil {
+		log.Fatalln("Failed to start server: ", err)
 	}
 
 	log_and_register := router.Group("/")

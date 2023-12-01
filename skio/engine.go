@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"sync"
 
 	"github.com/gin-gonic/gin"
@@ -94,7 +93,7 @@ func (engine *rtEngine) EmitToUser(userId int, key string, data interface{}) err
 
 func (en *rtEngine) Run(ctx component.AppContext, engine *gin.Engine) error {
 	engine.Use(func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", os.Getenv("CLIENTS")) // Set the allowed origin(s)
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*") // Set the allowed origin(s)
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
@@ -115,7 +114,7 @@ func (en *rtEngine) Run(ctx component.AppContext, engine *gin.Engine) error {
 	server.OnConnect("/", func(s socketio.Conn) error {
 		// Set up CORS
 		s.SetContext("")
-		s.RemoteHeader().Set("Access-Control-Allow-Origin", os.Getenv("CLIENTS"))
+		s.RemoteHeader().Set("Access-Control-Allow-Origin", "*")
 
 		// Log the connection
 		fmt.Println("connected:", s.ID(), " IP:", s.RemoteAddr())
