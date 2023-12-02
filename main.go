@@ -2,6 +2,7 @@ package main
 
 import (
 	"bestHabit/component"
+	"bestHabit/component/mailprovider"
 	"bestHabit/component/uploadprovider"
 	"bestHabit/middleware"
 	"bestHabit/modules/challenge/challengetransport/ginchallenge"
@@ -39,9 +40,9 @@ func ConnectToDB(dns string) *sqlx.DB {
 	return db
 }
 
-func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.UploadProvider) {
+func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.UploadProvider, gmailSender mailprovider.EmailSender) {
 
-	appCtx := component.NewAppContext(db, secretKey, s3upProvider, pblocal.NewPubSub())
+	appCtx := component.NewAppContext(db, secretKey, s3upProvider, pblocal.NewPubSub(), gmailSender)
 
 	router := gin.Default()
 
@@ -131,7 +132,12 @@ func main() {
 	s3Secret := os.Getenv("S3Secret")
 	s3Domain := os.Getenv("S3Domain")
 	s3upProvider := uploadprovider.NewS3Provider(s3BucketName, s3Region, s3ApiKey, s3Secret, s3Domain)
-
 	db := ConnectToDB(dns)
-	runServer(db, secretKet, s3upProvider)
+
+	// get Sender
+	appName := os.Getenv("SENDER_APP_NAME")
+	appEmailPw := os.Getenv("SENDER_APP_PW")
+	appEmailAdd := os.Getenv("SENDER_EMAIL_ADDRESS")
+	gmailSender := mailprovider.NewGmailSender(appName, appEmailAdd, appEmailPw)
+	runServer(db, secretKet, s3upProvider, gmailSender)
 }

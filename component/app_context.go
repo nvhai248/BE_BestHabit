@@ -1,6 +1,7 @@
 package component
 
 import (
+	"bestHabit/component/mailprovider"
 	"bestHabit/component/uploadprovider"
 	"bestHabit/pubsub"
 
@@ -12,6 +13,7 @@ type AppContext interface {
 	SecretKey() string
 	UploadProvider() uploadprovider.UploadProvider
 	GetPubSub() pubsub.Pubsub
+	GetEmailSender() mailprovider.EmailSender
 }
 
 type appCtx struct {
@@ -19,6 +21,7 @@ type appCtx struct {
 	secretKey      string
 	uploadProvider uploadprovider.UploadProvider
 	pb             pubsub.Pubsub
+	emailSender    mailprovider.EmailSender
 }
 
 func NewAppContext(
@@ -26,9 +29,10 @@ func NewAppContext(
 	secretKey string,
 	uploadProvider uploadprovider.UploadProvider,
 	pb pubsub.Pubsub,
+	emailSender mailprovider.EmailSender,
 
 ) *appCtx {
-	return &appCtx{db: db, secretKey: secretKey, uploadProvider: uploadProvider, pb: pb}
+	return &appCtx{db: db, secretKey: secretKey, uploadProvider: uploadProvider, pb: pb, emailSender: emailSender}
 }
 
 func (ctx *appCtx) GetMainDBConnection() *sqlx.DB {
@@ -45,4 +49,8 @@ func (ctx *appCtx) UploadProvider() uploadprovider.UploadProvider {
 
 func (ctx *appCtx) GetPubSub() pubsub.Pubsub {
 	return ctx.pb
+}
+
+func (ctx *appCtx) GetEmailSender() mailprovider.EmailSender {
+	return ctx.emailSender
 }
