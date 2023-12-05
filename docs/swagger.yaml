@@ -1,0 +1,80 @@
+definitions:
+  common.Image:
+    properties:
+      cloud_name:
+        type: string
+      extension:
+        type: string
+      height:
+        type: integer
+      id:
+        type: integer
+      url:
+        type: string
+      width:
+        type: integer
+    type: object
+  common.Settings:
+    properties:
+      language:
+        type: string
+      theme:
+        type: string
+    type: object
+  usermodel.UserCreate:
+    properties:
+      avatar:
+        $ref: '#/definitions/common.Image'
+      email:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      role:
+        type: string
+      settings:
+        $ref: '#/definitions/common.Settings'
+    type: object
+info:
+  contact: {}
+paths:
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: User create new Account by providing email and password
+      parameters:
+      - description: Email address
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: Password
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      - description: Phone
+        in: body
+        name: phone
+        required: true
+        schema:
+          type: string
+      - description: Name
+        in: body
+        name: name
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Sign up Success
+          schema:
+            $ref: '#/definitions/usermodel.UserCreate'
+      summary: Basic Register
+swagger: "2.0"

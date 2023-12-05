@@ -4,6 +4,7 @@ import (
 	"bestHabit/component"
 	"bestHabit/component/mailprovider"
 	"bestHabit/component/uploadprovider"
+	"bestHabit/docs"
 	"bestHabit/middleware"
 	"bestHabit/modules/challenge/challengetransport/ginchallenge"
 	"bestHabit/modules/habit/habittransport/ginhabit"
@@ -23,6 +24,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func ConnectToDB(dns string) *sqlx.DB {
@@ -59,11 +62,13 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 		log.Fatalln("Failed to start server: ", err)
 	}
 
+	docs.SwaggerInfo.BasePath = "/"
+
 	log_and_register := router.Group("/")
 	{
 		log_and_register.GET("/ping", func(ctx *gin.Context) {
 			ctx.JSON(http.StatusOK, gin.H{
-				"message": "Ping OK!",
+				"message": "Ping OK!!!!",
 			})
 		})
 		log_and_register.POST("/register", ginuser.BasicRegister(appCtx))
@@ -115,6 +120,7 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 		challengeAdmin.DELETE("/:id", ginchallenge.DeleteChallenge(appCtx))
 	}
 
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run(":8080")
 }
 

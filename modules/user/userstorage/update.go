@@ -78,3 +78,13 @@ func (s *sqlStore) DecreaseChallengeCount(ctx context.Context, userId int) error
 
 	return nil
 }
+
+func (s *sqlStore) VerifyUser(ctx context.Context, userId int) error {
+	db := s.db
+
+	if _, err := db.Exec("UPDATE users SET status = 1 WHERE id = ?", userId); err != nil {
+		return common.ErrDB(err)
+	}
+
+	return nil
+}

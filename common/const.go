@@ -8,6 +8,12 @@ const (
 	DbParticipant   = 5
 )
 
+const (
+	UserDeleted     = 0
+	UserBanned      = -1
+	UserNotVerified = -2
+)
+
 const CurrentUser = "user"
 
 type Requester interface {
