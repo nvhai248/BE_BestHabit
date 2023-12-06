@@ -16,12 +16,12 @@ import (
 // @Description User create new Account by providing email and password
 // @Accept  json
 // @Produce  json
-// @Param email body string true "Email address"
-// @Param password body string true "Password"
-// @Param phone body string true "Phone"
-// @Param name body string true "Name"
+// @Param email formData string true "Email address"
+// @Param password formData string true "Password"
+// @Param phone formData string true "Phone"
+// @Param name formData string true "Name"
 // @Success 200 {object} usermodel.UserCreate "Sign up Success"
-// @Router /register [post]
+// @Router /api/register [post]
 func BasicRegister(appCtx component.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var data usermodel.UserCreate

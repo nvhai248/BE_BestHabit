@@ -62,9 +62,11 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 		log.Fatalln("Failed to start server: ", err)
 	}
 
-	docs.SwaggerInfo.BasePath = "/"
+	docs.SwaggerInfo.BasePath = "/api"
 
-	log_and_register := router.Group("/")
+	routerAPIS := router.Group("/api")
+
+	log_and_register := routerAPIS.Group("/")
 	{
 		log_and_register.GET("/ping", func(ctx *gin.Context) {
 			ctx.JSON(http.StatusOK, gin.H{
@@ -75,14 +77,14 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 		log_and_register.POST("/login", ginuser.BasicLogin(appCtx))
 	}
 
-	user := router.Group("/users", middleware.RequireAuth(appCtx))
+	user := routerAPIS.Group("/users", middleware.RequireAuth(appCtx))
 	{
 		user.PATCH("/profile", ginuser.UpdateProfile(appCtx))
 		user.GET("/profile", ginuser.GetProfile(appCtx))
 		user.POST("/upload", ginupload.Upload(appCtx))
 	}
 
-	task := router.Group("/tasks", middleware.RequireAuth(appCtx))
+	task := routerAPIS.Group("/tasks", middleware.RequireAuth(appCtx))
 	{
 		task.POST("/", gintask.CreateTask(appCtx))
 		task.GET("/", gintask.ListTaskByConditions(appCtx))
@@ -91,7 +93,7 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 		task.DELETE("/:id", gintask.SoftDeleteTask(appCtx))
 	}
 
-	habit := router.Group("/habits", middleware.RequireAuth(appCtx))
+	habit := routerAPIS.Group("/habits", middleware.RequireAuth(appCtx))
 	{
 		habit.POST("/", ginhabit.CreateHabit(appCtx))
 		habit.GET("/", ginhabit.ListHabitByConditions(appCtx))
@@ -101,7 +103,7 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 		habit.POST("/:id/confirm-completed", ginhabit.AddCompletedDate(appCtx))
 	}
 
-	challenge := router.Group("/challenges", middleware.RequireAuth(appCtx))
+	challenge := routerAPIS.Group("/challenges", middleware.RequireAuth(appCtx))
 	{
 		challenge.GET("/", ginchallenge.ListChallengeByConditions(appCtx))
 		challenge.GET("/:id", ginchallenge.FindChallenge(appCtx))
@@ -113,7 +115,7 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 		challenge.GET("/participants/:id", ginparticipant.FindParticipant(appCtx))
 	}
 
-	challengeAdmin := router.Group("/challenges", middleware.RequireAuth(appCtx), middleware.RequireRoles(appCtx, "admin"))
+	challengeAdmin := routerAPIS.Group("/challenges", middleware.RequireAuth(appCtx), middleware.RequireRoles(appCtx, "admin"))
 	{
 		challengeAdmin.POST("/", ginchallenge.CreateChallenge(appCtx))
 		challengeAdmin.PATCH("/:id", ginchallenge.UpdateChallenge(appCtx))

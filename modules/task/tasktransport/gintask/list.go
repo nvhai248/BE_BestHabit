@@ -57,6 +57,6 @@ func ListTaskByConditions(appCtx component.AppContext) gin.HandlerFunc {
 			}
 		}
 
-		c.JSON(http.StatusOK, common.NewSuccessResponse(result, paging, filter))
+		c.JSON(http.StatusOK, common.NewSuccessResponse(result, paging, filter, 200, "Successful!"))
 	}
 }

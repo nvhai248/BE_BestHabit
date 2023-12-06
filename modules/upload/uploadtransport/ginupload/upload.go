@@ -10,6 +10,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary User Update Profile
+// @Description User update profile after successful authentication.
+// @Tags Users
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Authorization"
+// @Param file formData file true "Image"
+// @Success 200 {object} uploadmodel.ImageUpload "Upload Successfully"
+// @Router /api/users/upload [post]
 func Upload(appCtx component.AppContext) func(*gin.Context) {
 	return func(c *gin.Context) {
 		db := appCtx.GetMainDBConnection()

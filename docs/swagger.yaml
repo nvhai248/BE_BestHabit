@@ -21,6 +21,32 @@ definitions:
       theme:
         type: string
     type: object
+  tokenprovider.Token:
+    properties:
+      created:
+        type: string
+      expiry:
+        type: integer
+      token:
+        type: string
+    type: object
+  uploadmodel.ImageUpload:
+    properties:
+      cloud_name:
+        type: string
+      created_by:
+        type: integer
+      extension:
+        type: string
+      height:
+        type: integer
+      id:
+        type: integer
+      url:
+        type: string
+      width:
+        type: integer
+    type: object
   usermodel.UserCreate:
     properties:
       avatar:
@@ -36,39 +62,70 @@ definitions:
       settings:
         $ref: '#/definitions/common.Settings'
     type: object
+  usermodel.UserUpdate:
+    properties:
+      avatar:
+        $ref: '#/definitions/common.Image'
+      name:
+        type: string
+      phone:
+        type: string
+      settings:
+        $ref: '#/definitions/common.Settings'
+    type: object
 info:
   contact: {}
 paths:
-  /register:
+  /api/login:
+    post:
+      consumes:
+      - application/json
+      description: User use email and password to login to system
+      parameters:
+      - description: Email address
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: Password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login Successfully
+          schema:
+            $ref: '#/definitions/tokenprovider.Token'
+      summary: Basic Login
+  /api/register:
     post:
       consumes:
       - application/json
       description: User create new Account by providing email and password
       parameters:
       - description: Email address
-        in: body
+        in: formData
         name: email
         required: true
-        schema:
-          type: string
+        type: string
       - description: Password
-        in: body
+        in: formData
         name: password
         required: true
-        schema:
-          type: string
+        type: string
       - description: Phone
-        in: body
+        in: formData
         name: phone
         required: true
-        schema:
-          type: string
+        type: string
       - description: Name
-        in: body
+        in: formData
         name: name
         required: true
-        schema:
-          type: string
+        type: string
       produces:
       - application/json
       responses:
@@ -77,4 +134,90 @@ paths:
           schema:
             $ref: '#/definitions/usermodel.UserCreate'
       summary: Basic Register
+  /api/users/profile:
+    get:
+      consumes:
+      - application/json
+      description: User get profile after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Update Profile Successfully
+          schema: {}
+      summary: User Get Profile
+      tags:
+      - Users
+    patch:
+      consumes:
+      - application/json
+      description: User update profile after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Phone
+        in: formData
+        name: phone
+        required: true
+        type: string
+      - description: Name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Settings
+        in: formData
+        name: settings
+        required: true
+        type: string
+      - description: Image
+        in: formData
+        name: image
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Update Profile Successfully
+          schema:
+            $ref: '#/definitions/usermodel.UserUpdate'
+      summary: User Update Profile
+      tags:
+      - Users
+  /api/users/upload:
+    post:
+      consumes:
+      - application/json
+      description: User update profile after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Image
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Upload Successfully
+          schema:
+            $ref: '#/definitions/uploadmodel.ImageUpload'
+      summary: User Update Profile
+      tags:
+      - Users
 swagger: "2.0"

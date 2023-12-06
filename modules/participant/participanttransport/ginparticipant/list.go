@@ -39,6 +39,6 @@ func ListChallengeJoined(appCtx component.AppContext) gin.HandlerFunc {
 			}
 		}
 
-		c.JSON(http.StatusOK, common.NewSuccessResponse(result, paging, nil))
+		c.JSON(http.StatusOK, common.NewSuccessResponse(result, paging, nil, 200, "Successful!"))
 	}
 }

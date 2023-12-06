@@ -13,6 +13,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Basic Login
+// @Description User use email and password to login to system
+// @Accept  json
+// @Produce  json
+// @Param email formData string true "Email address"
+// @Param password formData string true "Password"
+// @Success 200 {object} tokenprovider.Token "Login Successfully"
+// @Router /api/login [post]
 func BasicLogin(appCtx component.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var loginUserData usermodel.UserLogin
