@@ -11,6 +11,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary User Update Challenge
+// @Description User Update challenge after successful authentication.
+// @Tags Challenges (requires admin)
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Authorization"
+// @Param id path string true "challenge Id"
+// @Param name formData string true "challenge Name"
+// @Param description formData string true "Description"
+// @Param start_date formData string true "startDate"
+// @Param end_date formData string true "endDate"
+// @Param experience_point formData number true "ExperiencePoint"
+// @Success 200 {object} challengemodel.ChallengeUpdate "Successfully update challenge!"
+// @Router /api/challenges/:id [patch]
 func UpdateChallenge(appCtx component.AppContext) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		uid, err := common.FromBase58(ctx.Param("id"))

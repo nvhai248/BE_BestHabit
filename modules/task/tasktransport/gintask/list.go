@@ -16,9 +16,9 @@ import (
 // @Tags Tasks
 // @Accept  json
 // @Produce  json
-// @Param Authorization header string true "Authorization"
-// @Param page path number true "Page number"
+// @Param Authorization header string true "Authorization"\
 // @Param name path string true "Task's name"
+// @Param page path number true "Page number"
 // @Param limit path number true "Limit of tasks returned!"
 // @Param cursor path string true "Task Id"
 // @Param deadline path string true "Deadline"

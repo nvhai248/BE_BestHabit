@@ -11,6 +11,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary User Participant to the Challenge
+// @Description User Participant challenge after successful authentication.
+// @Tags Challenges
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Authorization"
+// @Param id path string true "challenge Id"
+// @Success 200 {object} common.successRes "Successfully!"
+// @Router /api/challenges/:id/user-join [post]
 func CreateParticipant(appCtx component.AppContext) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		// get cl id

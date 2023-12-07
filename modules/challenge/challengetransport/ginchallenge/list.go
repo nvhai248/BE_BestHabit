@@ -11,6 +11,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Get List User's Challenge
+// @Description User Get List User's challenge after successful authentication.
+// @Tags Challenges
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Authorization"
+// @Param name path string true "challenge's name"
+// @Param page path number true "Page number"
+// @Param limit path number true "Limit of challenges returned!"
+// @Param cursor path string true "challenge Id"
+// @Param deadline path string true "Deadline"
+// @Success 200 {object} []challengemodel.Challenge "Successfully!"
+// @Router /api/challenges [get]
 func ListChallengeByConditions(appCtx component.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var filter challengemodel.ChallengeFilter

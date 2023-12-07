@@ -10,6 +10,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary User get list Challenge user participation
+// @Description User Participant challenge after successful authentication.
+// @Tags Participants
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Authorization"
+// @Param page path number true "Page number"
+// @Param limit path number true "Limit of tasks returned!"
+// @Success 200 {object} []participantmodel.Participant "Successfully!"
+// @Router /api/participants [get]
 func ListChallengeJoined(appCtx component.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 

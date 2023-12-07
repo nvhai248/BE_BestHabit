@@ -10,6 +10,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary User Find Challenge
+// @Description User Find challenge after successful authentication.
+// @Tags Challenges
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Authorization"
+// @Param id path string true "challenge Id"
+// @Success 200 {object} challengemodel.ChallengeFind "Successfully!"
+// @Router /api/challenges/:id [get]
 func FindChallenge(appCtx component.AppContext) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		uid, err := common.FromBase58(ctx.Param("id"))

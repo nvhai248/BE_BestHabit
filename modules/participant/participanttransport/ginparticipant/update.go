@@ -11,6 +11,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Change status of the Participant
+// @Description Change status of the Participant after successful authentication.
+// @Tags Participants
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Authorization"
+// @Param id path string true "challenge Id"
+// @Param status formData string true "Status"
+// @Success 200 {object} participantmodel.ParticipantUpdate "Successfully!"
+// @Router /api/participants/:id [patch]
 func UpdateParticipant(appCtx component.AppContext) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		uid, err := common.FromBase58(ctx.Param("id"))

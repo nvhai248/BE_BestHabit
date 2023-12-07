@@ -1,4 +1,76 @@
 definitions:
+  challengemodel.Challenge:
+    properties:
+      count_user_joined:
+        type: integer
+      created_at:
+        type: string
+      description:
+        type: string
+      end_date:
+        type: string
+      experience_point:
+        type: integer
+      id:
+        $ref: '#/definitions/common.UID'
+      name:
+        type: string
+      start_date:
+        type: string
+      status:
+        type: boolean
+      updated_at:
+        type: string
+    type: object
+  challengemodel.ChallengeCreate:
+    properties:
+      description:
+        type: string
+      end_date:
+        type: string
+      experience_point:
+        type: integer
+      name:
+        type: string
+      start_date:
+        type: string
+    type: object
+  challengemodel.ChallengeFind:
+    properties:
+      count_user_joined:
+        type: integer
+      created_at:
+        type: string
+      description:
+        type: string
+      end_date:
+        type: string
+      experience_point:
+        type: integer
+      id:
+        $ref: '#/definitions/common.UID'
+      name:
+        type: string
+      start_date:
+        type: string
+      status:
+        type: boolean
+      updated_at:
+        type: string
+    type: object
+  challengemodel.ChallengeUpdate:
+    properties:
+      description:
+        type: string
+      end_date:
+        type: string
+      experience_point:
+        type: integer
+      name:
+        type: string
+      start_date:
+        type: string
+    type: object
   common.Date:
     properties:
       date:
@@ -176,6 +248,41 @@ definitions:
       type:
         type: string
     type: object
+  participantmodel.Participant:
+    properties:
+      challenge_id:
+        type: integer
+      created_at:
+        type: string
+      id:
+        $ref: '#/definitions/common.UID'
+      status:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  participantmodel.ParticipantFind:
+    properties:
+      challenge_id:
+        type: integer
+      created_at:
+        type: string
+      id:
+        $ref: '#/definitions/common.UID'
+      status:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  participantmodel.ParticipantUpdate:
+    properties:
+      status:
+        type: string
+    type: object
   taskmodel.Task:
     properties:
       created_at:
@@ -293,6 +400,252 @@ definitions:
 info:
   contact: {}
 paths:
+  /api/challenges:
+    get:
+      consumes:
+      - application/json
+      description: User Get List User's challenge after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: challenge's name
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: Page number
+        in: path
+        name: page
+        required: true
+        type: number
+      - description: Limit of challenges returned!
+        in: path
+        name: limit
+        required: true
+        type: number
+      - description: challenge Id
+        in: path
+        name: cursor
+        required: true
+        type: string
+      - description: Deadline
+        in: path
+        name: deadline
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully!
+          schema:
+            items:
+              $ref: '#/definitions/challengemodel.Challenge'
+            type: array
+      summary: Get List User's Challenge
+      tags:
+      - Challenges
+    post:
+      consumes:
+      - application/json
+      description: User Create New challenge after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: challenge Name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Description
+        in: formData
+        name: description
+        required: true
+        type: string
+      - description: startDate
+        in: formData
+        name: start_date
+        required: true
+        type: string
+      - description: endDate
+        in: formData
+        name: end_date
+        required: true
+        type: string
+      - description: ExperiencePoint
+        in: formData
+        name: experience_point
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully created challenge!
+          schema:
+            $ref: '#/definitions/challengemodel.ChallengeCreate'
+      summary: User Create New Challenge
+      tags:
+      - Challenges (requires admin)
+  /api/challenges/:id:
+    delete:
+      consumes:
+      - application/json
+      description: User Deleted challenge after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: challenge Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully deleted challenge!
+          schema:
+            $ref: '#/definitions/common.successRes'
+      summary: User Deleted Challenge
+      tags:
+      - Challenges (requires admin)
+    get:
+      consumes:
+      - application/json
+      description: User Find challenge after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: challenge Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully!
+          schema:
+            $ref: '#/definitions/challengemodel.ChallengeFind'
+      summary: User Find Challenge
+      tags:
+      - Challenges
+    patch:
+      consumes:
+      - application/json
+      description: User Update challenge after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: challenge Id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: challenge Name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Description
+        in: formData
+        name: description
+        required: true
+        type: string
+      - description: startDate
+        in: formData
+        name: start_date
+        required: true
+        type: string
+      - description: endDate
+        in: formData
+        name: end_date
+        required: true
+        type: string
+      - description: ExperiencePoint
+        in: formData
+        name: experience_point
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully update challenge!
+          schema:
+            $ref: '#/definitions/challengemodel.ChallengeUpdate'
+      summary: User Update Challenge
+      tags:
+      - Challenges (requires admin)
+  /api/challenges/:id/user-cancel:
+    delete:
+      consumes:
+      - application/json
+      description: User Cancel the challenge after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: challenge Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully!
+          schema:
+            $ref: '#/definitions/common.successRes'
+      summary: User Cancel the Challenge
+      tags:
+      - Challenges
+  /api/challenges/:id/user-join:
+    post:
+      consumes:
+      - application/json
+      description: User Participant challenge after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: challenge Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully!
+          schema:
+            $ref: '#/definitions/common.successRes'
+      summary: User Participant to the Challenge
+      tags:
+      - Challenges
   /api/habits:
     get:
       consumes:
@@ -607,6 +960,95 @@ paths:
           schema:
             $ref: '#/definitions/tokenprovider.Token'
       summary: Basic Login
+  /api/participants:
+    get:
+      consumes:
+      - application/json
+      description: User Participant challenge after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Page number
+        in: path
+        name: page
+        required: true
+        type: number
+      - description: Limit of tasks returned!
+        in: path
+        name: limit
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully!
+          schema:
+            items:
+              $ref: '#/definitions/participantmodel.Participant'
+            type: array
+      summary: User get list Challenge user participation
+      tags:
+      - Participants
+  /api/participants/:id:
+    get:
+      consumes:
+      - application/json
+      description: User Find participant after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: challenge Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully!
+          schema:
+            $ref: '#/definitions/participantmodel.ParticipantFind'
+      summary: User Find participant
+      tags:
+      - Participants
+    patch:
+      consumes:
+      - application/json
+      description: Change status of the Participant after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: challenge Id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Status
+        in: formData
+        name: status
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully!
+          schema:
+            $ref: '#/definitions/participantmodel.ParticipantUpdate'
+      summary: Change status of the Participant
+      tags:
+      - Participants
   /api/register:
     post:
       consumes:
@@ -664,16 +1106,16 @@ paths:
         name: Authorization
         required: true
         type: string
-      - description: Page number
-        in: path
-        name: page
-        required: true
-        type: number
       - description: Task's name
         in: path
         name: name
         required: true
         type: string
+      - description: Page number
+        in: path
+        name: page
+        required: true
+        type: number
       - description: Limit of tasks returned!
         in: path
         name: limit

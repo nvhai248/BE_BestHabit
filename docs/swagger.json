@@ -4,6 +4,367 @@
         "contact": {}
     },
     "paths": {
+        "/api/challenges": {
+            "get": {
+                "description": "User Get List User's challenge after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Challenges"
+                ],
+                "summary": "Get List User's Challenge",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "challenge's name",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "Limit of challenges returned!",
+                        "name": "limit",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "challenge Id",
+                        "name": "cursor",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Deadline",
+                        "name": "deadline",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully!",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/challengemodel.Challenge"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "User Create New challenge after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Challenges (requires admin)"
+                ],
+                "summary": "User Create New Challenge",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "challenge Name",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Description",
+                        "name": "description",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "startDate",
+                        "name": "start_date",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "endDate",
+                        "name": "end_date",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "ExperiencePoint",
+                        "name": "experience_point",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully created challenge!",
+                        "schema": {
+                            "$ref": "#/definitions/challengemodel.ChallengeCreate"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/challenges/:id": {
+            "get": {
+                "description": "User Find challenge after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Challenges"
+                ],
+                "summary": "User Find Challenge",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "challenge Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully!",
+                        "schema": {
+                            "$ref": "#/definitions/challengemodel.ChallengeFind"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "User Deleted challenge after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Challenges (requires admin)"
+                ],
+                "summary": "User Deleted Challenge",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "challenge Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully deleted challenge!",
+                        "schema": {
+                            "$ref": "#/definitions/common.successRes"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "User Update challenge after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Challenges (requires admin)"
+                ],
+                "summary": "User Update Challenge",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "challenge Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "challenge Name",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Description",
+                        "name": "description",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "startDate",
+                        "name": "start_date",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "endDate",
+                        "name": "end_date",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "ExperiencePoint",
+                        "name": "experience_point",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully update challenge!",
+                        "schema": {
+                            "$ref": "#/definitions/challengemodel.ChallengeUpdate"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/challenges/:id/user-cancel": {
+            "delete": {
+                "description": "User Cancel the challenge after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Challenges"
+                ],
+                "summary": "User Cancel the Challenge",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "challenge Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully!",
+                        "schema": {
+                            "$ref": "#/definitions/common.successRes"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/challenges/:id/user-join": {
+            "post": {
+                "description": "User Participant challenge after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Challenges"
+                ],
+                "summary": "User Participant to the Challenge",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "challenge Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully!",
+                        "schema": {
+                            "$ref": "#/definitions/common.successRes"
+                        }
+                    }
+                }
+            }
+        },
         "/api/habits": {
             "get": {
                 "description": "User Get List User's habit after successful authentication.",
@@ -465,6 +826,138 @@
                 }
             }
         },
+        "/api/participants": {
+            "get": {
+                "description": "User Participant challenge after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Participants"
+                ],
+                "summary": "User get list Challenge user participation",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "Limit of tasks returned!",
+                        "name": "limit",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully!",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/participantmodel.Participant"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/participants/:id": {
+            "get": {
+                "description": "User Find participant after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Participants"
+                ],
+                "summary": "User Find participant",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "challenge Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully!",
+                        "schema": {
+                            "$ref": "#/definitions/participantmodel.ParticipantFind"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Change status of the Participant after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Participants"
+                ],
+                "summary": "Change status of the Participant",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "challenge Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Status",
+                        "name": "status",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully!",
+                        "schema": {
+                            "$ref": "#/definitions/participantmodel.ParticipantUpdate"
+                        }
+                    }
+                }
+            }
+        },
         "/api/register": {
             "post": {
                 "description": "User create new Account by providing email and password",
@@ -555,16 +1048,16 @@
                         "required": true
                     },
                     {
-                        "type": "number",
-                        "description": "Page number",
-                        "name": "page",
+                        "type": "string",
+                        "description": "Task's name",
+                        "name": "name",
                         "in": "path",
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "description": "Task's name",
-                        "name": "name",
+                        "type": "number",
+                        "description": "Page number",
+                        "name": "page",
                         "in": "path",
                         "required": true
                     },
@@ -938,6 +1431,116 @@
         }
     },
     "definitions": {
+        "challengemodel.Challenge": {
+            "type": "object",
+            "properties": {
+                "count_user_joined": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "experience_point": {
+                    "type": "integer"
+                },
+                "id": {
+                    "$ref": "#/definitions/common.UID"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "boolean"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "challengemodel.ChallengeCreate": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "experience_point": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                }
+            }
+        },
+        "challengemodel.ChallengeFind": {
+            "type": "object",
+            "properties": {
+                "count_user_joined": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "experience_point": {
+                    "type": "integer"
+                },
+                "id": {
+                    "$ref": "#/definitions/common.UID"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "boolean"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "challengemodel.ChallengeUpdate": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "experience_point": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                }
+            }
+        },
         "common.Date": {
             "type": "object",
             "properties": {
@@ -1203,6 +1806,60 @@
                     "$ref": "#/definitions/common.Target"
                 },
                 "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "participantmodel.Participant": {
+            "type": "object",
+            "properties": {
+                "challenge_id": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "$ref": "#/definitions/common.UID"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "participantmodel.ParticipantFind": {
+            "type": "object",
+            "properties": {
+                "challenge_id": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "$ref": "#/definitions/common.UID"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "participantmodel.ParticipantUpdate": {
+            "type": "object",
+            "properties": {
+                "status": {
                     "type": "string"
                 }
             }

@@ -11,6 +11,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary User Cancel the Challenge
+// @Description User Cancel the challenge after successful authentication.
+// @Tags Challenges
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Authorization"
+// @Param id path string true "challenge Id"
+// @Success 200 {object} common.successRes "Successfully!"
+// @Router /api/challenges/:id/user-cancel [delete]
 func CancelParticipant(appCtx component.AppContext) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		// get cl id

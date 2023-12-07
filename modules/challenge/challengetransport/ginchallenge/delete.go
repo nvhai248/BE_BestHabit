@@ -10,6 +10,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary User Deleted Challenge
+// @Description User Deleted challenge after successful authentication.
+// @Tags Challenges (requires admin)
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Authorization"
+// @Param id path string true "challenge Id"
+// @Success 200 {object} common.successRes "Successfully deleted challenge!"
+// @Router /api/challenges/:id [delete]
 func DeleteChallenge(appCtx component.AppContext) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		uid, err := common.FromBase58(ctx.Param("id"))
