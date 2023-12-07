@@ -22,7 +22,7 @@ import (
 // @Param deadline formData string true "Deadline"
 // @Param reminder formData string true "Reminder"
 // @Success 200 {object} taskmodel.TaskCreate "Successfully created task!"
-// @Router /api/task/ [post]
+// @Router /api/tasks [post]
 func CreateTask(appCtx component.AppContext) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var taskData taskmodel.TaskCreate

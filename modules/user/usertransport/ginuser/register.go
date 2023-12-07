@@ -20,6 +20,8 @@ import (
 // @Param password formData string true "Password"
 // @Param phone formData string true "Phone"
 // @Param name formData string true "Name"
+// @Param avatar body common.Image true "Avatar"
+// @Param settings body common.Settings true "Settings"
 // @Success 200 {object} usermodel.UserCreate "Sign up Success"
 // @Router /api/register [post]
 func BasicRegister(appCtx component.AppContext) gin.HandlerFunc {

@@ -18,7 +18,7 @@ import (
 // @Param Authorization header string true "Authorization"
 // @Param id path string true "Task Id"
 // @Success 200 {object} common.successRes "Successfully deleted task!"
-// @Router /api/task/:id [delete]
+// @Router /api/tasks/:id [delete]
 func SoftDeleteTask(appCtx component.AppContext) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		uid, err := common.FromBase58(ctx.Param("id"))

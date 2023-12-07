@@ -98,9 +98,9 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 		habit.POST("/", ginhabit.CreateHabit(appCtx))
 		habit.GET("/", ginhabit.ListHabitByConditions(appCtx))
 		habit.GET("/:id", ginhabit.FindHabit(appCtx))
-		habit.PATCH("/:id", ginhabit.UpdateTask(appCtx))
+		habit.PATCH("/:id", ginhabit.UpdateHabit(appCtx))
 		habit.DELETE("/:id", ginhabit.SoftDeleteHabit(appCtx))
-		habit.POST("/:id/confirm-completed", ginhabit.AddCompletedDate(appCtx))
+		habit.PATCH("/:id/confirm-completed", ginhabit.AddCompletedDate(appCtx))
 	}
 
 	challenge := routerAPIS.Group("/challenges", middleware.RequireAuth(appCtx))

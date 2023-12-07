@@ -18,7 +18,7 @@ import (
 // @Param Authorization header string true "Authorization"
 // @Param id path string true "Task Id"
 // @Success 200 {object} taskmodel.TaskFind "Successfully!"
-// @Router /api/task/:id [get]
+// @Router /api/tasks/:id [get]
 func FindTask(appCtx component.AppContext) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		uid, err := common.FromBase58(ctx.Param("id"))

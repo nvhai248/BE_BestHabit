@@ -15,6 +15,431 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/habits": {
+            "get": {
+                "description": "User Get List User's habit after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Habits"
+                ],
+                "summary": "Get List User's Habit",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Habit's name",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "Limit of habits returned!",
+                        "name": "limit",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "habit Id",
+                        "name": "cursor",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Deadline",
+                        "name": "deadline",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully!",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/habitmodel.Habit"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "User Create New habit after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Habits"
+                ],
+                "summary": "User Create New Habit",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "habit Name",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Description",
+                        "name": "description",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "StartDate",
+                        "name": "start_date",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "EndDate",
+                        "name": "end_date",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Type",
+                        "name": "type",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Reminder",
+                        "name": "reminder",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "IsCountBased",
+                        "name": "is_count_based",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "description": "IsCountBased",
+                        "name": "days",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/common.Day"
+                            }
+                        }
+                    },
+                    {
+                        "description": "IsCountBased",
+                        "name": "completed_dates",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/common.Date"
+                            }
+                        }
+                    },
+                    {
+                        "description": "Target",
+                        "name": "target",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/common.Target"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully created habit!",
+                        "schema": {
+                            "$ref": "#/definitions/habitmodel.HabitCreate"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/habits/:id": {
+            "get": {
+                "description": "User Find habit after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Habits"
+                ],
+                "summary": "User Find Habit",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "habit Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully!",
+                        "schema": {
+                            "$ref": "#/definitions/habitmodel.HabitFind"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "User Deleted habit after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Habits"
+                ],
+                "summary": "User Deleted Habit",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "habit Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully deleted habit!",
+                        "schema": {
+                            "$ref": "#/definitions/common.successRes"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "User Update habit after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Habits"
+                ],
+                "summary": "User Update Habit",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "habit Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "habit Name",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Description",
+                        "name": "description",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "StartDate",
+                        "name": "start_date",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "EndDate",
+                        "name": "end_date",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Type",
+                        "name": "type",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Reminder",
+                        "name": "reminder",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "IsCountBased",
+                        "name": "is_count_based",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "description": "IsCountBased",
+                        "name": "days",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/common.Day"
+                            }
+                        }
+                    },
+                    {
+                        "description": "IsCountBased",
+                        "name": "completed_dates",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/common.Date"
+                            }
+                        }
+                    },
+                    {
+                        "description": "Target",
+                        "name": "target",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/common.Target"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully update habit!",
+                        "schema": {
+                            "$ref": "#/definitions/habitmodel.HabitUpdate"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/habits/:id/confirm-completed": {
+            "patch": {
+                "description": "User Add Completed date of Habit after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Habits"
+                ],
+                "summary": "User Add Completed date of Habit",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "habit Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Date",
+                        "name": "date",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/common.Date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully!",
+                        "schema": {
+                            "$ref": "#/definitions/common.Date"
+                        }
+                    }
+                }
+            }
+        },
         "/api/login": {
             "post": {
                 "description": "User use email and password to login to system",
@@ -89,6 +514,24 @@ const docTemplate = `{
                         "name": "name",
                         "in": "formData",
                         "required": true
+                    },
+                    {
+                        "description": "Avatar",
+                        "name": "avatar",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/common.Image"
+                        }
+                    },
+                    {
+                        "description": "Settings",
+                        "name": "settings",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/common.Settings"
+                        }
                     }
                 ],
                 "responses": {
@@ -101,7 +544,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/task": {
+        "/api/tasks": {
             "get": {
                 "description": "User Get List User's Task after successful authentication.",
                 "consumes": [
@@ -126,6 +569,13 @@ const docTemplate = `{
                         "type": "number",
                         "description": "Page number",
                         "name": "page",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Task's name",
+                        "name": "name",
                         "in": "path",
                         "required": true
                     },
@@ -162,9 +612,7 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/api/task/": {
+            },
             "post": {
                 "description": "User Create New Task after successful authentication.",
                 "consumes": [
@@ -224,7 +672,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/task/:id": {
+        "/api/tasks/:id": {
             "get": {
                 "description": "User Find Task after successful authentication.",
                 "consumes": [
@@ -501,6 +949,22 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "common.Date": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                }
+            }
+        },
+        "common.Day": {
+            "type": "object",
+            "properties": {
+                "weekday": {
+                    "type": "string"
+                }
+            }
+        },
         "common.Image": {
             "type": "object",
             "properties": {
@@ -535,6 +999,17 @@ const docTemplate = `{
                 }
             }
         },
+        "common.Target": {
+            "type": "object",
+            "properties": {
+                "times": {
+                    "type": "integer"
+                },
+                "total_time": {
+                    "type": "integer"
+                }
+            }
+        },
         "common.UID": {
             "type": "object"
         },
@@ -549,6 +1024,197 @@ const docTemplate = `{
                 "paging": {},
                 "status_code": {
                     "type": "integer"
+                }
+            }
+        },
+        "habitmodel.Habit": {
+            "type": "object",
+            "properties": {
+                "completed_dates": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/common.Date"
+                    }
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "days": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/common.Day"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "id": {
+                    "$ref": "#/definitions/common.UID"
+                },
+                "is_count_based": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "reminder": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "target": {
+                    "$ref": "#/definitions/common.Target"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "habitmodel.HabitCreate": {
+            "type": "object",
+            "properties": {
+                "completed_dates": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/common.Date"
+                    }
+                },
+                "days": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/common.Day"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "is_count_based": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "reminder": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "target": {
+                    "$ref": "#/definitions/common.Target"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "habitmodel.HabitFind": {
+            "type": "object",
+            "properties": {
+                "completed_dates": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/common.Date"
+                    }
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "days": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/common.Day"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "id": {
+                    "$ref": "#/definitions/common.UID"
+                },
+                "is_count_based": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "reminder": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "target": {
+                    "$ref": "#/definitions/common.Target"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "habitmodel.HabitUpdate": {
+            "type": "object",
+            "properties": {
+                "completed_dates": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/common.Date"
+                    }
+                },
+                "days": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/common.Day"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "is_count_based": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "reminder": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "target": {
+                    "$ref": "#/definitions/common.Target"
+                },
+                "type": {
+                    "type": "string"
                 }
             }
         },

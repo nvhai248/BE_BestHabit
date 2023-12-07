@@ -1,4 +1,14 @@
 definitions:
+  common.Date:
+    properties:
+      date:
+        type: string
+    type: object
+  common.Day:
+    properties:
+      weekday:
+        type: string
+    type: object
   common.Image:
     properties:
       cloud_name:
@@ -21,6 +31,13 @@ definitions:
       theme:
         type: string
     type: object
+  common.Target:
+    properties:
+      times:
+        type: integer
+      total_time:
+        type: integer
+    type: object
   common.UID:
     type: object
   common.successRes:
@@ -32,6 +49,132 @@ definitions:
       paging: {}
       status_code:
         type: integer
+    type: object
+  habitmodel.Habit:
+    properties:
+      completed_dates:
+        items:
+          $ref: '#/definitions/common.Date'
+        type: array
+      created_at:
+        type: string
+      days:
+        items:
+          $ref: '#/definitions/common.Day'
+        type: array
+      description:
+        type: string
+      end_date:
+        type: string
+      id:
+        $ref: '#/definitions/common.UID'
+      is_count_based:
+        type: boolean
+      name:
+        type: string
+      reminder:
+        type: string
+      start_date:
+        type: string
+      status:
+        type: integer
+      target:
+        $ref: '#/definitions/common.Target'
+      type:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  habitmodel.HabitCreate:
+    properties:
+      completed_dates:
+        items:
+          $ref: '#/definitions/common.Date'
+        type: array
+      days:
+        items:
+          $ref: '#/definitions/common.Day'
+        type: array
+      description:
+        type: string
+      end_date:
+        type: string
+      is_count_based:
+        type: boolean
+      name:
+        type: string
+      reminder:
+        type: string
+      start_date:
+        type: string
+      target:
+        $ref: '#/definitions/common.Target'
+      type:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  habitmodel.HabitFind:
+    properties:
+      completed_dates:
+        items:
+          $ref: '#/definitions/common.Date'
+        type: array
+      created_at:
+        type: string
+      days:
+        items:
+          $ref: '#/definitions/common.Day'
+        type: array
+      description:
+        type: string
+      end_date:
+        type: string
+      id:
+        $ref: '#/definitions/common.UID'
+      is_count_based:
+        type: boolean
+      name:
+        type: string
+      reminder:
+        type: string
+      start_date:
+        type: string
+      status:
+        type: integer
+      target:
+        $ref: '#/definitions/common.Target'
+      type:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  habitmodel.HabitUpdate:
+    properties:
+      completed_dates:
+        items:
+          $ref: '#/definitions/common.Date'
+        type: array
+      days:
+        items:
+          $ref: '#/definitions/common.Day'
+        type: array
+      description:
+        type: string
+      end_date:
+        type: string
+      is_count_based:
+        type: boolean
+      name:
+        type: string
+      reminder:
+        type: string
+      start_date:
+        type: string
+      target:
+        $ref: '#/definitions/common.Target'
+      type:
+        type: string
     type: object
   taskmodel.Task:
     properties:
@@ -150,6 +293,296 @@ definitions:
 info:
   contact: {}
 paths:
+  /api/habits:
+    get:
+      consumes:
+      - application/json
+      description: User Get List User's habit after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Habit's name
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: Page number
+        in: path
+        name: page
+        required: true
+        type: number
+      - description: Limit of habits returned!
+        in: path
+        name: limit
+        required: true
+        type: number
+      - description: habit Id
+        in: path
+        name: cursor
+        required: true
+        type: string
+      - description: Deadline
+        in: path
+        name: deadline
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully!
+          schema:
+            items:
+              $ref: '#/definitions/habitmodel.Habit'
+            type: array
+      summary: Get List User's Habit
+      tags:
+      - Habits
+    post:
+      consumes:
+      - application/json
+      description: User Create New habit after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: habit Name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Description
+        in: formData
+        name: description
+        required: true
+        type: string
+      - description: StartDate
+        in: formData
+        name: start_date
+        required: true
+        type: string
+      - description: EndDate
+        in: formData
+        name: end_date
+        required: true
+        type: string
+      - description: Type
+        in: formData
+        name: type
+        required: true
+        type: string
+      - description: Reminder
+        in: formData
+        name: reminder
+        required: true
+        type: string
+      - description: IsCountBased
+        in: formData
+        name: is_count_based
+        required: true
+        type: number
+      - description: IsCountBased
+        in: body
+        name: days
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/common.Day'
+          type: array
+      - description: IsCountBased
+        in: body
+        name: completed_dates
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/common.Date'
+          type: array
+      - description: Target
+        in: body
+        name: target
+        required: true
+        schema:
+          $ref: '#/definitions/common.Target'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully created habit!
+          schema:
+            $ref: '#/definitions/habitmodel.HabitCreate'
+      summary: User Create New Habit
+      tags:
+      - Habits
+  /api/habits/:id:
+    delete:
+      consumes:
+      - application/json
+      description: User Deleted habit after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: habit Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully deleted habit!
+          schema:
+            $ref: '#/definitions/common.successRes'
+      summary: User Deleted Habit
+      tags:
+      - Habits
+    get:
+      consumes:
+      - application/json
+      description: User Find habit after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: habit Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully!
+          schema:
+            $ref: '#/definitions/habitmodel.HabitFind'
+      summary: User Find Habit
+      tags:
+      - Habits
+    patch:
+      consumes:
+      - application/json
+      description: User Update habit after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: habit Id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: habit Name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Description
+        in: formData
+        name: description
+        required: true
+        type: string
+      - description: StartDate
+        in: formData
+        name: start_date
+        required: true
+        type: string
+      - description: EndDate
+        in: formData
+        name: end_date
+        required: true
+        type: string
+      - description: Type
+        in: formData
+        name: type
+        required: true
+        type: string
+      - description: Reminder
+        in: formData
+        name: reminder
+        required: true
+        type: string
+      - description: IsCountBased
+        in: formData
+        name: is_count_based
+        required: true
+        type: number
+      - description: IsCountBased
+        in: body
+        name: days
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/common.Day'
+          type: array
+      - description: IsCountBased
+        in: body
+        name: completed_dates
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/common.Date'
+          type: array
+      - description: Target
+        in: body
+        name: target
+        required: true
+        schema:
+          $ref: '#/definitions/common.Target'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully update habit!
+          schema:
+            $ref: '#/definitions/habitmodel.HabitUpdate'
+      summary: User Update Habit
+      tags:
+      - Habits
+  /api/habits/:id/confirm-completed:
+    patch:
+      consumes:
+      - application/json
+      description: User Add Completed date of Habit after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: habit Id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Date
+        in: body
+        name: date
+        required: true
+        schema:
+          $ref: '#/definitions/common.Date'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully!
+          schema:
+            $ref: '#/definitions/common.Date'
+      summary: User Add Completed date of Habit
+      tags:
+      - Habits
   /api/login:
     post:
       consumes:
@@ -200,6 +633,18 @@ paths:
         name: name
         required: true
         type: string
+      - description: Avatar
+        in: body
+        name: avatar
+        required: true
+        schema:
+          $ref: '#/definitions/common.Image'
+      - description: Settings
+        in: body
+        name: settings
+        required: true
+        schema:
+          $ref: '#/definitions/common.Settings'
       produces:
       - application/json
       responses:
@@ -208,7 +653,7 @@ paths:
           schema:
             $ref: '#/definitions/usermodel.UserCreate'
       summary: Basic Register
-  /api/task:
+  /api/tasks:
     get:
       consumes:
       - application/json
@@ -224,6 +669,11 @@ paths:
         name: page
         required: true
         type: number
+      - description: Task's name
+        in: path
+        name: name
+        required: true
+        type: string
       - description: Limit of tasks returned!
         in: path
         name: limit
@@ -251,7 +701,6 @@ paths:
       summary: Get List User's Task
       tags:
       - Tasks
-  /api/task/:
     post:
       consumes:
       - application/json
@@ -292,7 +741,7 @@ paths:
       summary: User Create New Task
       tags:
       - Tasks
-  /api/task/:id:
+  /api/tasks/:id:
     delete:
       consumes:
       - application/json

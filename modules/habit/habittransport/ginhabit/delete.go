@@ -10,6 +10,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary User Deleted Habit
+// @Description User Deleted habit after successful authentication.
+// @Tags Habits
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Authorization"
+// @Param id path string true "habit Id"
+// @Success 200 {object} common.successRes "Successfully deleted habit!"
+// @Router /api/habits/:id [delete]
 func SoftDeleteHabit(appCtx component.AppContext) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		uid, err := common.FromBase58(ctx.Param("id"))
