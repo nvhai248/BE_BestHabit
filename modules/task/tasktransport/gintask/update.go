@@ -11,6 +11,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary User Update Task
+// @Description User Update Task after successful authentication.
+// @Tags Tasks
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Authorization"
+// @Param id path string true "Task Id"
+// @Param name formData string true "Task Name"
+// @Param description formData string true "Description"
+// @Param deadline formData string true "Deadline"
+// @Param reminder formData string true "Reminder"
+// @Param status formData string true "Status"
+// @Success 200 {object} taskmodel.TaskUpdate "Successfully update task!"
+// @Router /api/task/:id [patch]
 func UpdateTask(appCtx component.AppContext) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		uid, err := common.FromBase58(ctx.Param("id"))

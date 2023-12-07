@@ -21,6 +21,80 @@ definitions:
       theme:
         type: string
     type: object
+  common.UID:
+    type: object
+  common.successRes:
+    properties:
+      data: {}
+      filter: {}
+      message:
+        type: string
+      paging: {}
+      status_code:
+        type: integer
+    type: object
+  taskmodel.Task:
+    properties:
+      created_at:
+        type: string
+      deadline:
+        type: string
+      description:
+        type: string
+      id:
+        $ref: '#/definitions/common.UID'
+      name:
+        type: string
+      reminder:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  taskmodel.TaskCreate:
+    properties:
+      deadline:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      reminder:
+        type: string
+    type: object
+  taskmodel.TaskFind:
+    properties:
+      created_at:
+        type: string
+      deadline:
+        type: string
+      description:
+        type: string
+      id:
+        $ref: '#/definitions/common.UID'
+      name:
+        type: string
+      reminder:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  taskmodel.TaskUpdate:
+    properties:
+      deadline:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      reminder:
+        type: string
+      status:
+        type: string
+    type: object
   tokenprovider.Token:
     properties:
       created:
@@ -134,6 +208,191 @@ paths:
           schema:
             $ref: '#/definitions/usermodel.UserCreate'
       summary: Basic Register
+  /api/task:
+    get:
+      consumes:
+      - application/json
+      description: User Get List User's Task after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Page number
+        in: path
+        name: page
+        required: true
+        type: number
+      - description: Limit of tasks returned!
+        in: path
+        name: limit
+        required: true
+        type: number
+      - description: Task Id
+        in: path
+        name: cursor
+        required: true
+        type: string
+      - description: Deadline
+        in: path
+        name: deadline
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully!
+          schema:
+            items:
+              $ref: '#/definitions/taskmodel.Task'
+            type: array
+      summary: Get List User's Task
+      tags:
+      - Tasks
+  /api/task/:
+    post:
+      consumes:
+      - application/json
+      description: User Create New Task after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Task Name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Description
+        in: formData
+        name: description
+        required: true
+        type: string
+      - description: Deadline
+        in: formData
+        name: deadline
+        required: true
+        type: string
+      - description: Reminder
+        in: formData
+        name: reminder
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully created task!
+          schema:
+            $ref: '#/definitions/taskmodel.TaskCreate'
+      summary: User Create New Task
+      tags:
+      - Tasks
+  /api/task/:id:
+    delete:
+      consumes:
+      - application/json
+      description: User Deleted Task after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Task Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully deleted task!
+          schema:
+            $ref: '#/definitions/common.successRes'
+      summary: User Deleted Task
+      tags:
+      - Tasks
+    get:
+      consumes:
+      - application/json
+      description: User Find Task after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Task Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully!
+          schema:
+            $ref: '#/definitions/taskmodel.TaskFind'
+      summary: User Find Task
+      tags:
+      - Tasks
+    patch:
+      consumes:
+      - application/json
+      description: User Update Task after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Task Id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Task Name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Description
+        in: formData
+        name: description
+        required: true
+        type: string
+      - description: Deadline
+        in: formData
+        name: deadline
+        required: true
+        type: string
+      - description: Reminder
+        in: formData
+        name: reminder
+        required: true
+        type: string
+      - description: Status
+        in: formData
+        name: status
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully update task!
+          schema:
+            $ref: '#/definitions/taskmodel.TaskUpdate'
+      summary: User Update Task
+      tags:
+      - Tasks
   /api/users/profile:
     get:
       consumes:
@@ -198,7 +457,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: User update profile after successful authentication.
+      description: User upload photo after successful authentication.
       parameters:
       - description: Authorization
         in: header
@@ -217,7 +476,7 @@ paths:
           description: Upload Successfully
           schema:
             $ref: '#/definitions/uploadmodel.ImageUpload'
-      summary: User Update Profile
+      summary: User Upload Photo
       tags:
       - Users
 swagger: "2.0"

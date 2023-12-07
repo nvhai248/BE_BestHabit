@@ -11,6 +11,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary User Create New Task
+// @Description User Create New Task after successful authentication.
+// @Tags Tasks
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Authorization"
+// @Param name formData string true "Task Name"
+// @Param description formData string true "Description"
+// @Param deadline formData string true "Deadline"
+// @Param reminder formData string true "Reminder"
+// @Success 200 {object} taskmodel.TaskCreate "Successfully created task!"
+// @Router /api/task/ [post]
 func CreateTask(appCtx component.AppContext) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var taskData taskmodel.TaskCreate

@@ -11,6 +11,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Get List User's Task
+// @Description User Get List User's Task after successful authentication.
+// @Tags Tasks
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Authorization"
+// @Param page path number true "Page number"
+// @Param limit path number true "Limit of tasks returned!"
+// @Param cursor path string true "Task Id"
+// @Param deadline path string true "Deadline"
+// @Success 200 {object} []taskmodel.Task "Successfully!"
+// @Router /api/task [get]
 func ListTaskByConditions(appCtx component.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var filter taskmodel.TaskFilter

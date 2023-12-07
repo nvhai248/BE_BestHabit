@@ -101,6 +101,277 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/task": {
+            "get": {
+                "description": "User Get List User's Task after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Get List User's Task",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "Limit of tasks returned!",
+                        "name": "limit",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Task Id",
+                        "name": "cursor",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Deadline",
+                        "name": "deadline",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully!",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/taskmodel.Task"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/task/": {
+            "post": {
+                "description": "User Create New Task after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "User Create New Task",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Task Name",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Description",
+                        "name": "description",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Deadline",
+                        "name": "deadline",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Reminder",
+                        "name": "reminder",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully created task!",
+                        "schema": {
+                            "$ref": "#/definitions/taskmodel.TaskCreate"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/task/:id": {
+            "get": {
+                "description": "User Find Task after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "User Find Task",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Task Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully!",
+                        "schema": {
+                            "$ref": "#/definitions/taskmodel.TaskFind"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "User Deleted Task after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "User Deleted Task",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Task Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully deleted task!",
+                        "schema": {
+                            "$ref": "#/definitions/common.successRes"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "User Update Task after successful authentication.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "User Update Task",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Task Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Task Name",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Description",
+                        "name": "description",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Deadline",
+                        "name": "deadline",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Reminder",
+                        "name": "reminder",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Status",
+                        "name": "status",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully update task!",
+                        "schema": {
+                            "$ref": "#/definitions/taskmodel.TaskUpdate"
+                        }
+                    }
+                }
+            }
+        },
         "/api/users/profile": {
             "get": {
                 "description": "User get profile after successful authentication.",
@@ -191,7 +462,7 @@ const docTemplate = `{
         },
         "/api/users/upload": {
             "post": {
-                "description": "User update profile after successful authentication.",
+                "description": "User upload photo after successful authentication.",
                 "consumes": [
                     "application/json"
                 ],
@@ -201,7 +472,7 @@ const docTemplate = `{
                 "tags": [
                     "Users"
                 ],
-                "summary": "User Update Profile",
+                "summary": "User Upload Photo",
                 "parameters": [
                     {
                         "type": "string",
@@ -260,6 +531,118 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "theme": {
+                    "type": "string"
+                }
+            }
+        },
+        "common.UID": {
+            "type": "object"
+        },
+        "common.successRes": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "filter": {},
+                "message": {
+                    "type": "string"
+                },
+                "paging": {},
+                "status_code": {
+                    "type": "integer"
+                }
+            }
+        },
+        "taskmodel.Task": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "deadline": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "$ref": "#/definitions/common.UID"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "reminder": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "taskmodel.TaskCreate": {
+            "type": "object",
+            "properties": {
+                "deadline": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "reminder": {
+                    "type": "string"
+                }
+            }
+        },
+        "taskmodel.TaskFind": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "deadline": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "$ref": "#/definitions/common.UID"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "reminder": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "taskmodel.TaskUpdate": {
+            "type": "object",
+            "properties": {
+                "deadline": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "reminder": {
+                    "type": "string"
+                },
+                "status": {
                     "type": "string"
                 }
             }

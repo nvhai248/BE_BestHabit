@@ -10,8 +10,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @Summary User Update Profile
-// @Description User update profile after successful authentication.
+// @Summary User Upload Photo
+// @Description User upload photo after successful authentication.
 // @Tags Users
 // @Accept  json
 // @Produce  json

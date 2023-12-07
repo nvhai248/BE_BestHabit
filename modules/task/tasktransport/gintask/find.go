@@ -10,6 +10,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary User Find Task
+// @Description User Find Task after successful authentication.
+// @Tags Tasks
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Authorization"
+// @Param id path string true "Task Id"
+// @Success 200 {object} taskmodel.TaskFind "Successfully!"
+// @Router /api/task/:id [get]
 func FindTask(appCtx component.AppContext) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		uid, err := common.FromBase58(ctx.Param("id"))
