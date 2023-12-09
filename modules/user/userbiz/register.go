@@ -2,8 +2,11 @@ package userbiz
 
 import (
 	"bestHabit/common"
+	"bestHabit/component/mailprovider"
+	"bestHabit/component/tokenprovider"
 	"bestHabit/modules/user/usermodel"
 	"context"
+	"fmt"
 )
 
 type BasicRegisterStorage interface {
@@ -16,12 +19,19 @@ type Hasher interface {
 }
 
 type basicRegisterBiz struct {
-	store  BasicRegisterStorage
-	hasher Hasher
+	store         BasicRegisterStorage
+	hasher        Hasher
+	mailSender    mailprovider.EmailSender
+	tokenProvider tokenprovider.Provider
 }
 
-func NewBasicRegisterBiz(store BasicRegisterStorage, hasher Hasher) *basicRegisterBiz {
-	return &basicRegisterBiz{store: store, hasher: hasher}
+func NewBasicRegisterBiz(
+	store BasicRegisterStorage,
+	hasher Hasher,
+	mailSender mailprovider.EmailSender,
+	tokenProvider tokenprovider.Provider,
+) *basicRegisterBiz {
+	return &basicRegisterBiz{store: store, hasher: hasher, mailSender: mailSender, tokenProvider: tokenProvider}
 }
 
 func (biz *basicRegisterBiz) BasicRegister(ctx context.Context, data *usermodel.UserCreate) error {
@@ -51,6 +61,23 @@ func (biz *basicRegisterBiz) BasicRegister(ctx context.Context, data *usermodel.
 	if err := biz.store.Create(ctx, data); err != nil {
 		return common.ErrCannotCreateEntity(usermodel.EntityName, err)
 	}
+
+	go func() {
+		defer common.AppRecover()
+		user, _err := biz.store.FindByEmail(ctx, data.Email)
+
+		if _err != nil {
+			fmt.Println("error: ", _err)
+		}
+
+		payload := tokenprovider.TokenPayload{
+			UserId: user.Id,
+			Role:   *user.Role,
+		}
+		token, _err := biz.tokenProvider.Generate(payload, 60*60*24)
+		email := common.NewEmailVerifyAccount([]string{data.Email}, token.Token)
+		biz.mailSender.SendEmail(email.Subject, email.Content, email.To, email.Cc, email.Bcc, email.AttachFiles)
+	}()
 
 	return nil
 }

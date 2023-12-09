@@ -4,6 +4,7 @@ import (
 	"bestHabit/common"
 	"bestHabit/component"
 	"bestHabit/component/hasher"
+	"bestHabit/component/tokenprovider/jwt"
 	"bestHabit/modules/user/userbiz"
 	"bestHabit/modules/user/usermodel"
 	"bestHabit/modules/user/userstorage"
@@ -34,7 +35,8 @@ func BasicRegister(appCtx component.AppContext) gin.HandlerFunc {
 
 		store := userstorage.NewSQLStore(appCtx.GetMainDBConnection())
 		md5 := hasher.NewMd5Hash()
-		biz := userbiz.NewBasicRegisterBiz(store, md5)
+		tokenProvider := jwt.NewTokenJWTProvider(appCtx.SecretKey())
+		biz := userbiz.NewBasicRegisterBiz(store, md5, appCtx.GetEmailSender(), tokenProvider)
 
 		if err := biz.BasicRegister(c.Request.Context(), &data); err != nil {
 			panic(err)
