@@ -11,18 +11,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @Summary Basic Register
-// @Description User create new Account by providing email and password
+// @Summary User require send verification
+// @Description User require send verification account.
 // @Accept  json
 // @Produce  json
-// @Param email formData string true "Email address"
-// @Param password formData string true "Password"
-// @Param phone formData string true "Phone"
-// @Param name formData string true "Name"
-// @Param avatar body common.Image true "Avatar"
-// @Param settings body common.Settings true "Settings"
+// @Param Authorization header string true "Authorization token"
 // @Success 200 {object} usermodel.UserCreate "Sign up Success"
-// @Router /api/register [post]
+// @Router /api/users/send-verification [post]
 func SendVerification(appCtx component.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		store := userstorage.NewSQLStore(appCtx.GetMainDBConnection())
