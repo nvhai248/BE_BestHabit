@@ -82,6 +82,7 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 		user.PATCH("/profile", ginuser.UpdateProfile(appCtx))
 		user.GET("/profile", ginuser.GetProfile(appCtx))
 		user.POST("/upload", ginupload.Upload(appCtx))
+		user.POST("/send-verification", ginuser.SendVerification(appCtx))
 	}
 
 	task := routerAPIS.Group("/tasks", middleware.RequireAuth(appCtx))
