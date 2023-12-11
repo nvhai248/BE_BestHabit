@@ -5,7 +5,6 @@ import (
 	"bestHabit/component"
 	"bestHabit/component/tokenprovider/jwt"
 	"bestHabit/modules/user/userbiz"
-	"bestHabit/modules/user/userstorage"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -13,20 +12,20 @@ import (
 
 // @Summary User require send verification
 // @Description User require send verification account.
+// @Tags Users
 // @Accept  json
 // @Produce  json
 // @Param Authorization header string true "Authorization token"
-// @Success 200 {object} usermodel.UserCreate "Sign up Success"
+// @Success 200 {object} common.successRes "Success!"
 // @Router /api/users/send-verification [post]
 func SendVerification(appCtx component.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		store := userstorage.NewSQLStore(appCtx.GetMainDBConnection())
 		tokenProvider := jwt.NewTokenJWTProvider(appCtx.SecretKey())
-		biz := userbiz.NewSendVerificationBiz(store, appCtx.GetEmailSender(), tokenProvider)
+		biz := userbiz.NewSendVerificationBiz(appCtx.GetEmailSender(), tokenProvider)
 
 		user := c.MustGet(common.CurrentUser).(common.Requester)
 
-		if err := biz.SendVerification(c.Request.Context(), user.GetId(), user.GetRole()); err != nil {
+		if err := biz.SendVerification(c.Request.Context(), user.GetEmail(), user.GetId(), user.GetRole()); err != nil {
 			panic(err)
 		}
 

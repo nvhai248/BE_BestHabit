@@ -1344,6 +1344,27 @@ paths:
       summary: User Update Profile
       tags:
       - Users
+  /api/users/send-verification:
+    post:
+      consumes:
+      - application/json
+      description: User require send verification account.
+      parameters:
+      - description: Authorization token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success!
+          schema:
+            $ref: '#/definitions/common.successRes'
+      summary: User require send verification
+      tags:
+      - Users
   /api/users/upload:
     post:
       consumes:

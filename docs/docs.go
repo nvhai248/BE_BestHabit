@@ -1401,6 +1401,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/users/send-verification": {
+            "post": {
+                "description": "User require send verification account.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "User require send verification",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success!",
+                        "schema": {
+                            "$ref": "#/definitions/common.successRes"
+                        }
+                    }
+                }
+            }
+        },
         "/api/users/upload": {
             "post": {
                 "description": "User upload photo after successful authentication.",
