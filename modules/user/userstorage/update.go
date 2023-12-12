@@ -88,3 +88,13 @@ func (s *sqlStore) VerifyUser(ctx context.Context, userId int) error {
 
 	return nil
 }
+
+func (s *sqlStore) ChangePassword(ctx context.Context, newPw string, userId int) error {
+	db := s.db
+
+	if _, err := db.Exec("UPDATE users SET password = ? WHERE id = ?", newPw, userId); err != nil {
+		return common.ErrDB(err)
+	}
+
+	return nil
+}

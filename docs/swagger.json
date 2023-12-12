@@ -1302,6 +1302,52 @@
                 }
             }
         },
+        "/api/users/change-password": {
+            "patch": {
+                "description": "User can change password after authentication",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "User change password",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Password",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "New Password",
+                        "name": "new_password",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "change password Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/common.successRes"
+                        }
+                    }
+                }
+            }
+        },
         "/api/users/profile": {
             "get": {
                 "description": "User get profile after successful authentication.",

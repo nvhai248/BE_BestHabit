@@ -9,6 +9,15 @@ type UserUpdate struct {
 	Settings *common.Settings `json:"settings" db:"settings"`
 }
 
+type UpdatePassword struct {
+	NewPassword *string `json:"new_password"`
+	Password    *string `json:"password" db:"password"`
+}
+
+func (UpdatePassword) TableName() string {
+	return UserCreate{}.TableName()
+}
+
 func (UserUpdate) TableName() string {
 	return UserCreate{}.TableName()
 }

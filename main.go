@@ -84,6 +84,7 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 		user.POST("/upload", ginupload.Upload(appCtx))
 		user.POST("/send-verification", ginuser.SendVerification(appCtx))
 		user.PATCH("/verify/:token", middleware.CompareIdBeforeVerify(appCtx), ginuser.Verify(appCtx))
+		user.PATCH("/change-password", ginuser.ChangePassword(appCtx))
 	}
 
 	task := routerAPIS.Group("/tasks", middleware.RequireAuth(appCtx))

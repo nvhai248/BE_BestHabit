@@ -1284,6 +1284,37 @@ paths:
       summary: User Update Task
       tags:
       - Tasks
+  /api/users/change-password:
+    patch:
+      consumes:
+      - application/json
+      description: User can change password after authentication
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Password
+        in: formData
+        name: password
+        required: true
+        type: string
+      - description: New Password
+        in: formData
+        name: new_password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: change password Successfully
+          schema:
+            $ref: '#/definitions/common.successRes'
+      summary: User change password
+      tags:
+      - Users
   /api/users/profile:
     get:
       consumes:

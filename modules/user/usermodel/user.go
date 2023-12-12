@@ -7,8 +7,8 @@ import (
 )
 
 type UserLogin struct {
-	Email    string `db:"email" json:"email" form:"email"`
-	Password string `db:"password" json:"password" form:"password"`
+	Email    string `db:"email" json:"email"`
+	Password string `db:"password" json:"password"`
 }
 
 func (UserLogin) TableName() string {
