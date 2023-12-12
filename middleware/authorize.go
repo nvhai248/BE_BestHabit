@@ -71,3 +71,25 @@ func RequireAuth(appCtx component.AppContext) func(c *gin.Context) {
 		c.Next()
 	}
 }
+
+func CompareIdBeforeVerify(appCtx component.AppContext) func(c *gin.Context) {
+	tokenProvider := jwt.NewTokenJWTProvider(appCtx.SecretKey())
+
+	return func(c *gin.Context) {
+
+		token := c.Param("token")
+
+		payload, err := tokenProvider.Validate(token)
+		if err != nil {
+			panic(common.NewCustomError(nil, "Wrong token to compare!", "ErrWrongAuth"))
+		}
+
+		user := c.MustGet(common.CurrentUser).(common.Requester)
+
+		if user.GetId() != payload.UserId {
+			panic(common.NewCustomError(nil, "You are not have permission to verify!", "NoPermission"))
+		}
+
+		c.Next()
+	}
+}

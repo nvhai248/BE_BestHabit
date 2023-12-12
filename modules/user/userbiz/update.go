@@ -33,8 +33,8 @@ func (b *updateProfileBiz) UpdateProfile(ctx context.Context,
 		return common.ErrCannotGetEntity(usermodel.EntityName, err)
 	}
 
-	if oldData.Status == 0 {
-		return common.NewCustomError(nil, "Data deleted!", usermodel.EntityName)
+	if oldData.Status == common.UserDeleted {
+		return common.ErrEntityDeleted(usermodel.EntityName, nil)
 	}
 
 	if newInfo.Name == nil {

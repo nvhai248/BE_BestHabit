@@ -1471,6 +1471,45 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/users/verify/:token": {
+            "patch": {
+                "description": "User can verify after authentication (only you can verify your account)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Verify User",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Token",
+                        "name": "token",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Verify Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/common.successRes"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {

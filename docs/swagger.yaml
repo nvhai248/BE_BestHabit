@@ -1391,4 +1391,31 @@ paths:
       summary: User Upload Photo
       tags:
       - Users
+  /api/users/verify/:token:
+    patch:
+      consumes:
+      - application/json
+      description: User can verify after authentication (only you can verify your
+        account)
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Token
+        in: path
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Verify Successfully
+          schema:
+            $ref: '#/definitions/common.successRes'
+      summary: Verify User
+      tags:
+      - Users
 swagger: "2.0"
