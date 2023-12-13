@@ -1447,6 +1447,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/users/send-reset-password": {
+            "post": {
+                "description": "User can require send email reset password if user forgot password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "User require send email reset password",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Email",
+                        "name": "email",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "send successfully!",
+                        "schema": {
+                            "$ref": "#/definitions/common.successRes"
+                        }
+                    }
+                }
+            }
+        },
         "/api/users/send-verification": {
             "post": {
                 "description": "User require send verification account.",

@@ -69,7 +69,7 @@ func (biz *changePassBiz) ChangePass(ctx context.Context, email string, id int, 
 			fmt.Println(_err)
 		}
 
-		email := common.NewRequireResetPw([]string{email}, token.Token)
+		email := common.NewRequireResetPwAfterChangePass([]string{email}, token.Token)
 		biz.mailSender.SendEmail(email.Subject, email.Content, email.To, email.Cc, email.Bcc, email.AttachFiles)
 	}()
 

@@ -1375,6 +1375,27 @@ paths:
       summary: User Update Profile
       tags:
       - Users
+  /api/users/send-reset-password:
+    post:
+      consumes:
+      - application/json
+      description: User can require send email reset password if user forgot password
+      parameters:
+      - description: Email
+        in: formData
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: send successfully!
+          schema:
+            $ref: '#/definitions/common.successRes'
+      summary: User require send email reset password
+      tags:
+      - Users
   /api/users/send-verification:
     post:
       consumes:

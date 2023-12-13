@@ -25,30 +25,9 @@ func NewEmailVerifyAccount(to []string, token string) *Email {
 				<div style="text-align: center; margin-top: 20px;">
 				<a href="%s/verification?token_id=%s" style="display: inline-block; padding: 12px 24px; font-size: 16px; text-decoration: none; background-color: #007bff; color: #fff; border-radius: 5px;">Verify Email</a>
 				</div>
-				<p style="font-size: 14px; color: #999; text-align: center; margin-top: 20px;">Note: This link will expire in 1 hour.</p>
+				<p style="font-size: 14px; color: #999; text-align: center; margin-top: 20px;">Note: This link will expire in 1 day.</p>
 			</div>
 		`, os.Getenv("DOMAIN_CLIENT"), token),
-		To:          to,
-		Cc:          nil,
-		Bcc:         nil,
-		AttachFiles: nil,
-	}
-}
-
-func NewEmailRenewPw(to []string, newPw string) *Email {
-	return &Email{
-		Subject: "Your Password Has Been Changed",
-		Content: fmt.Sprintf(`
-		<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto;">
-			<h1 style="color: #333; text-align: center;">Password Changed</h1>
-			<p style="font-size: 16px; color: #555; text-align: center;">Hi there,</p>
-			<p style="font-size: 16px; color: #555;">Your password has been changed successfully. Here is your new password:</p>
-			<div style="text-align: center; margin-top: 20px; background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
-			<p style="font-size: 18px; color: #333; margin: 0;">%s</p>
-			</div>
-			<p style="font-size: 14px; color: #999; text-align: center; margin-top: 20px;">Please login with your new password.</p>
-		</div>
-		`, newPw),
 		To:          to,
 		Cc:          nil,
 		Bcc:         nil,
@@ -60,6 +39,36 @@ func NewRequireResetPw(to []string, token string) *Email {
 	return &Email{
 		Subject: "Password Reset Request",
 		Content: fmt.Sprintf(`
+		<!DOCTYPE html>
+		<html>
+		<head>
+			<meta charset="utf-8">
+			<title>Password Reset Request</title>
+		</head>
+		<body style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; color: #333;">
+			<div style="text-align: center;">
+				<h1 style="color: #333;">Password Reset Request</h1>
+				<p style="font-size: 16px; color: #555;">Hi there,</p>
+				<p style="font-size: 16px; color: #555;">You have requested to reset your password. Please click the button below to proceed:</p>
+				<div style="text-align: center; margin-top: 20px;">
+					<a href="%s/resetPw?token_id=%s" style="display: inline-block; padding: 12px 24px; font-size: 16px; text-decoration: none; background-color: #007bff; color: #fff; border-radius: 5px;">Reset Password</a>
+				</div>
+				<p style="font-size: 14px; color: #999; margin-top: 20px;">Please note: This link will expire in 1 day.</p>
+			</div>
+		</body>
+		</html>
+		`, os.Getenv("DOMAIN_CLIENT"), token),
+		To:          to,
+		Cc:          nil,
+		Bcc:         nil,
+		AttachFiles: nil,
+	}
+}
+
+func NewRequireResetPwAfterChangePass(to []string, token string) *Email {
+	return &Email{
+		Subject: "Password Reset Request",
+		Content: fmt.Sprintf(`
 		<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto;">
 			<h1 style="color: #333; text-align: center;">Password Reset Request</h1>
 			<p style="font-size: 16px; color: #555; text-align: center;">Hi there,</p>
@@ -68,7 +77,7 @@ func NewRequireResetPw(to []string, token string) *Email {
 			<a href="%s/resetPw?token_id=%s" style="display: inline-block; padding: 12px 24px; font-size: 16px; text-decoration: none; background-color: #007bff; color: #fff; border-radius: 5px;">Reset Password</a>
 			</div>
 			<p style="font-size: 14px; color: #999; text-align: center; margin-top: 20px;">If you did not request this change, please reset your password immediately.</p>
-			<p style="font-size: 14px; color: #999; text-align: center; margin-top: 20px;">Please note: This link will expire in 15 minutes.</p>
+			<p style="font-size: 14px; color: #999; text-align: center; margin-top: 20px;">Please note: This link will expire in 1 day.</p>
 		</div>
 		`, os.Getenv("DOMAIN_CLIENT"), token),
 		To:          to,

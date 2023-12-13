@@ -75,6 +75,7 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 		})
 		log_and_register.POST("/register", ginuser.BasicRegister(appCtx))
 		log_and_register.POST("/login", ginuser.BasicLogin(appCtx))
+		log_and_register.POST("/users/send-reset-password", ginuser.SenResetPw(appCtx))
 	}
 
 	user := routerAPIS.Group("/users", middleware.RequireAuth(appCtx))
