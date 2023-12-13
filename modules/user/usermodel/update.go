@@ -14,6 +14,10 @@ type UpdatePassword struct {
 	Password    *string `json:"password" db:"password"`
 }
 
+type ResetPassword struct {
+	Password *string `json:"password" db:"password"`
+}
+
 func (UpdatePassword) TableName() string {
 	return UserCreate{}.TableName()
 }

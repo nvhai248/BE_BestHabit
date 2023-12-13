@@ -1375,6 +1375,32 @@ paths:
       summary: User Update Profile
       tags:
       - Users
+  /api/users/reset-password:
+    patch:
+      consumes:
+      - application/json
+      description: User reset password if user forgot the password
+      parameters:
+      - description: Password
+        in: formData
+        name: password
+        required: true
+        type: string
+      - description: Authorization token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: reset password Successfully
+          schema:
+            $ref: '#/definitions/common.successRes'
+      summary: User reset password
+      tags:
+      - Users
   /api/users/send-reset-password:
     post:
       consumes:

@@ -1447,6 +1447,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/users/reset-password": {
+            "patch": {
+                "description": "User reset password if user forgot the password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "User reset password",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Password",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "reset password Successfully",
+                        "schema": {
+                            "$ref": "#/definitions/common.successRes"
+                        }
+                    }
+                }
+            }
+        },
         "/api/users/send-reset-password": {
             "post": {
                 "description": "User can require send email reset password if user forgot password",
