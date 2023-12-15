@@ -11,7 +11,7 @@ const EntityName = "User"
 type UserCreate struct {
 	Email    string           `json:"email" db:"email"`
 	Phone    string           `json:"phone" db:"phone"`
-	Password string           `json:"-" db:"password"`
+	Password string           `json:"password" db:"password"`
 	Name     string           `json:"name" db:"name"`
 	FbID     string           `json:"-" db:"fb_id"`
 	GgID     string           `json:"-" db:"gg_id"`
