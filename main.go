@@ -3,6 +3,7 @@ package main
 import (
 	"bestHabit/component"
 	"bestHabit/component/mailprovider"
+	"bestHabit/component/oauth"
 	"bestHabit/component/uploadprovider"
 	"bestHabit/docs"
 	"bestHabit/middleware"
@@ -76,6 +77,8 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 		log_and_register.POST("/register", ginuser.BasicRegister(appCtx))
 		log_and_register.POST("/login", ginuser.BasicLogin(appCtx))
 		log_and_register.POST("/users/send-reset-password", ginuser.SenResetPw(appCtx))
+		log_and_register.GET("/auth/google", oauth.HandleGoogleLogin(appCtx))
+		log_and_register.GET("/auth/google/callback", oauth.HandleGoogleLogin(appCtx))
 	}
 
 	user := routerAPIS.Group("/users", middleware.RequireAuth(appCtx))
