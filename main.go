@@ -4,6 +4,7 @@ import (
 	"bestHabit/component"
 	"bestHabit/component/mailprovider"
 	"bestHabit/component/oauth"
+	"bestHabit/component/oauth/oauthprovider"
 	"bestHabit/component/uploadprovider"
 	"bestHabit/docs"
 	"bestHabit/middleware"
@@ -44,9 +45,9 @@ func ConnectToDB(dns string) *sqlx.DB {
 	return db
 }
 
-func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.UploadProvider, gmailSender mailprovider.EmailSender) {
+func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.UploadProvider, gmailSender mailprovider.EmailSender, authProvider oauthprovider.GGOAuthProvider) {
 
-	appCtx := component.NewAppContext(db, secretKey, s3upProvider, pblocal.NewPubSub(), gmailSender)
+	appCtx := component.NewAppContext(db, secretKey, s3upProvider, pblocal.NewPubSub(), gmailSender, authProvider)
 
 	router := gin.Default()
 
@@ -155,5 +156,9 @@ func main() {
 	appEmailPw := os.Getenv("SENDER_APP_PW")
 	appEmailAdd := os.Getenv("SENDER_EMAIL_ADDRESS")
 	gmailSender := mailprovider.NewGmailSender(appName, appEmailAdd, appEmailPw)
-	runServer(db, secretKet, s3upProvider, gmailSender)
+	oauthProvider := oauthprovider.NewGGOAuthProvider(os.Getenv("GOOGLE_CLIENT_ID"),
+		os.Getenv("GOOGLE_CLIENT_SECRET"),
+		"http://localhost:8080/api/auth/google/callback",
+		[]string{"profile", "email"})
+	runServer(db, secretKet, s3upProvider, gmailSender, oauthProvider)
 }

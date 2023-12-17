@@ -2,6 +2,7 @@ package component
 
 import (
 	"bestHabit/component/mailprovider"
+	"bestHabit/component/oauth/oauthprovider"
 	"bestHabit/component/uploadprovider"
 	"bestHabit/pubsub"
 
@@ -14,6 +15,7 @@ type AppContext interface {
 	UploadProvider() uploadprovider.UploadProvider
 	GetPubSub() pubsub.Pubsub
 	GetEmailSender() mailprovider.EmailSender
+	GetGGOAuth() oauthprovider.GGOAuthProvider
 }
 
 type appCtx struct {
@@ -22,6 +24,7 @@ type appCtx struct {
 	uploadProvider uploadprovider.UploadProvider
 	pb             pubsub.Pubsub
 	emailSender    mailprovider.EmailSender
+	oauthProvider  oauthprovider.GGOAuthProvider
 }
 
 func NewAppContext(
@@ -30,9 +33,9 @@ func NewAppContext(
 	uploadProvider uploadprovider.UploadProvider,
 	pb pubsub.Pubsub,
 	emailSender mailprovider.EmailSender,
-
+	oauthProvider oauthprovider.GGOAuthProvider,
 ) *appCtx {
-	return &appCtx{db: db, secretKey: secretKey, uploadProvider: uploadProvider, pb: pb, emailSender: emailSender}
+	return &appCtx{db: db, secretKey: secretKey, uploadProvider: uploadProvider, pb: pb, emailSender: emailSender, oauthProvider: oauthProvider}
 }
 
 func (ctx *appCtx) GetMainDBConnection() *sqlx.DB {
@@ -53,4 +56,8 @@ func (ctx *appCtx) GetPubSub() pubsub.Pubsub {
 
 func (ctx *appCtx) GetEmailSender() mailprovider.EmailSender {
 	return ctx.emailSender
+}
+
+func (ctx *appCtx) GetGGOAuth() oauthprovider.GGOAuthProvider {
+	return ctx.oauthProvider
 }
