@@ -78,8 +78,9 @@ func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.Upload
 		log_and_register.POST("/register", ginuser.BasicRegister(appCtx))
 		log_and_register.POST("/login", ginuser.BasicLogin(appCtx))
 		log_and_register.POST("/users/send-reset-password", ginuser.SenResetPw(appCtx))
+		// google oauth
 		log_and_register.GET("/auth/google", oauth.HandleGoogleLogin(appCtx))
-		log_and_register.GET("/auth/google/callback", oauth.HandleGoogleLogin(appCtx))
+		log_and_register.GET("/auth/google/callback", oauth.HandleGoogleCallback(appCtx))
 	}
 
 	user := routerAPIS.Group("/users", middleware.RequireAuth(appCtx))
@@ -158,7 +159,7 @@ func main() {
 	gmailSender := mailprovider.NewGmailSender(appName, appEmailAdd, appEmailPw)
 	oauthProvider := oauthprovider.NewGGOAuthProvider(os.Getenv("GOOGLE_CLIENT_ID"),
 		os.Getenv("GOOGLE_CLIENT_SECRET"),
-		"http://localhost:8080/api/auth/google/callback",
+		fmt.Sprintf("%s/api/auth/google/callback", os.Getenv("SITE_DOMAIN")),
 		[]string{"profile", "email"})
 	runServer(db, secretKet, s3upProvider, gmailSender, oauthProvider)
 }

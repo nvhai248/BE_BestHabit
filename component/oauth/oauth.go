@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -39,6 +40,7 @@ func HandleGoogleCallback(appCtx component.AppContext) gin.HandlerFunc {
 			c.String(http.StatusBadRequest, "Failed to get user info")
 			return
 		}
+
 		defer response.Body.Close()
 
 		var userInfo map[string]interface{}
@@ -49,6 +51,6 @@ func HandleGoogleCallback(appCtx component.AppContext) gin.HandlerFunc {
 		}
 
 		fmt.Print(userInfo)
-		c.Redirect(http.StatusSeeOther, "/api/ping")
+		c.Redirect(http.StatusSeeOther, fmt.Sprintf("%s/api/ping", os.Getenv("SITE_DOMAIN")))
 	}
 }
