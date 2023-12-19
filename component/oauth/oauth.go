@@ -1,11 +1,15 @@
 package oauth
 
 import (
+	"bestHabit/common"
 	"bestHabit/component"
+	"bestHabit/component/tokenprovider"
+	"bestHabit/component/tokenprovider/jwt"
+	"bestHabit/modules/user/usermodel"
+	"bestHabit/modules/user/userstorage"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -50,7 +54,80 @@ func HandleGoogleCallback(appCtx component.AppContext) gin.HandlerFunc {
 			return
 		}
 
-		fmt.Print(userInfo)
-		c.Redirect(http.StatusSeeOther, fmt.Sprintf("%s/api/ping", os.Getenv("SITE_DOMAIN")))
+		userStorage := userstorage.NewSQLStore(appCtx.GetMainDBConnection())
+		userCreate := &usermodel.UserCreate{
+			Email:  userInfo["email"].(string),
+			GgID:   userInfo["id"].(string),
+			Name:   userInfo["name"].(string),
+			Avatar: common.NewImageFromGgAuth(userInfo["picture"].(string)),
+			Role:   "user",
+		}
+
+		// find user by gg id
+		userCheck, err := userStorage.FindByGgId(c.Request.Context(), userCreate.GgID)
+
+		if err == common.ErrorNoRows {
+			// if user not found => find user by email
+			userCheckByMail, err := userStorage.FindByEmail(c.Request.Context(), userCreate.Email)
+
+			if err == common.ErrorNoRows {
+				// if not found => create new user and return
+				err := userStorage.Create(c.Request.Context(), userCreate)
+
+				if err != nil {
+					c.JSON(http.StatusBadRequest, common.NewCustomError(err,
+						"Cannot create user!",
+						"CannotCreateUser"))
+					return
+				}
+
+				userReturn, err := userStorage.FindByGgId(c.Request.Context(), userCreate.GgID)
+
+				if err != nil {
+					c.JSON(http.StatusBadRequest, common.NewCustomError(err,
+						"Cannot find user after create user!",
+						"CannotFindUser"))
+					return
+				}
+
+				payload := tokenprovider.TokenPayload{
+					UserId: userReturn.Id,
+					Role:   *userReturn.Role,
+				}
+
+				accessToken, err := jwt.NewTokenJWTProvider(appCtx.SecretKey()).Generate(payload, 60*60*24*7)
+				if err != nil {
+					c.JSON(http.StatusInternalServerError, common.ErrInternal(err))
+					return
+				}
+
+				c.JSON(http.StatusOK, common.SimpleSuccessResponse(accessToken))
+			}
+
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, common.ErrInternal(err))
+				return
+			}
+
+			// if found => return err
+			c.JSON(http.StatusBadRequest, common.NewCustomError(err,
+				fmt.Sprintf("The email %s already used by another account!", *userCheckByMail.Email),
+				"CannotFindUser"))
+			return
+		}
+
+		// if find => return token
+		payload := tokenprovider.TokenPayload{
+			UserId: userCheck.Id,
+			Role:   *userCheck.Role,
+		}
+
+		accessToken, err := jwt.NewTokenJWTProvider(appCtx.SecretKey()).Generate(payload, 60*60*24*7)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.ErrInternal(err))
+			return
+		}
+
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse(accessToken))
 	}
 }

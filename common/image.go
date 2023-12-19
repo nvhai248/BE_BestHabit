@@ -12,11 +12,15 @@ type Image struct {
 	Url       string `json:"url" db:"url"`
 	Width     int    `json:"width" db:"width"`
 	Height    int    `json:"height" db:"height"`
-	CloudName string `json:"cloud_name, omitempty" db:"cloud_name"`
-	Extension string `json:"extension, omitempty" db:"extension"`
+	CloudName string `json:"cloud_name,omitempty" db:"cloud_name"`
+	Extension string `json:"extension,omitempty" db:"extension"`
 }
 
 func (Image) TableName() string { return "images" }
+
+func NewImageFromGgAuth(url string) *Image {
+	return &Image{Url: url, CloudName: "Google"}
+}
 
 func (j *Image) Scan(value interface{}) error {
 	bytes, ok := value.([]byte)
