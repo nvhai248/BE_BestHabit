@@ -15,6 +15,46 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/auth/google": {
+            "get": {
+                "description": "Simple access to application by Oauth by google",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "OAuth by google",
+                "responses": {
+                    "200": {
+                        "description": "redirect to /api/auth/google/callback",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/google/callback": {
+            "get": {
+                "description": "Simple access to application by Oauth by google",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Callback OAuth by google",
+                "responses": {
+                    "200": {
+                        "description": "Success!",
+                        "schema": {
+                            "$ref": "#/definitions/tokenprovider.Token"
+                        }
+                    }
+                }
+            }
+        },
         "/api/challenges": {
             "get": {
                 "description": "User Get List User's challenge after successful authentication.",
@@ -2208,6 +2248,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                },
+                "password": {
                     "type": "string"
                 },
                 "phone": {

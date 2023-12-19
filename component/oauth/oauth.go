@@ -14,6 +14,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary OAuth by google
+// @Description Simple access to application by Oauth by google
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} string "redirect to /api/auth/google/callback"
+// @Router /api/auth/google [get]
 func HandleGoogleLogin(appCtx component.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		url := appCtx.GetGGOAuth().GetGoogleOauthConfig().AuthCodeURL(
@@ -23,6 +29,12 @@ func HandleGoogleLogin(appCtx component.AppContext) gin.HandlerFunc {
 	}
 }
 
+// @Summary Callback OAuth by google
+// @Description Simple access to application by Oauth by google
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} tokenprovider.Token "Success!"
+// @Router /api/auth/google/callback [get]
 func HandleGoogleCallback(appCtx component.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
