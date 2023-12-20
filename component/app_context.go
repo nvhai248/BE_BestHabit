@@ -2,7 +2,7 @@ package component
 
 import (
 	"bestHabit/component/mailprovider"
-	"bestHabit/component/oauth/oauthprovider"
+	"bestHabit/component/oauthprovider"
 	"bestHabit/component/uploadprovider"
 	"bestHabit/pubsub"
 
