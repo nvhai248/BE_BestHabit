@@ -574,7 +574,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/common.Date"
+                                "$ref": "#/definitions/common.CompleteDate"
                             }
                         }
                     },
@@ -769,7 +769,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/common.Date"
+                                "$ref": "#/definitions/common.CompleteDate"
                             }
                         }
                     },
@@ -827,7 +827,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/common.Date"
+                            "$ref": "#/definitions/common.CompleteDate"
                         }
                     }
                 ],
@@ -835,7 +835,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Successfully!",
                         "schema": {
-                            "$ref": "#/definitions/common.Date"
+                            "$ref": "#/definitions/common.CompleteDate"
                         }
                     }
                 }
@@ -1780,11 +1780,17 @@ const docTemplate = `{
                 }
             }
         },
-        "common.Date": {
+        "common.CompleteDate": {
             "type": "object",
             "properties": {
                 "date": {
                     "type": "string"
+                },
+                "times": {
+                    "type": "integer"
+                },
+                "total_time": {
+                    "type": "integer"
                 }
             }
         },
@@ -1864,7 +1870,7 @@ const docTemplate = `{
                 "completed_dates": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/common.Date"
+                        "$ref": "#/definitions/common.CompleteDate"
                     }
                 },
                 "created_at": {
@@ -1917,7 +1923,7 @@ const docTemplate = `{
                 "completed_dates": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/common.Date"
+                        "$ref": "#/definitions/common.CompleteDate"
                     }
                 },
                 "days": {
@@ -1961,7 +1967,7 @@ const docTemplate = `{
                 "completed_dates": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/common.Date"
+                        "$ref": "#/definitions/common.CompleteDate"
                     }
                 },
                 "created_at": {
@@ -2014,7 +2020,7 @@ const docTemplate = `{
                 "completed_dates": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/common.Date"
+                        "$ref": "#/definitions/common.CompleteDate"
                     }
                 },
                 "days": {

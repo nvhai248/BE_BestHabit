@@ -21,7 +21,7 @@ func NewAddCompletedDateBiz(store AddCompletedDateStore, pubsub pubsub.Pubsub) *
 	return &addCompletedDateBiz{store: store, pubsub: pubsub}
 }
 
-func (b *addCompletedDateBiz) AddCompletedDate(ctx context.Context, date *common.Date, id int) error {
+func (b *addCompletedDateBiz) AddCompletedDate(ctx context.Context, date *common.CompleteDate, id int) error {
 	newData, err := b.store.FindHabitById(ctx, id)
 
 	if err != nil {

@@ -71,10 +71,14 @@ definitions:
       start_date:
         type: string
     type: object
-  common.Date:
+  common.CompleteDate:
     properties:
       date:
         type: string
+      times:
+        type: integer
+      total_time:
+        type: integer
     type: object
   common.Day:
     properties:
@@ -126,7 +130,7 @@ definitions:
     properties:
       completed_dates:
         items:
-          $ref: '#/definitions/common.Date'
+          $ref: '#/definitions/common.CompleteDate'
         type: array
       created_at:
         type: string
@@ -161,7 +165,7 @@ definitions:
     properties:
       completed_dates:
         items:
-          $ref: '#/definitions/common.Date'
+          $ref: '#/definitions/common.CompleteDate'
         type: array
       days:
         items:
@@ -190,7 +194,7 @@ definitions:
     properties:
       completed_dates:
         items:
-          $ref: '#/definitions/common.Date'
+          $ref: '#/definitions/common.CompleteDate'
         type: array
       created_at:
         type: string
@@ -225,7 +229,7 @@ definitions:
     properties:
       completed_dates:
         items:
-          $ref: '#/definitions/common.Date'
+          $ref: '#/definitions/common.CompleteDate'
         type: array
       days:
         items:
@@ -781,7 +785,7 @@ paths:
         required: true
         schema:
           items:
-            $ref: '#/definitions/common.Date'
+            $ref: '#/definitions/common.CompleteDate'
           type: array
       - description: Target
         in: body
@@ -914,7 +918,7 @@ paths:
         required: true
         schema:
           items:
-            $ref: '#/definitions/common.Date'
+            $ref: '#/definitions/common.CompleteDate'
           type: array
       - description: Target
         in: body
@@ -953,14 +957,14 @@ paths:
         name: date
         required: true
         schema:
-          $ref: '#/definitions/common.Date'
+          $ref: '#/definitions/common.CompleteDate'
       produces:
       - application/json
       responses:
         "200":
           description: Successfully!
           schema:
-            $ref: '#/definitions/common.Date'
+            $ref: '#/definitions/common.CompleteDate'
       summary: User Add Completed date of Habit
       tags:
       - Habits

@@ -25,7 +25,7 @@ import (
 // @Param reminder formData string true "Reminder"
 // @Param is_count_based formData number true "IsCountBased"
 // @Param days body common.Days true "IsCountBased"
-// @Param completed_dates body common.Dates true "IsCountBased"
+// @Param completed_dates body common.CompleteDates true "IsCountBased"
 // @Param target body common.Target true "Target"
 // @Success 200 {object} habitmodel.HabitCreate "Successfully created habit!"
 // @Router /api/habits [post]

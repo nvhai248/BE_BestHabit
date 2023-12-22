@@ -7,18 +7,20 @@ import (
 	"fmt"
 )
 
-type Date struct {
-	Date string `json:"date"`
+type CompleteDate struct {
+	Date      string `json:"date"`
+	Times     int    `json:"times"`
+	TotalTime int    `json:"total_time"`
 }
 
-func (j *Date) Scan(value interface{}) error {
+func (j *CompleteDate) Scan(value interface{}) error {
 	bytes, ok := value.([]byte)
 
 	if !ok {
 		_ = errors.New(fmt.Sprint("Failed to unmarshal JSONB value: ", value))
 	}
 
-	var day Date
+	var day CompleteDate
 	if err := json.Unmarshal(bytes, &day); err != nil {
 		return err
 	}
@@ -27,7 +29,7 @@ func (j *Date) Scan(value interface{}) error {
 	return nil
 }
 
-func (j *Date) Value() (driver.Value, error) {
+func (j *CompleteDate) Value() (driver.Value, error) {
 	if j == nil {
 		return nil, nil
 	}
@@ -35,16 +37,16 @@ func (j *Date) Value() (driver.Value, error) {
 	return json.Marshal(j)
 }
 
-type Dates []Date
+type CompleteDates []CompleteDate
 
-func (j *Dates) Scan(value interface{}) error {
+func (j *CompleteDates) Scan(value interface{}) error {
 	bytes, ok := value.([]byte)
 
 	if !ok {
 		_ = errors.New(fmt.Sprint("Failed to unmarshal JSONB value: ", value))
 	}
 
-	var days []Date
+	var days []CompleteDate
 	if err := json.Unmarshal(bytes, &days); err != nil {
 		return err
 	}
@@ -53,7 +55,7 @@ func (j *Dates) Scan(value interface{}) error {
 	return nil
 }
 
-func (j *Dates) Value() (driver.Value, error) {
+func (j *CompleteDates) Value() (driver.Value, error) {
 	if j == nil {
 		return nil, nil
 	}
@@ -61,10 +63,10 @@ func (j *Dates) Value() (driver.Value, error) {
 	return json.Marshal(j)
 }
 
-func (j *Dates) AddDate(date Date) {
+func (j *CompleteDates) AddDate(date CompleteDate) {
 	*j = append(*j, date)
 }
 
-func (j *Dates) Init() {
-	*j = make(Dates, 0)
+func (j *CompleteDates) Init() {
+	*j = make(CompleteDates, 0)
 }

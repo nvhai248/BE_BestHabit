@@ -563,7 +563,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/common.Date"
+                                "$ref": "#/definitions/common.CompleteDate"
                             }
                         }
                     },
@@ -758,7 +758,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/common.Date"
+                                "$ref": "#/definitions/common.CompleteDate"
                             }
                         }
                     },
@@ -816,7 +816,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/common.Date"
+                            "$ref": "#/definitions/common.CompleteDate"
                         }
                     }
                 ],
@@ -824,7 +824,7 @@
                     "200": {
                         "description": "Successfully!",
                         "schema": {
-                            "$ref": "#/definitions/common.Date"
+                            "$ref": "#/definitions/common.CompleteDate"
                         }
                     }
                 }
@@ -1769,11 +1769,17 @@
                 }
             }
         },
-        "common.Date": {
+        "common.CompleteDate": {
             "type": "object",
             "properties": {
                 "date": {
                     "type": "string"
+                },
+                "times": {
+                    "type": "integer"
+                },
+                "total_time": {
+                    "type": "integer"
                 }
             }
         },
@@ -1853,7 +1859,7 @@
                 "completed_dates": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/common.Date"
+                        "$ref": "#/definitions/common.CompleteDate"
                     }
                 },
                 "created_at": {
@@ -1906,7 +1912,7 @@
                 "completed_dates": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/common.Date"
+                        "$ref": "#/definitions/common.CompleteDate"
                     }
                 },
                 "days": {
@@ -1950,7 +1956,7 @@
                 "completed_dates": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/common.Date"
+                        "$ref": "#/definitions/common.CompleteDate"
                     }
                 },
                 "created_at": {
@@ -2003,7 +2009,7 @@
                 "completed_dates": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/common.Date"
+                        "$ref": "#/definitions/common.CompleteDate"
                     }
                 },
                 "days": {

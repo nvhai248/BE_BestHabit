@@ -17,8 +17,8 @@ import (
 // @Produce  json
 // @Param Authorization header string true "Authorization"
 // @Param id path string true "habit Id"
-// @Param date body common.Date true "Date"
-// @Success 200 {object} common.Date "Successfully!"
+// @Param date body common.CompleteDate true "Date"
+// @Success 200 {object} common.CompleteDate "Successfully!"
 // @Router /api/habits/:id/confirm-completed [patch]
 func AddCompletedDate(appCtx component.AppContext) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
@@ -28,7 +28,7 @@ func AddCompletedDate(appCtx component.AppContext) gin.HandlerFunc {
 			panic(common.ErrInvalidRequest(err))
 		}
 
-		var data common.Date
+		var data common.CompleteDate
 
 		if err := ctx.ShouldBindJSON(&data); err != nil {
 			panic(common.ErrInvalidRequest(err))

@@ -26,7 +26,7 @@ func (b *createHabitBiz) CreateHabit(ctx context.Context, data *habitmodel.Habit
 	}
 
 	data.UserId = userId
-	data.CompletedDates = &common.Dates{}
+	data.CompletedDates = &common.CompleteDates{}
 	data.CompletedDates.Init()
 
 	if data.Days == nil {
