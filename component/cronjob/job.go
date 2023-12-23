@@ -10,15 +10,37 @@ import (
 	"github.com/robfig/cron/v3"
 )
 
+// Function to check if the given day is a notification day according to Days in Notification
+func isNotificationDay(weekday string, days common.Days) bool {
+	for _, day := range days {
+		if day.Weekday == weekday {
+			return true
+		}
+	}
+	return false
+}
+
 // Create new cron job
-func CreateCronJob(notification common.Notification) (cron.EntryID, error) {
+func CreateCronJob(notification common.Notification) (*cron.EntryID, error) {
 	c := cron.New()
 
 	var entryID cron.EntryID
 	var err error
 
 	if *notification.IsTask {
-		entryID, err = c.AddFunc(*notification.ReminderTime, func() {
+		t, err := common.ParseStringToTimestamp(*notification.ReminderTime)
+
+		if err != nil {
+			fmt.Println(err)
+			return nil, common.ErrInternal(err)
+		}
+
+		_, month, day := t.Date()
+		hour, minute, _ := t.Clock()
+
+		fmt.Println(fmt.Sprintf("%d %d %d %d *", minute, hour, day, month))
+
+		entryID, err = c.AddFunc(fmt.Sprintf("%d %d %d %d *", minute, hour, day, month), func() {
 			fmt.Println("Sending notification for task to user:", *notification.UserId)
 			fmt.Println("Info:", notification)
 		})
@@ -46,23 +68,13 @@ func CreateCronJob(notification common.Notification) (cron.EntryID, error) {
 	}
 
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 
 	// Start cron job
 	c.Start()
 
-	return entryID, nil
-}
-
-// Function to check if the given day is a notification day according to Days in Notification
-func isNotificationDay(weekday string, days common.Days) bool {
-	for _, day := range days {
-		if day.Weekday == weekday {
-			return true
-		}
-	}
-	return false
+	return &entryID, nil
 }
 
 // Update cron job
@@ -73,8 +85,17 @@ func UpdateCronJob(entryID cron.EntryID, newDateTime string, notification common
 
 	var err error
 	if *notification.IsTask {
-		_, err = c.AddFunc(newDateTime, func() {
-			fmt.Println("Sending updated notification for task to user:", *notification.UserId)
+		t, err := common.ParseStringToTimestamp(newDateTime)
+
+		if err != nil {
+			return common.ErrInternal(err)
+		}
+
+		_, month, day := t.Date()
+		hour, minute, _ := t.Clock()
+
+		entryID, err = c.AddFunc(fmt.Sprintf("%d %d %d %d *", minute, hour, day, month), func() {
+			fmt.Println("Sending notification for task to user:", *notification.UserId)
 			fmt.Println("Info:", notification)
 		})
 	} else {
