@@ -3,15 +3,13 @@ package cronjob
 import (
 	"bestHabit/common"
 	"fmt"
-	"strconv"
-	"strings"
-	"time"
 
 	"github.com/robfig/cron/v3"
 )
 
 // Function to check if the given day is a notification day according to Days in Notification
 func isNotificationDay(weekday string, days common.Days) bool {
+
 	for _, day := range days {
 		if day.Weekday == weekday {
 			return true
@@ -21,10 +19,10 @@ func isNotificationDay(weekday string, days common.Days) bool {
 }
 
 // Create new cron job
-func CreateCronJob(notification common.Notification) (*cron.EntryID, error) {
+func CreateCronJob(notification common.Notification) ([]cron.EntryID, error) {
 	c := cron.New()
 
-	var entryID cron.EntryID
+	var entryIDs []cron.EntryID
 	var err error
 
 	if *notification.IsTask {
@@ -38,31 +36,33 @@ func CreateCronJob(notification common.Notification) (*cron.EntryID, error) {
 		_, month, day := t.Date()
 		hour, minute, _ := t.Clock()
 
-		fmt.Println(fmt.Sprintf("%d %d %d %d *", minute, hour, day, month))
-
-		entryID, err = c.AddFunc(fmt.Sprintf("%d %d %d %d *", minute, hour, day, month), func() {
+		entryID, _ := c.AddFunc(fmt.Sprintf("%d %d %d %d *", minute, hour, day, month), func() {
 			fmt.Println("Sending notification for task to user:", *notification.UserId)
 			fmt.Println("Info:", notification)
 		})
+
+		entryIDs = append(entryIDs, entryID)
 	} else {
 		// Logic for habit notifications (if IsTask is false)
 		// Assuming *notification.Days is not nil and correctly filled when IsTask is false
 
 		// Parsing StartDate and EndDate
-		startDate, _ := time.Parse("2006-01-02", *notification.StartDate)
-		endDate, _ := time.Parse("2006-01-02", *notification.EndDate)
+		startDate, _ := common.ParseStringToDate(*notification.StartDate)
+		endDate, _ := common.ParseStringToDate(*notification.EndDate)
 
 		// Splitting ReminderTime to get hours and minutes
-		reminderTimeParts := strings.Split(*notification.ReminderTime, ":")
-		hour, _ := strconv.Atoi(reminderTimeParts[0])
-		minute, _ := strconv.Atoi(reminderTimeParts[1])
+		reminderTime, _ := common.ParseStringToTime(*notification.ReminderTime)
+		hour, minute, _ := reminderTime.Clock()
 
-		for date := startDate; date.Before(endDate) || date.Equal(endDate); date = date.AddDate(0, 0, 1) {
+		for date := *startDate; date.Before(*endDate) || date.Equal(*endDate); date = date.AddDate(0, 0, 1) {
 			if isNotificationDay(date.Weekday().String(), *notification.Days) {
-				entryID, err = c.AddFunc(fmt.Sprintf("%d %d %d %d *", minute, hour, date.Day(), date.Month()), func() {
-					fmt.Println("Sending notification for habit to user:", *notification.UserId)
+				fmt.Println(fmt.Sprintf("%d %d %d %d *", minute, hour, date.Day(), date.Month()))
+				entryId, _ := c.AddFunc(fmt.Sprintf("%d %d %d %d *", minute, hour, date.Day(), date.Month()), func() {
+					fmt.Println("Sending updated notification for habit to user:", *notification.UserId)
 					fmt.Println("Info:", notification)
 				})
+
+				entryIDs = append(entryIDs, entryId)
 			}
 		}
 	}
@@ -74,7 +74,7 @@ func CreateCronJob(notification common.Notification) (*cron.EntryID, error) {
 	// Start cron job
 	c.Start()
 
-	return &entryID, nil
+	return entryIDs, nil
 }
 
 // Update cron job
@@ -88,6 +88,7 @@ func UpdateCronJob(entryID cron.EntryID, newDateTime string, notification common
 		t, err := common.ParseStringToTimestamp(newDateTime)
 
 		if err != nil {
+			fmt.Println(err)
 			return common.ErrInternal(err)
 		}
 
@@ -103,15 +104,14 @@ func UpdateCronJob(entryID cron.EntryID, newDateTime string, notification common
 		// Assuming *notification.Days is not nil and correctly filled when IsTask is false
 
 		// Parsing StartDate and EndDate
-		startDate, _ := time.Parse("2006-01-02", *notification.StartDate)
-		endDate, _ := time.Parse("2006-01-02", *notification.EndDate)
+		startDate, _ := common.ParseStringToDate(*notification.StartDate)
+		endDate, _ := common.ParseStringToDate(*notification.EndDate)
 
 		// Splitting ReminderTime to get hours and minutes
-		reminderTimeParts := strings.Split(*notification.ReminderTime, ":")
-		hour, _ := strconv.Atoi(reminderTimeParts[0])
-		minute, _ := strconv.Atoi(reminderTimeParts[1])
+		reminderTime, _ := common.ParseStringToTime(*notification.ReminderTime)
+		hour, minute, _ := reminderTime.Clock()
 
-		for date := startDate; date.Before(endDate) || date.Equal(endDate); date = date.AddDate(0, 0, 1) {
+		for date := *startDate; date.Before(*endDate) || date.Equal(*endDate); date = date.AddDate(0, 0, 1) {
 			if isNotificationDay(date.Weekday().String(), *notification.Days) {
 				_, err = c.AddFunc(fmt.Sprintf("%d %d %d %d *", minute, hour, date.Day(), date.Month()), func() {
 					fmt.Println("Sending updated notification for habit to user:", *notification.UserId)

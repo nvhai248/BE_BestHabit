@@ -6,8 +6,7 @@ import (
 	"bestHabit/modules/task/taskmodel"
 	"bestHabit/pubsub"
 	"context"
-
-	"github.com/robfig/cron/v3"
+	"fmt"
 )
 
 type CreateTaskStore interface {
@@ -41,8 +40,8 @@ func (b *createTaskBiz) CreateTask(ctx context.Context, data *taskmodel.TaskCrea
 	// create a new cron job
 	go func() {
 		defer common.AppRecover()
-		cronjob.CreateCronJob(*common.NewNotificationBasedOnTask(userId, data.Description, data.Name, data.Reminder))
-		cronjob.RunAllJobs(cron.New())
+		entryIds, _ := cronjob.CreateCronJob(*common.NewNotificationBasedOnTask(userId, data.Description, data.Name, data.Reminder))
+		fmt.Println(entryIds)
 	}()
 	return nil
 }

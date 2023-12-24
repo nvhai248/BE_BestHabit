@@ -2,9 +2,11 @@ package habitbiz
 
 import (
 	"bestHabit/common"
+	"bestHabit/component/cronjob"
 	"bestHabit/modules/habit/habitmodel"
 	"bestHabit/pubsub"
 	"context"
+	"fmt"
 )
 
 type CreateHabitStore interface {
@@ -44,6 +46,19 @@ func (b *createHabitBiz) CreateHabit(ctx context.Context, data *habitmodel.Habit
 	go func() {
 		defer common.AppRecover()
 		b.pubsub.Publish(ctx, common.TopicUserCreateNewHabit, pubsub.NewMessage(data))
+	}()
+
+	// create a new cron job
+	go func() {
+		defer common.AppRecover()
+		entryIds, _ := cronjob.CreateCronJob(*common.NewNotificationBasedHabit(userId,
+			data.Description,
+			data.Name,
+			data.StartDate,
+			data.EndDate,
+			data.Reminder,
+			*data.Days))
+		fmt.Println(entryIds)
 	}()
 	return nil
 }
