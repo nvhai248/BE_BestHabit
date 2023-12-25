@@ -2,6 +2,7 @@ package main
 
 import (
 	"bestHabit/component"
+	"bestHabit/component/cronjob"
 	"bestHabit/component/mailprovider"
 	"bestHabit/component/oauthprovider"
 	"bestHabit/component/uploadprovider"
@@ -44,9 +45,20 @@ func ConnectToDB(dns string) *sqlx.DB {
 	return db
 }
 
-func runServer(db *sqlx.DB, secretKey string, s3upProvider uploadprovider.UploadProvider, gmailSender mailprovider.EmailSender, authProvider oauthprovider.GGOAuthProvider) {
+func runServer(db *sqlx.DB,
+	secretKey string,
+	s3upProvider uploadprovider.UploadProvider,
+	gmailSender mailprovider.EmailSender,
+	authProvider oauthprovider.GGOAuthProvider,
+	cronProvider cronjob.CronJobProvider,
+) {
 
-	appCtx := component.NewAppContext(db, secretKey, s3upProvider, pblocal.NewPubSub(), gmailSender, authProvider)
+	appCtx := component.NewAppContext(db, secretKey,
+		s3upProvider,
+		pblocal.NewPubSub(),
+		gmailSender,
+		authProvider,
+		cronProvider)
 
 	router := gin.Default()
 
@@ -160,5 +172,7 @@ func main() {
 		os.Getenv("GOOGLE_CLIENT_SECRET"),
 		fmt.Sprintf("%s/api/auth/google/callback", os.Getenv("SITE_DOMAIN")),
 		[]string{"profile", "email"})
-	runServer(db, secretKet, s3upProvider, gmailSender, oauthProvider)
+	cronProvider := cronjob.NewCronJob()
+	cronProvider.StartJobs()
+	runServer(db, secretKet, s3upProvider, gmailSender, oauthProvider, cronProvider)
 }

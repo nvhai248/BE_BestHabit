@@ -14,12 +14,13 @@ type CreateTaskStore interface {
 }
 
 type createTaskBiz struct {
-	store  CreateTaskStore
-	pubsub pubsub.Pubsub
+	store   CreateTaskStore
+	pubsub  pubsub.Pubsub
+	cronJob cronjob.CronJobProvider
 }
 
-func NewCreateTaskBiz(store CreateTaskStore, pubsub pubsub.Pubsub) *createTaskBiz {
-	return &createTaskBiz{store: store, pubsub: pubsub}
+func NewCreateTaskBiz(store CreateTaskStore, pubsub pubsub.Pubsub, cronJob cronjob.CronJobProvider) *createTaskBiz {
+	return &createTaskBiz{store: store, pubsub: pubsub, cronJob: cronJob}
 }
 
 func (b *createTaskBiz) CreateTask(ctx context.Context, data *taskmodel.TaskCreate, userId int) error {
@@ -40,7 +41,7 @@ func (b *createTaskBiz) CreateTask(ctx context.Context, data *taskmodel.TaskCrea
 	// create a new cron job
 	go func() {
 		defer common.AppRecover()
-		entryIds, _ := cronjob.CreateCronJob(*common.NewNotificationBasedOnTask(userId, data.Description, data.Name, data.Reminder))
+		entryIds, _ := b.cronJob.CreateNewJobs(*common.NewNotificationBasedOnTask(userId, data.Description, data.Name, data.Reminder))
 		fmt.Println(entryIds)
 	}()
 	return nil

@@ -14,12 +14,13 @@ type CreateHabitStore interface {
 }
 
 type createHabitBiz struct {
-	store  CreateHabitStore
-	pubsub pubsub.Pubsub
+	store   CreateHabitStore
+	pubsub  pubsub.Pubsub
+	cronJob cronjob.CronJobProvider
 }
 
-func NewCreateHabitBiz(store CreateHabitStore, pubsub pubsub.Pubsub) *createHabitBiz {
-	return &createHabitBiz{store: store, pubsub: pubsub}
+func NewCreateHabitBiz(store CreateHabitStore, pubsub pubsub.Pubsub, cronJob cronjob.CronJobProvider) *createHabitBiz {
+	return &createHabitBiz{store: store, pubsub: pubsub, cronJob: cronJob}
 }
 
 func (b *createHabitBiz) CreateHabit(ctx context.Context, data *habitmodel.HabitCreate, userId int) error {
@@ -51,7 +52,7 @@ func (b *createHabitBiz) CreateHabit(ctx context.Context, data *habitmodel.Habit
 	// create a new cron job
 	go func() {
 		defer common.AppRecover()
-		entryIds, _ := cronjob.CreateCronJob(*common.NewNotificationBasedHabit(userId,
+		entryIds, _ := b.cronJob.CreateNewJobs(*common.NewNotificationBasedHabit(userId,
 			data.Description,
 			data.Name,
 			data.StartDate,

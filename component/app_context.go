@@ -1,6 +1,7 @@
 package component
 
 import (
+	"bestHabit/component/cronjob"
 	"bestHabit/component/mailprovider"
 	"bestHabit/component/oauthprovider"
 	"bestHabit/component/uploadprovider"
@@ -16,6 +17,7 @@ type AppContext interface {
 	GetPubSub() pubsub.Pubsub
 	GetEmailSender() mailprovider.EmailSender
 	GetGGOAuth() oauthprovider.GGOAuthProvider
+	GetCronJob() cronjob.CronJobProvider
 }
 
 type appCtx struct {
@@ -25,6 +27,7 @@ type appCtx struct {
 	pb             pubsub.Pubsub
 	emailSender    mailprovider.EmailSender
 	oauthProvider  oauthprovider.GGOAuthProvider
+	cronProvider   cronjob.CronJobProvider
 }
 
 func NewAppContext(
@@ -34,8 +37,18 @@ func NewAppContext(
 	pb pubsub.Pubsub,
 	emailSender mailprovider.EmailSender,
 	oauthProvider oauthprovider.GGOAuthProvider,
+	cronProvider cronjob.CronJobProvider,
 ) *appCtx {
-	return &appCtx{db: db, secretKey: secretKey, uploadProvider: uploadProvider, pb: pb, emailSender: emailSender, oauthProvider: oauthProvider}
+	return &appCtx{db: db,
+		secretKey:      secretKey,
+		uploadProvider: uploadProvider,
+		pb:             pb, emailSender: emailSender,
+		oauthProvider: oauthProvider,
+		cronProvider:  cronProvider}
+}
+
+func (ctx *appCtx) GetCronJob() cronjob.CronJobProvider {
+	return ctx.cronProvider
 }
 
 func (ctx *appCtx) GetMainDBConnection() *sqlx.DB {
