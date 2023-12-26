@@ -24,6 +24,30 @@ func (t *HabitCreate) GetUserId() int {
 	return t.UserId
 }
 
+func (t *HabitCreate) GetDescription() string {
+	return t.Description
+}
+
+func (t *HabitCreate) GetName() string {
+	return t.Name
+}
+
+func (t *HabitCreate) GetReminderTime() string {
+	return t.Reminder
+}
+
+func (t *HabitCreate) GetStartDate() string {
+	return t.StartDate
+}
+
+func (t *HabitCreate) GetEndDate() string {
+	return t.EndDate
+}
+
+func (t *HabitCreate) GetDays() *common.Days {
+	return t.Days
+}
+
 func (t *HabitCreate) Validate() error {
 	if t.Name == "" {
 		return ErrNameNotBeBlank

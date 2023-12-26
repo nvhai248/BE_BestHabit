@@ -38,7 +38,7 @@ func CreateHabit(appCtx component.AppContext) gin.HandlerFunc {
 		}
 
 		store := habitstorage.NewSQLStore(appCtx.GetMainDBConnection())
-		biz := habitbiz.NewCreateHabitBiz(store, appCtx.GetPubSub(), appCtx.GetCronJob())
+		biz := habitbiz.NewCreateHabitBiz(store, appCtx.GetPubSub())
 
 		user := ctx.MustGet(common.CurrentUser).(common.Requester)
 		err := biz.CreateHabit(ctx.Request.Context(), &habitData, user.GetId())

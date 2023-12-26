@@ -4,8 +4,6 @@ import (
 	"bestHabit/common"
 	"bestHabit/modules/cronnoticetask/cronnoticetaskmodel"
 	"context"
-
-	"github.com/robfig/cron/v3"
 )
 
 func (s *sqlStore) CreateNewCronNoticeTask(ctx context.Context, data *cronnoticetaskmodel.CronNoticeTask) error {
@@ -16,16 +14,5 @@ func (s *sqlStore) CreateNewCronNoticeTask(ctx context.Context, data *cronnotice
 		return common.ErrDB(err)
 	}
 
-	return nil
-}
-
-func (s *sqlStore) CreateNewCronNoticeTasks(ctx context.Context, userId, taskId int, entryIds []cron.EntryID) error {
-	for entryId := range entryIds {
-		s.CreateNewCronNoticeTask(ctx, &cronnoticetaskmodel.CronNoticeTask{
-			UserId:  userId,
-			TaskId:  taskId,
-			EntryId: cron.EntryID(entryId),
-		})
-	}
 	return nil
 }

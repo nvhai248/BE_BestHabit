@@ -27,12 +27,14 @@ func (engine *consumerEngine) Start() error {
 		common.TopicUserCreateNewTask,
 		true,
 		RunIncreaseTaskCountAfterUserCreateNewTask(engine.appCtx),
+		RunCreateNewCronJobTaskAfterUserAddNewTask(engine.appCtx),
 	)
 
 	engine.startSubTopic(
 		common.TopicUserCreateNewHabit,
 		true,
 		RunIncreaseHabitCountAfterUserCreateNewHabit(engine.appCtx),
+		RunCreateNewCronJobHabitAfterUserAddNewHabit(engine.appCtx),
 	)
 
 	engine.startSubTopic(

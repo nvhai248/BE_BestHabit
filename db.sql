@@ -71,6 +71,7 @@ DROP TABLE IF EXISTS habit_logs;
 
 -- Bảng Challenges
 DROP TABLE IF EXISTS challenges;
+
 CREATE TABLE `challenges` (
     `id` int NOT NULL AUTO_INCREMENT,
     `name` varchar(100) NOT NULL,
@@ -108,12 +109,10 @@ CREATE TABLE `images` (
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 4 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci
-
-DROP TABLE IF EXISTS `cron_notice_tasks`;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci DROP TABLE IF EXISTS `cron_notice_tasks`;
 
 create table `cron_notice_tasks` (
-	`user_id` int not null,
+    `user_id` int not null,
     `entry_id` int not null,
     `task_id` int not null,
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
@@ -121,8 +120,8 @@ create table `cron_notice_tasks` (
 
 DROP TABLE IF EXISTS `cron_notice_habits`;
 
-create table `cron_notice_tasks` (
-	`user_id` int not null,
+create table `cron_notice_habits` (
+    `user_id` int not null,
     `entry_id` int not null,
     `habit_id` int not null,
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP

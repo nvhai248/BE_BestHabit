@@ -16,6 +16,18 @@ func (t *TaskCreate) GetUserId() int {
 	return t.UserId
 }
 
+func (t *TaskCreate) GetDescription() string {
+	return t.Description
+}
+
+func (t *TaskCreate) GetName() string {
+	return t.Name
+}
+
+func (t *TaskCreate) GetReminderTime() string {
+	return t.Reminder
+}
+
 func (t *TaskCreate) Validate() error {
 	if t.Name == "" {
 		return ErrNameNotBeBlank
