@@ -23,3 +23,7 @@ func (t *TaskFind) Mask(isAdminOrOwner bool) {
 func (t *TaskFind) GetUserId() int {
 	return t.UserId
 }
+
+func (t *TaskFind) GetTaskId() int {
+	return t.Id
+}

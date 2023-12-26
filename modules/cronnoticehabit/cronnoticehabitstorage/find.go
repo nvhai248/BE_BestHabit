@@ -5,7 +5,7 @@ import (
 	"context"
 )
 
-func (s *sqlStore) getListCronNoticeHabit(ctx context.Context, userId, habitId int) ([]cronnoticehabitmodel.CronNoticeHabit, error) {
+func (s *sqlStore) GetListCronNoticeHabit(ctx context.Context, userId, habitId int) ([]cronnoticehabitmodel.CronNoticeHabit, error) {
 	db := s.db
 
 	var result []cronnoticehabitmodel.CronNoticeHabit

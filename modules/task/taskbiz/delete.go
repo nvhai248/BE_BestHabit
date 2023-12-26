@@ -40,6 +40,7 @@ func (b *deleteTaskBiz) SoftDeleteTask(ctx context.Context, id int) error {
 	if err := b.store.DeleteTask(ctx, id); err != nil {
 		return err
 	}
+
 	go func() {
 		defer common.AppRecover()
 		b.pubsub.Publish(ctx, common.TopicUserDeleteTask, pubsub.NewMessage(task))

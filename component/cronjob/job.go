@@ -9,8 +9,7 @@ import (
 
 type CronJobProvider interface {
 	CreateNewJobs(notification common.Notification) ([]cron.EntryID, error)
-	RemoveJobs(entryIds []cron.EntryID) error
-	UpdateJobs(entryIds []cron.EntryID, notification common.Notification) ([]cron.EntryID, error)
+	RemoveJob(entryId cron.EntryID) error
 	StartJobs()
 }
 
@@ -85,23 +84,9 @@ func (c *CronJob) CreateNewJobs(notification common.Notification) ([]cron.EntryI
 	return entryIDs, nil
 }
 
-func (c *CronJob) RemoveJobs(entryIds []cron.EntryID) error {
-	for entryId := range entryIds {
-		c.cronJob.Remove(cron.EntryID(entryId))
-	}
+func (c *CronJob) RemoveJob(entryId cron.EntryID) error {
+	c.cronJob.Remove(cron.EntryID(entryId))
 	return nil
-}
-
-func (c *CronJob) UpdateJobs(entryIds []cron.EntryID, notification common.Notification) ([]cron.EntryID, error) {
-	c.RemoveJobs(entryIds)
-
-	newEntryIds, err := c.CreateNewJobs(notification)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return newEntryIds, nil
 }
 
 func (c *CronJob) StartJobs() {

@@ -17,4 +17,8 @@ var (
 	ErrEndDateNotBeBlank = common.NewCustomError(errors.New("End date not be blank!"),
 		"End date of task not be blank!",
 		"EndDateNotBeBlank")
+
+	ErrNameAlreadyUsed = common.NewCustomError(errors.New("Name already used by another task!"),
+		"Name already used!",
+		"NameAlreadyUsed")
 )

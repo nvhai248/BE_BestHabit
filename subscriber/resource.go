@@ -26,3 +26,13 @@ type HasHabitInfoCreate interface {
 type HasChallengeId interface {
 	GetChallengeId() int
 }
+
+type HasTaskInfoWhenDelete interface {
+	GetUserId() int
+	GetTaskId() int
+}
+
+type HasHabitInfoWhenDelete interface {
+	GetUserId() int
+	GetTaskId() int
+}

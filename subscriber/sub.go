@@ -41,6 +41,7 @@ func (engine *consumerEngine) Start() error {
 		common.TopicUserDeleteTask,
 		true,
 		RunDecreaseTaskCountAfterUserDeleteTask(engine.appCtx),
+		RunDeleteCronJobTaskAfterUserDeleteTask(engine.appCtx),
 	)
 
 	engine.startSubTopic(

@@ -5,7 +5,7 @@ import (
 	"context"
 )
 
-func (s *sqlStore) getListCronNoticeTask(ctx context.Context, userId, taskId int) ([]cronnoticetaskmodel.CronNoticeTask, error) {
+func (s *sqlStore) GetListCronNoticeTask(ctx context.Context, userId, taskId int) ([]cronnoticetaskmodel.CronNoticeTask, error) {
 	db := s.db
 
 	var result []cronnoticetaskmodel.CronNoticeTask
