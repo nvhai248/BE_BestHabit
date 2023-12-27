@@ -26,7 +26,7 @@ func (s *sqlStore) FindHabitByInformation(ctx context.Context, userId int, name 
 	db := s.db
 
 	var habit habitmodel.HabitFind
-	if err := db.Get(&habit, "SELECT * FROM habits WHERE user_id = ? AND name = ?", userId, name); err != nil {
+	if err := db.Get(&habit, "SELECT * FROM habits WHERE user_id = ? AND name = ? AND status = 1", userId, name); err != nil {
 		if err == sql.ErrNoRows {
 			return nil, common.ErrorNoRows
 		}

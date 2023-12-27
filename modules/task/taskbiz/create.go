@@ -9,6 +9,7 @@ import (
 
 type CreateTaskStore interface {
 	Create(ctx context.Context, data *taskmodel.TaskCreate) error
+	FindTaskByInformation(ctx context.Context, userId int, name string) (*taskmodel.TaskFind, error)
 }
 
 type createTaskBiz struct {
@@ -23,6 +24,10 @@ func NewCreateTaskBiz(store CreateTaskStore, pubsub pubsub.Pubsub) *createTaskBi
 func (b *createTaskBiz) CreateTask(ctx context.Context, data *taskmodel.TaskCreate, userId int) error {
 	if err := data.Validate(); err != nil {
 		return err
+	}
+
+	if _, err := b.store.FindTaskByInformation(ctx, userId, data.Name); err == nil {
+		return taskmodel.ErrNameAlreadyUsed
 	}
 
 	data.UserId = userId

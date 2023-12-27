@@ -34,5 +34,5 @@ type HasTaskInfoWhenDelete interface {
 
 type HasHabitInfoWhenDelete interface {
 	GetUserId() int
-	GetTaskId() int
+	GetHabitId() int
 }

@@ -26,7 +26,7 @@ func (s *sqlStore) FindTaskByInformation(ctx context.Context, userId int, name s
 	db := s.db
 
 	var task taskmodel.TaskFind
-	if err := db.Get(&task, "SELECT * FROM tasks WHERE user_id = ? AND name = ?", userId, name); err != nil {
+	if err := db.Get(&task, "SELECT * FROM tasks WHERE user_id = ? AND name = ? AND status <> 'deleted'", userId, name); err != nil {
 		if err == sql.ErrNoRows {
 			return nil, common.ErrorNoRows
 		}

@@ -48,6 +48,7 @@ func (engine *consumerEngine) Start() error {
 		common.TopicUserDeleteHabit,
 		true,
 		RunDecreaseHabitCountAfterUserDeleteHabit(engine.appCtx),
+		RunDeleteCronJobHabitAfterUserDeleteHabit(engine.appCtx),
 	)
 
 	engine.startSubTopic(

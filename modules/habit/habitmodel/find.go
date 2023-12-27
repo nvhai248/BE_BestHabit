@@ -29,3 +29,7 @@ func (t *HabitFind) Mask(isAdminOrOwner bool) {
 func (h *HabitFind) GetUserId() int {
 	return h.UserId
 }
+
+func (h *HabitFind) GetHabitId() int {
+	return h.Id
+}
