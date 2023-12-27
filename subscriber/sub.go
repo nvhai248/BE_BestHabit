@@ -65,6 +65,18 @@ func (engine *consumerEngine) Start() error {
 		RunDecreaseUserJoinedCountAfterUserCancelChallenge(engine.appCtx),
 	)
 
+	engine.startSubTopic(
+		common.TopicUserUpdateTask,
+		true,
+		RunUpdateCronJobTaskAfterUserUpdateTask(engine.appCtx),
+	)
+
+	engine.startSubTopic(
+		common.TopicUserUpdateHabit,
+		true,
+		RunUpdateCronJobHabitAfterUserUpdateHabit(engine.appCtx),
+	)
+
 	return nil
 }
 

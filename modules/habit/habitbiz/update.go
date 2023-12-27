@@ -4,6 +4,7 @@ import (
 	"bestHabit/common"
 	"bestHabit/modules/habit/habitmodel"
 	"bestHabit/modules/task/taskmodel"
+	"bestHabit/pubsub"
 	"context"
 )
 
@@ -13,15 +14,18 @@ type UpdateHabitStorage interface {
 }
 
 type updateHabitBiz struct {
-	store UpdateHabitStorage
+	store  UpdateHabitStorage
+	pubsub pubsub.Pubsub
 }
 
-func NewUpdateHabitBiz(store UpdateHabitStorage) *updateHabitBiz {
-	return &updateHabitBiz{store: store}
+func NewUpdateHabitBiz(store UpdateHabitStorage, pubsub pubsub.Pubsub) *updateHabitBiz {
+	return &updateHabitBiz{store: store, pubsub: pubsub}
 }
 
 func (b *updateHabitBiz) Update(ctx context.Context, newInfo *habitmodel.HabitUpdate, id int) error {
 	oldData, err := b.store.FindHabitById(ctx, id)
+
+	isNeedUpdateCronJob := true
 
 	if err != nil {
 		if err == common.ErrorNoRows {
@@ -41,6 +45,10 @@ func (b *updateHabitBiz) Update(ctx context.Context, newInfo *habitmodel.HabitUp
 
 	if newInfo.Description == nil {
 		newInfo.Description = &oldData.Description
+	}
+
+	if newInfo.StartDate == nil && newInfo.Reminder == nil && newInfo.EndDate == nil {
+		isNeedUpdateCronJob = false
 	}
 
 	if newInfo.StartDate == nil {
@@ -71,10 +79,20 @@ func (b *updateHabitBiz) Update(ctx context.Context, newInfo *habitmodel.HabitUp
 		newInfo.Target = oldData.Target
 	}
 
+	newInfo.UserId = &oldData.UserId
+	newInfo.Id = &id
+
 	err = b.store.UpdateHabitInfo(ctx, newInfo, id)
 
 	if err != nil {
 		return common.ErrCannotUpdateEntity(taskmodel.EntityName, err)
+	}
+
+	if isNeedUpdateCronJob {
+		go func() {
+			defer common.AppRecover()
+			b.pubsub.Publish(ctx, common.TopicUserUpdateHabit, pubsub.NewMessage(newInfo))
+		}()
 	}
 
 	return nil

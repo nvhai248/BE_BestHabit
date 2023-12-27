@@ -45,7 +45,7 @@ func UpdateHabit(appCtx component.AppContext) gin.HandlerFunc {
 		}
 
 		store := habitstorage.NewSQLStore(appCtx.GetMainDBConnection())
-		biz := habitbiz.NewUpdateHabitBiz(store)
+		biz := habitbiz.NewUpdateHabitBiz(store, appCtx.GetPubSub())
 
 		if err := biz.Update(ctx.Request.Context(), &newData, int(uid.GetLocalID())); err != nil {
 			panic(err)

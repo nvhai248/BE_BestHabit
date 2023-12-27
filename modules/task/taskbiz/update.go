@@ -3,7 +3,9 @@ package taskbiz
 import (
 	"bestHabit/common"
 	"bestHabit/modules/task/taskmodel"
+	"bestHabit/pubsub"
 	"context"
+	"fmt"
 )
 
 type UpdateTaskStorage interface {
@@ -12,15 +14,18 @@ type UpdateTaskStorage interface {
 }
 
 type updateTaskBiz struct {
-	store UpdateTaskStorage
+	store  UpdateTaskStorage
+	pubsub pubsub.Pubsub
 }
 
-func NewUpdateTaskBiz(store UpdateTaskStorage) *updateTaskBiz {
-	return &updateTaskBiz{store: store}
+func NewUpdateTaskBiz(store UpdateTaskStorage, pubsub pubsub.Pubsub) *updateTaskBiz {
+	return &updateTaskBiz{store: store, pubsub: pubsub}
 }
 
 func (b *updateTaskBiz) Update(ctx context.Context, newInfo *taskmodel.TaskUpdate, id int) error {
 	oldData, err := b.store.FindTaskById(ctx, id)
+
+	isNeedUpdateCronJob := true
 
 	if err != nil {
 		if err == common.ErrorNoRows {
@@ -52,12 +57,25 @@ func (b *updateTaskBiz) Update(ctx context.Context, newInfo *taskmodel.TaskUpdat
 
 	if newInfo.Reminder == nil {
 		newInfo.Reminder = &oldData.Reminder
+		isNeedUpdateCronJob = false
 	}
+
+	newInfo.UserId = &oldData.UserId
+	newInfo.Id = &id
 
 	err = b.store.UpdateTaskInfo(ctx, newInfo, id)
 
 	if err != nil {
 		return common.ErrCannotUpdateEntity(taskmodel.EntityName, err)
+	}
+
+	fmt.Println(isNeedUpdateCronJob)
+
+	if isNeedUpdateCronJob {
+		go func() {
+			defer common.AppRecover()
+			b.pubsub.Publish(ctx, common.TopicUserUpdateTask, pubsub.NewMessage(newInfo))
+		}()
 	}
 
 	return nil

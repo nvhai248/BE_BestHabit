@@ -40,7 +40,7 @@ func UpdateTask(appCtx component.AppContext) gin.HandlerFunc {
 		}
 
 		store := taskstorage.NewSQLStore(appCtx.GetMainDBConnection())
-		biz := taskbiz.NewUpdateTaskBiz(store)
+		biz := taskbiz.NewUpdateTaskBiz(store, appCtx.GetPubSub())
 
 		if err := biz.Update(ctx.Request.Context(), &newData, int(uid.GetLocalID())); err != nil {
 			panic(err)

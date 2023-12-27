@@ -36,3 +36,22 @@ type HasHabitInfoWhenDelete interface {
 	GetUserId() int
 	GetHabitId() int
 }
+
+type HasTaskInfoUpdate interface {
+	GetTaskId() int
+	GetUserId() int
+	GetDescription() string
+	GetName() string
+	GetReminderTime() string
+}
+
+type HasHabitInfoUpdate interface {
+	GetHabitId() int
+	GetUserId() int
+	GetDescription() string
+	GetName() string
+	GetReminderTime() string
+	GetStartDate() string
+	GetEndDate() string
+	GetDays() *common.Days
+}

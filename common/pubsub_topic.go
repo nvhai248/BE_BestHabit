@@ -9,4 +9,6 @@ const (
 	TopicUserDeleteHabit     pubsub.Topic = "TopicUserDeleteHabit"
 	TopicUserDeleteTask      pubsub.Topic = "TopicUserDeleteTask"
 	TopicUserCancelChallenge pubsub.Topic = "TopicUserCancelChallenge"
+	TopicUserUpdateTask      pubsub.Topic = "TopicUserUpdateTask"
+	TopicUserUpdateHabit     pubsub.Topic = "TopicUserUpdateHabit"
 )

@@ -13,3 +13,23 @@ type TaskUpdate struct {
 func (TaskUpdate) TableName() string {
 	return Task{}.TableName()
 }
+
+func (t *TaskUpdate) GetUserId() int {
+	return *t.UserId
+}
+
+func (t *TaskUpdate) GetDescription() string {
+	return *t.Description
+}
+
+func (t *TaskUpdate) GetName() string {
+	return *t.Name
+}
+
+func (t *TaskUpdate) GetTaskId() int {
+	return *t.Id
+}
+
+func (t *TaskUpdate) GetReminderTime() string {
+	return *t.Reminder
+}

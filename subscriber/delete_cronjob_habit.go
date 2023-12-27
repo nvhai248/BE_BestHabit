@@ -11,7 +11,7 @@ func RunDeleteCronJobHabitAfterUserDeleteHabit(appCtx component.AppContext) cons
 	store := cronnoticehabitstorage.NewSQLStore(appCtx.GetMainDBConnection())
 
 	return consumerJob{
-		Title: "Create new cron job after user create new Habit!",
+		Title: "Delete cron job after user delete Habit!",
 		Hld: func(ctx context.Context, message *pubsub.Message) error {
 			userData := message.Data().(HasHabitInfoWhenDelete)
 

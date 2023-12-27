@@ -11,7 +11,7 @@ func RunDeleteCronJobTaskAfterUserDeleteTask(appCtx component.AppContext) consum
 	store := cronnoticetaskstorage.NewSQLStore(appCtx.GetMainDBConnection())
 
 	return consumerJob{
-		Title: "Create new cron job after user create new task!",
+		Title: "Delete cron job after user delete task!",
 		Hld: func(ctx context.Context, message *pubsub.Message) error {
 			userData := message.Data().(HasTaskInfoWhenDelete)
 

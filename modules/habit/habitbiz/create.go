@@ -9,7 +9,6 @@ import (
 
 type CreateHabitStore interface {
 	Create(ctx context.Context, data *habitmodel.HabitCreate) error
-	FindHabitByInformation(ctx context.Context, userId int, name string) (*habitmodel.HabitFind, error)
 }
 
 type createHabitBiz struct {
@@ -24,10 +23,6 @@ func NewCreateHabitBiz(store CreateHabitStore, pubsub pubsub.Pubsub) *createHabi
 func (b *createHabitBiz) CreateHabit(ctx context.Context, data *habitmodel.HabitCreate, userId int) error {
 	if err := data.Validate(); err != nil {
 		return err
-	}
-
-	if _, err := b.store.FindHabitByInformation(ctx, userId, data.Name); err == nil {
-		return habitmodel.ErrNameAlreadyUsed
 	}
 
 	data.UserId = userId
