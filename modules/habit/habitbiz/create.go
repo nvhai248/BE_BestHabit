@@ -26,7 +26,7 @@ func (b *createHabitBiz) CreateHabit(ctx context.Context, data *habitmodel.Habit
 		return err
 	}
 
-	if _, err := b.store.FindHabitByInformation(ctx, userId, data.Name); err != nil {
+	if _, err := b.store.FindHabitByInformation(ctx, userId, data.Name); err == nil {
 		return habitmodel.ErrNameAlreadyUsed
 	}
 
@@ -46,9 +46,11 @@ func (b *createHabitBiz) CreateHabit(ctx context.Context, data *habitmodel.Habit
 	if err := b.store.Create(ctx, data); err != nil {
 		return err
 	}
+
 	go func() {
 		defer common.AppRecover()
 		b.pubsub.Publish(ctx, common.TopicUserCreateNewHabit, pubsub.NewMessage(data))
 	}()
+
 	return nil
 }
