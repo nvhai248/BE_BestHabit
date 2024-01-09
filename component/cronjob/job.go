@@ -58,11 +58,23 @@ func (c *CronJob) CreateNewJobs(notification common.Notification) ([]cron.EntryI
 		// Assuming *notification.Days is not nil and correctly filled when IsTask is false
 
 		// Parsing StartDate and EndDate
-		startDate, _ := common.ParseStringToDate(*notification.StartDate)
-		endDate, _ := common.ParseStringToDate(*notification.EndDate)
+		startDate, err := common.ParseStringToDate(*notification.StartDate)
+		if err != nil {
+			fmt.Println(err)
+			return nil, common.ErrInternal(err)
+		}
+		endDate, err := common.ParseStringToDate(*notification.EndDate)
+		if err != nil {
+			fmt.Println(err)
+			return nil, common.ErrInternal(err)
+		}
 
 		// Splitting ReminderTime to get hours and minutes
-		reminderTime, _ := common.ParseStringToTime(*notification.ReminderTime)
+		reminderTime, err := common.ParseStringToTime(*notification.ReminderTime)
+		if err != nil {
+			fmt.Println(err)
+			return nil, common.ErrInternal(err)
+		}
 		hour, minute, _ := reminderTime.Clock()
 
 		for date := *startDate; date.Before(*endDate) || date.Equal(*endDate); date = date.AddDate(0, 0, 1) {

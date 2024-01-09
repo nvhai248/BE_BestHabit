@@ -20,6 +20,11 @@ func RunCreateNewCronJobHabitAfterUserAddNewHabit(appCtx component.AppContext) c
 		Title: "Create new cron job after user create new task!",
 		Hld: func(ctx context.Context, message *pubsub.Message) error {
 			habitData := message.Data().(HasHabitInfoCreate)
+
+			if habitData.GetReminderTime() == "" {
+				return nil
+			}
+
 			entryIds, err := appCtx.GetCronJob().CreateNewJobs(*common.NewNotificationBasedHabit(habitData.GetUserId(),
 				habitData.GetDescription(),
 				habitData.GetName(),

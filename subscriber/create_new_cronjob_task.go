@@ -36,7 +36,6 @@ func RunCreateNewCronJobTaskAfterUserAddNewTask(appCtx component.AppContext) con
 			}
 
 			for _, entryId := range entryIds {
-
 				store.CreateNewCronNoticeTask(ctx, &cronnoticetaskmodel.CronNoticeTask{
 					UserId:  userData.GetUserId(),
 					TaskId:  task.Id,
