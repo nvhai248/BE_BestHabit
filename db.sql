@@ -34,8 +34,8 @@ CREATE TABLE `habits` (
     `user_id` int NOT NULL,
     `name` varchar(100) NOT NULL,
     `description` text,
-    `start_date` datetime DEFAULT NULL,
-    `end_date` datetime DEFAULT NULL,
+    `start_date` date DEFAULT NULL,
+    `end_date` date DEFAULT NULL,
     `type` enum(
         'health',
         'work_and_study',
@@ -52,7 +52,7 @@ CREATE TABLE `habits` (
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 6 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng Tasks
+) ENGINE = InnoDB AUTO_INCREMENT = 46 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng Tasks
 DROP TABLE IF EXISTS tasks;
 
 CREATE TABLE `tasks` (
@@ -60,13 +60,13 @@ CREATE TABLE `tasks` (
     `user_id` int NOT NULL,
     `name` varchar(100) NOT NULL,
     `description` text,
-    `deadline` datetime DEFAULT NULL,
+    `deadline` date DEFAULT NULL,
     `reminder` timestamp NULL DEFAULT NULL,
     `status` enum('pending', 'completed', 'overdue', 'deleted') DEFAULT 'pending',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 8 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng habit_logs
+) ENGINE = InnoDB AUTO_INCREMENT = 46 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng habit_logs
 DROP TABLE IF EXISTS habit_logs;
 
 -- Bảng Challenges
