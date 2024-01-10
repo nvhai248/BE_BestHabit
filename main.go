@@ -5,6 +5,7 @@ import (
 	"bestHabit/component/cronjob"
 	"bestHabit/component/mailprovider"
 	"bestHabit/component/oauthprovider"
+	"bestHabit/component/sendnotificationprovider"
 	"bestHabit/component/uploadprovider"
 	"bestHabit/docs"
 	"bestHabit/middleware"
@@ -17,6 +18,7 @@ import (
 	"bestHabit/pubsub/pblocal"
 	"bestHabit/skio"
 	"bestHabit/subscriber"
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -51,6 +53,7 @@ func runServer(db *sqlx.DB,
 	gmailSender mailprovider.EmailSender,
 	authProvider oauthprovider.GGOAuthProvider,
 	cronProvider cronjob.CronJobProvider,
+	sendNotificationProvider sendnotificationprovider.NotificationProvider,
 ) {
 
 	appCtx := component.NewAppContext(db, secretKey,
@@ -58,7 +61,8 @@ func runServer(db *sqlx.DB,
 		pblocal.NewPubSub(),
 		gmailSender,
 		authProvider,
-		cronProvider)
+		cronProvider,
+		sendNotificationProvider)
 
 	router := gin.Default()
 
@@ -168,11 +172,35 @@ func main() {
 	appEmailPw := os.Getenv("SENDER_APP_PW")
 	appEmailAdd := os.Getenv("SENDER_EMAIL_ADDRESS")
 	gmailSender := mailprovider.NewGmailSender(appName, appEmailAdd, appEmailPw)
+	//get oauth
 	oauthProvider := oauthprovider.NewGGOAuthProvider(os.Getenv("GOOGLE_CLIENT_ID"),
 		os.Getenv("GOOGLE_CLIENT_SECRET"),
 		fmt.Sprintf("%s/api/auth/google/callback", os.Getenv("SITE_DOMAIN")),
 		[]string{"profile", "email"})
+
+	// get cronjob
 	cronProvider := cronjob.NewCronJob()
 	cronProvider.StartJobs()
-	runServer(db, secretKet, s3upProvider, gmailSender, oauthProvider, cronProvider)
+
+	// get send notification
+	fbProjectId := os.Getenv("FIREBASE_PROJECT_ID")
+	fbPrivateKeyID := os.Getenv("FIREBASE_PRIVATE_KEY_ID")
+	fbPrivateKey := os.Getenv("FIREBASE_PRIVATE_KEY")
+	fbClientEmail := os.Getenv("FIREBASE_CLIENT_EMAIL")
+	fbClientId := os.Getenv("FIREBASE_CLIENT_ID")
+
+	sendNotificationProvider, err := sendnotificationprovider.NewNotificationService(
+		context.Background(),
+		fbProjectId,
+		fbPrivateKeyID,
+		fbPrivateKey,
+		fbClientEmail,
+		fbClientId)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	runServer(db, secretKet, s3upProvider, gmailSender, oauthProvider, cronProvider, sendNotificationProvider)
 }

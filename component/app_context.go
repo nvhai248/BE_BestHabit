@@ -4,6 +4,7 @@ import (
 	"bestHabit/component/cronjob"
 	"bestHabit/component/mailprovider"
 	"bestHabit/component/oauthprovider"
+	"bestHabit/component/sendnotificationprovider"
 	"bestHabit/component/uploadprovider"
 	"bestHabit/pubsub"
 
@@ -18,16 +19,18 @@ type AppContext interface {
 	GetEmailSender() mailprovider.EmailSender
 	GetGGOAuth() oauthprovider.GGOAuthProvider
 	GetCronJob() cronjob.CronJobProvider
+	GetSendNotification() sendnotificationprovider.NotificationProvider
 }
 
 type appCtx struct {
-	db             *sqlx.DB
-	secretKey      string
-	uploadProvider uploadprovider.UploadProvider
-	pb             pubsub.Pubsub
-	emailSender    mailprovider.EmailSender
-	oauthProvider  oauthprovider.GGOAuthProvider
-	cronProvider   cronjob.CronJobProvider
+	db                       *sqlx.DB
+	secretKey                string
+	uploadProvider           uploadprovider.UploadProvider
+	pb                       pubsub.Pubsub
+	emailSender              mailprovider.EmailSender
+	oauthProvider            oauthprovider.GGOAuthProvider
+	cronProvider             cronjob.CronJobProvider
+	sendNotificationProvider sendnotificationprovider.NotificationProvider
 }
 
 func NewAppContext(
@@ -38,13 +41,17 @@ func NewAppContext(
 	emailSender mailprovider.EmailSender,
 	oauthProvider oauthprovider.GGOAuthProvider,
 	cronProvider cronjob.CronJobProvider,
+	sendNotificationProvider sendnotificationprovider.NotificationProvider,
 ) *appCtx {
-	return &appCtx{db: db,
+	return &appCtx{
+		db:             db,
 		secretKey:      secretKey,
 		uploadProvider: uploadProvider,
 		pb:             pb, emailSender: emailSender,
-		oauthProvider: oauthProvider,
-		cronProvider:  cronProvider}
+		oauthProvider:            oauthProvider,
+		cronProvider:             cronProvider,
+		sendNotificationProvider: sendNotificationProvider,
+	}
 }
 
 func (ctx *appCtx) GetCronJob() cronjob.CronJobProvider {
@@ -73,4 +80,7 @@ func (ctx *appCtx) GetEmailSender() mailprovider.EmailSender {
 
 func (ctx *appCtx) GetGGOAuth() oauthprovider.GGOAuthProvider {
 	return ctx.oauthProvider
+}
+func (ctx *appCtx) GetSendNotification() sendnotificationprovider.NotificationProvider {
+	return ctx.sendNotificationProvider
 }
