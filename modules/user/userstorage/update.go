@@ -98,3 +98,23 @@ func (s *sqlStore) ChangePassword(ctx context.Context, newPw string, userId int)
 
 	return nil
 }
+
+func (s *sqlStore) BannedUser(ctx context.Context, userId int) error {
+	db := s.db
+
+	if _, err := db.Exec("UPDATE users SET status = -1 WHERE id = ?", userId); err != nil {
+		return common.ErrDB(err)
+	}
+
+	return nil
+}
+
+func (s *sqlStore) UnbannedUser(ctx context.Context, userId int) error {
+	db := s.db
+
+	if _, err := db.Exec("UPDATE users SET status = 1 WHERE id = ?", userId); err != nil {
+		return common.ErrDB(err)
+	}
+
+	return nil
+}

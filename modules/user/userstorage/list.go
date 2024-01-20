@@ -1,8 +1,8 @@
-package challengestore
+package userstorage
 
 import (
 	"bestHabit/common"
-	"bestHabit/modules/challenge/challengemodel"
+	"bestHabit/modules/user/usermodel"
 	"context"
 	"fmt"
 	"strings"
@@ -17,15 +17,15 @@ func replacePlaceholders(query string, args []interface{}) string {
 	return query
 }
 
-func (s *sqlStore) ListChallengesByConditions(ctx context.Context,
-	filter *challengemodel.ChallengeFilter,
+func (s *sqlStore) ListTaskByConditions(ctx context.Context,
+	filter *usermodel.UserFilter,
 	paging *common.Paging,
-	conditions map[string]interface{}) ([]challengemodel.Challenge, error) {
+	conditions map[string]interface{}) ([]usermodel.User, error) {
 	db := s.db
 
 	args := []interface{}{}
-	query := "SELECT * FROM challenges"
-	countQuery := "SELECT COUNT(*) FROM challenges"
+	query := "SELECT * FROM users"
+	countQuery := "SELECT COUNT(*) FROM users"
 
 	var conditionsAndMore string
 
@@ -45,7 +45,6 @@ func (s *sqlStore) ListChallengesByConditions(ctx context.Context,
 			args = append(args, value)
 		}
 	}
-
 	// add filter conditions
 	if v := filter.Name; v != "" {
 		if len(conditions) > 0 {
@@ -58,12 +57,12 @@ func (s *sqlStore) ListChallengesByConditions(ctx context.Context,
 
 	// add status
 	if len(conditions) > 0 || filter.Name != "" {
-		conditionsAndMore += " AND status in (1)"
+		conditionsAndMore += " AND status <> 'deleted'"
 	} else {
-		conditionsAndMore += " WHERE status in (1)"
+		conditionsAndMore += " WHERE status <> 'deleted'"
 	}
 
-	var challenges []challengemodel.Challenge
+	var users []usermodel.User
 	limit := paging.Limit
 
 	// count paging
@@ -91,9 +90,9 @@ func (s *sqlStore) ListChallengesByConditions(ctx context.Context,
 	}
 
 	query = db.Rebind(query + conditionsAndMore)
-	if err := db.Select(&challenges, query, args...); err != nil {
+	if err := db.Select(&users, query, args...); err != nil {
 		return nil, common.ErrDB(err)
 	}
 
-	return challenges, nil
+	return users, nil
 }

@@ -57,7 +57,7 @@ func (s *sqlStore) ListHabitByConditions(ctx context.Context,
 	}
 
 	// add status
-	if len(conditions) > 0 {
+	if len(conditions) > 0 || filter.Name != "" {
 		conditionsAndMore += " AND status in (1)"
 	} else {
 		conditionsAndMore += " WHERE status in (1)"

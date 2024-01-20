@@ -60,8 +60,16 @@ func RequireAuth(appCtx component.AppContext) func(c *gin.Context) {
 			panic(err)
 		}
 
-		if user.Status == 0 {
-			panic(common.ErrNoPermission(errors.New("user has been deleted or banned")))
+		if user.Status == common.UserDeleted {
+			panic(common.ErrNoPermission(errors.New("user has been deleted!")))
+		}
+
+		if user.Status == common.UserNotVerified {
+			panic(common.ErrNoPermission(errors.New("user not verified!")))
+		}
+
+		if user.Status == common.UserBanned {
+			panic(common.ErrNoPermission(errors.New("user has been banned!")))
 		}
 
 		user.Mask(false)

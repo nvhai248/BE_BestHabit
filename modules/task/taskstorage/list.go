@@ -57,7 +57,7 @@ func (s *sqlStore) ListTaskByConditions(ctx context.Context,
 	}
 
 	// add status
-	if len(conditions) > 0 {
+	if len(conditions) > 0 || filter.Name != "" {
 		conditionsAndMore += " AND status <> 'deleted'"
 	} else {
 		conditionsAndMore += " WHERE status <> 'deleted'"

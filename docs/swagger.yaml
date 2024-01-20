@@ -239,6 +239,8 @@ definitions:
         type: string
       end_date:
         type: string
+      id:
+        type: integer
       is_count_based:
         type: boolean
       name:
@@ -251,6 +253,8 @@ definitions:
         $ref: '#/definitions/common.Target'
       type:
         type: string
+      userId:
+        type: integer
     type: object
   participantmodel.Participant:
     properties:
@@ -342,12 +346,16 @@ definitions:
         type: string
       description:
         type: string
+      id:
+        type: integer
       name:
         type: string
       reminder:
         type: string
       status:
         type: string
+      userId:
+        type: integer
     type: object
   tokenprovider.Token:
     properties:
@@ -374,6 +382,39 @@ definitions:
         type: string
       width:
         type: integer
+    type: object
+  usermodel.User:
+    properties:
+      avatar:
+        $ref: '#/definitions/common.Image'
+      challenge_count:
+        type: integer
+      created_at:
+        type: string
+      email:
+        type: string
+      experience:
+        type: integer
+      habit_count:
+        type: integer
+      id:
+        $ref: '#/definitions/common.UID'
+      level:
+        type: integer
+      name:
+        type: string
+      phone:
+        type: string
+      role:
+        type: string
+      settings:
+        $ref: '#/definitions/common.Settings'
+      status:
+        type: integer
+      task_count:
+        type: integer
+      updated_at:
+        type: string
     type: object
   usermodel.UserCreate:
     properties:
@@ -1316,6 +1357,132 @@ paths:
       summary: User Update Task
       tags:
       - Tasks
+  /api/users:
+    get:
+      consumes:
+      - application/json
+      description: Admin Get List User after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: User's name
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: Page number
+        in: path
+        name: page
+        required: true
+        type: number
+      - description: Limit of user returned!
+        in: path
+        name: limit
+        required: true
+        type: number
+      - description: User Id
+        in: path
+        name: cursor
+        required: true
+        type: string
+      - description: Deadline
+        in: path
+        name: deadline
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully!
+          schema:
+            items:
+              $ref: '#/definitions/usermodel.User'
+            type: array
+      summary: Get List User
+      tags:
+      - Admin
+  /api/users/:id:
+    get:
+      consumes:
+      - application/json
+      description: Admin find user after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: User Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully!
+          schema:
+            $ref: '#/definitions/common.successRes'
+      summary: Admin find user
+      tags:
+      - Admin
+  /api/users/:id/banned:
+    patch:
+      consumes:
+      - application/json
+      description: Admin banned user after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: User Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully!
+          schema:
+            $ref: '#/definitions/common.successRes'
+      summary: Admin banned user
+      tags:
+      - Admin
+  /api/users/:id/unbanned:
+    patch:
+      consumes:
+      - application/json
+      description: Admin unbanned user after successful authentication.
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: User Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully!
+          schema:
+            $ref: '#/definitions/common.successRes'
+      summary: Admin unbanned user
+      tags:
+      - Admin
   /api/users/change-password:
     patch:
       consumes:

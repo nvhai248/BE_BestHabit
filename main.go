@@ -147,6 +147,14 @@ func runServer(db *sqlx.DB,
 		challengeAdmin.DELETE("/:id", ginchallenge.DeleteChallenge(appCtx))
 	}
 
+	userAdmin := routerAPIS.Group("/users", middleware.RequireAuth(appCtx), middleware.RequireRoles(appCtx, "admin"))
+	{
+		userAdmin.GET("/", ginuser.ListUserByConditions(appCtx))
+		userAdmin.GET("/:id", ginuser.FindUser(appCtx))
+		userAdmin.PATCH("/:id/banned", ginuser.BannedUser(appCtx))
+		userAdmin.PATCH("/:id/unbanned", ginuser.UnbannedUser(appCtx))
+	}
+
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run(":8080")
 }
