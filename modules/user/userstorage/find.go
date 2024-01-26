@@ -66,3 +66,16 @@ func (s *sqlStore) FindByFbId(ctx context.Context, fbId string) (*usermodel.User
 
 	return &result, nil
 }
+
+func (s *sqlStore) CountUserByTimeCreated(time string) (int, error) {
+	db := s.db
+
+	query := "select COUNT(id) from users where created_at LIKE '" + time + "%'"
+
+	var count int
+	if err := db.QueryRow(query).Scan(&count); err != nil {
+		return 0, common.ErrDB(err)
+	}
+
+	return count, nil
+}

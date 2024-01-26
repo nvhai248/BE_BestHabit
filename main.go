@@ -12,6 +12,7 @@ import (
 	"bestHabit/modules/challenge/challengetransport/ginchallenge"
 	"bestHabit/modules/habit/habittransport/ginhabit"
 	"bestHabit/modules/participant/participanttransport/ginparticipant"
+	"bestHabit/modules/statistical/statisticaltransport/ginstatistical"
 	"bestHabit/modules/task/tasktransport/gintask"
 	"bestHabit/modules/upload/uploadtransport/ginupload"
 	"bestHabit/modules/user/usertransport/ginuser"
@@ -154,6 +155,11 @@ func runServer(db *sqlx.DB,
 		userAdmin.PATCH("/:id/banned", ginuser.BannedUser(appCtx))
 		userAdmin.PATCH("/:id/unbanned", ginuser.UnbannedUser(appCtx))
 	}
+
+	routerAPIS.GET("/statistical",
+		middleware.RequireAuth(appCtx),
+		middleware.RequireRoles(appCtx, "admin"),
+		ginstatistical.GetStatistical(appCtx))
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run(":8080")
