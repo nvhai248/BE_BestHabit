@@ -118,3 +118,13 @@ func (s *sqlStore) UnbannedUser(ctx context.Context, userId int) error {
 
 	return nil
 }
+
+func (s *sqlStore) UpdateDeviceToken(ctx context.Context, userId int, data *usermodel.UpdateDeviceTokens) error {
+	db := s.db
+
+	if _, err := db.Exec("UPDATE users SET device_tokens = ? WHERE id = ?", data.DeviceTokens, userId); err != nil {
+		return common.ErrDB(err)
+	}
+
+	return nil
+}

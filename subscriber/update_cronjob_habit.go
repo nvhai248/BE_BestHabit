@@ -5,6 +5,7 @@ import (
 	"bestHabit/component"
 	"bestHabit/modules/cronnoticehabit/cronnoticehabitmodel"
 	"bestHabit/modules/cronnoticehabit/cronnoticehabitstorage"
+	"bestHabit/modules/user/userstorage"
 	"bestHabit/pubsub"
 	"context"
 	"fmt"
@@ -14,6 +15,7 @@ import (
 
 func RunUpdateCronJobHabitAfterUserUpdateHabit(appCtx component.AppContext) consumerJob {
 	store := cronnoticehabitstorage.NewSQLStore(appCtx.GetMainDBConnection())
+	userStore := userstorage.NewSQLStore(appCtx.GetMainDBConnection())
 
 	return consumerJob{
 		Title: "Update cron job after user update Habit!",
@@ -34,28 +36,43 @@ func RunUpdateCronJobHabitAfterUserUpdateHabit(appCtx component.AppContext) cons
 
 			store.DeleteCronNoticeHabits(ctx, habitData.GetUserId(), habitData.GetHabitId())
 
-			// create new cron job
-			entryIds, err := appCtx.GetCronJob().CreateNewJobs(*common.NewNotificationBasedHabit(habitData.GetUserId(),
-				habitData.GetDescription(),
-				habitData.GetName(),
-				habitData.GetStartDate(),
-				habitData.GetEndDate(),
-				habitData.GetReminderTime(),
-				*habitData.GetDays()))
-
+			userData, err := userStore.FindById(ctx, habitData.GetUserId())
 			if err != nil {
-				fmt.Println(err)
-				return err
+				return nil
 			}
 
-			// save to db
-			for _, entryId := range entryIds {
-				store.CreateNewCronNoticeHabit(ctx, &cronnoticehabitmodel.CronNoticeHabit{
-					UserId:  habitData.GetUserId(),
-					HabitId: habitData.GetHabitId(),
-					EntryId: cron.EntryID(entryId),
-				})
+			sendNoticeFunc := func(deviceToken string, title, body string) error {
+				return appCtx.GetSendNotification().SendNotification(deviceToken, title, body)
 			}
+
+			for _, token := range *userData.DeviceTokens {
+				// create new cron job
+				entryIds, err := appCtx.GetCronJob().CreateNewJobs(*common.NewNotificationBasedHabit(habitData.GetUserId(),
+					habitData.GetDescription(),
+					habitData.GetName(),
+					habitData.GetStartDate(),
+					habitData.GetEndDate(),
+					habitData.GetReminderTime(),
+					*habitData.GetDays()), sendNoticeFunc,
+					token.DeviceToken,
+					fmt.Sprintf("Time to do %s", habitData.GetName()),
+					habitData.GetDescription())
+
+				if err != nil {
+					fmt.Println(err)
+					return err
+				}
+
+				// save to db
+				for _, entryId := range entryIds {
+					store.CreateNewCronNoticeHabit(ctx, &cronnoticehabitmodel.CronNoticeHabit{
+						UserId:  habitData.GetUserId(),
+						HabitId: habitData.GetHabitId(),
+						EntryId: cron.EntryID(entryId),
+					})
+				}
+			}
+
 			return nil
 		},
 	}

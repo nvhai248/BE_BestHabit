@@ -22,11 +22,12 @@ CREATE TABLE `users` (
     `habit_count` int DEFAULT '0',
     `task_count` int DEFAULT '0',
     `challenge_count` int DEFAULT '0',
-    `status` int DEFAULT '1',
+    `device_tokens` json DEFAULT NULL,
+    `status` int DEFAULT '-2',
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng Habits
+) ENGINE = InnoDB AUTO_INCREMENT = 17 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci -- Bảng Habits
 DROP TABLE IF EXISTS habits;
 
 CREATE TABLE `habits` (

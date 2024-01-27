@@ -8,16 +8,16 @@ type StatisticalElement struct {
 }
 
 type Statistical struct {
-	TaskCount      int                 `json:"task_count"`
-	HabitCount     int                 `json:"habit_count"`
-	UserCount      int                 `json:"user_count"`
-	ChallengeCount int                 `json:"challenge_count"`
-	Time           string              `json:"time"`
-	Element        *StatisticalElement `json:"element"`
+	TaskCount      int                  `json:"task_count"`
+	HabitCount     int                  `json:"habit_count"`
+	UserCount      int                  `json:"user_count"`
+	ChallengeCount int                  `json:"challenge_count"`
+	Time           string               `json:"year"`
+	Element        []StatisticalElement `json:"elements"`
 }
 
 type Filter struct {
-	Time string `json:"time" form:"time"`
+	Time string `json:"year" form:"year"`
 }
 
 func NewStatisticalElement(tc, hc, uc, cc int) *StatisticalElement {
@@ -29,7 +29,7 @@ func NewStatisticalElement(tc, hc, uc, cc int) *StatisticalElement {
 	}
 }
 
-func NewStatistical(tc, hc, uc, cc int, time string, element *StatisticalElement) *Statistical {
+func NewStatistical(tc, hc, uc, cc int, time string, element []StatisticalElement) *Statistical {
 	return &Statistical{
 		TaskCount:      tc,
 		HabitCount:     hc,

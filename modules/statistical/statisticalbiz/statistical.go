@@ -2,7 +2,6 @@ package statisticalbiz
 
 import (
 	"bestHabit/modules/statistical/statisticalmodel"
-	"fmt"
 )
 
 type CountUserStorage interface {
@@ -42,49 +41,54 @@ func NewStatisticalBiz(countUserStorage CountUserStorage,
 
 func (b *statisticalBiz) GetStatistical(time string) (*statisticalmodel.Statistical, error) {
 	// get main statistical
-	cc, err := b.countChallengeStorage.CountChallengesByTimeCreated("")
+
+	cc, err := b.countChallengeStorage.CountChallengesByTimeCreated(time)
 	if err != nil {
 		return nil, err
 	}
 
-	fmt.Println(cc)
-
-	uc, err := b.countUserStorage.CountUserByTimeCreated("")
+	uc, err := b.countUserStorage.CountUserByTimeCreated(time)
 	if err != nil {
 		return nil, err
 	}
 
-	hc, err := b.countHabitStorage.CountHabitByTimeCreated("")
+	hc, err := b.countHabitStorage.CountHabitByTimeCreated(time)
 	if err != nil {
 		return nil, err
 	}
 
-	tc, err := b.countTaskStorage.CountTaskByTimeCreated("")
+	tc, err := b.countTaskStorage.CountTaskByTimeCreated(time)
 	if err != nil {
 		return nil, err
 	}
 
-	// get element statistical
-	_cc, err := b.countChallengeStorage.CountChallengesByTimeCreated(time)
-	if err != nil {
-		return nil, err
+	var statisticalElements []statisticalmodel.StatisticalElement
+	templateMonths := []string{"-01", "-02", "-03", "-04", "-05", "-06", "-07",
+		"-08", "-09", "-10", "-11", "-12"}
+	for i := 0; i < 12; i++ {
+		// get element statistical
+		_cc, err := b.countChallengeStorage.CountChallengesByTimeCreated(time + templateMonths[i])
+		if err != nil {
+			return nil, err
+		}
+
+		_uc, err := b.countUserStorage.CountUserByTimeCreated(time + templateMonths[i])
+		if err != nil {
+			return nil, err
+		}
+
+		_hc, err := b.countHabitStorage.CountHabitByTimeCreated(time + templateMonths[i])
+		if err != nil {
+			return nil, err
+		}
+
+		_tc, err := b.countTaskStorage.CountTaskByTimeCreated(time + templateMonths[i])
+		if err != nil {
+			return nil, err
+		}
+
+		statisticalElements = append(statisticalElements, *statisticalmodel.NewStatisticalElement(_tc, _hc, _uc, _cc))
 	}
 
-	_uc, err := b.countUserStorage.CountUserByTimeCreated(time)
-	if err != nil {
-		return nil, err
-	}
-
-	_hc, err := b.countHabitStorage.CountHabitByTimeCreated(time)
-	if err != nil {
-		return nil, err
-	}
-
-	_tc, err := b.countTaskStorage.CountTaskByTimeCreated(time)
-	if err != nil {
-		return nil, err
-	}
-
-	return statisticalmodel.NewStatistical(tc, hc, uc, cc, time,
-		statisticalmodel.NewStatisticalElement(_tc, _hc, _uc, _cc)), nil
+	return statisticalmodel.NewStatistical(tc, hc, uc, cc, time, statisticalElements), nil
 }

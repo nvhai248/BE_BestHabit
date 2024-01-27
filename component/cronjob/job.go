@@ -8,7 +8,9 @@ import (
 )
 
 type CronJobProvider interface {
-	CreateNewJobs(notification common.Notification) ([]cron.EntryID, error)
+	CreateNewJobs(notification common.Notification,
+		sendNoticeFunc func(deviceToken string, title, body string) error,
+		deviceToken string, title, body string) ([]cron.EntryID, error)
 	RemoveJob(entryId cron.EntryID) error
 	StartJobs()
 }
@@ -32,7 +34,9 @@ func (c *CronJob) isNotificationDay(weekday string, days common.Days) bool {
 	return false
 }
 
-func (c *CronJob) CreateNewJobs(notification common.Notification) ([]cron.EntryID, error) {
+func (c *CronJob) CreateNewJobs(notification common.Notification,
+	sendNoticeFunc func(deviceToken string, title, body string) error,
+	deviceToken string, title, body string) ([]cron.EntryID, error) {
 	var entryIDs []cron.EntryID
 	var err error
 
@@ -48,8 +52,7 @@ func (c *CronJob) CreateNewJobs(notification common.Notification) ([]cron.EntryI
 		hour, minute, _ := t.Clock()
 
 		entryID, _ := c.cronJob.AddFunc(fmt.Sprintf("%d %d %d %d *", minute, hour, day, month), func() {
-			fmt.Println("Sending notification for task to user:", *notification.UserId)
-			fmt.Println("Info:", notification)
+			sendNoticeFunc(deviceToken, title, body)
 		})
 
 		entryIDs = append(entryIDs, entryID)

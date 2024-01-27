@@ -22,7 +22,7 @@ func main() {
 		log.Fatalf("Error creating NotificationService: %v", err)
 	}
 
-	deviceToken := "your-device-token"
+	deviceToken := "cqtGEYVQRk-6C0ot5ghx4j:APA91bFaO5OL4Oaa0fJqhSVe-e-1ZFvx9Bl31371RBAfRNoMQNrrmXl7tDBg537FUaM58wWDLUnHCJ_PLCznfZxgcIvafxfe4WBA_DAcFBCTn8-gU9OQGtLltLeXyHg98GSgQI78OfoW"
 	title := "Test Notification"
 	body := "This is a test notification."
 
