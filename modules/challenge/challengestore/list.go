@@ -56,13 +56,6 @@ func (s *sqlStore) ListChallengesByConditions(ctx context.Context,
 		conditionsAndMore += "name LIKE " + "'%" + v + "%'"
 	}
 
-	// add status
-	if len(conditions) > 0 || filter.Name != "" {
-		conditionsAndMore += " AND status in (1)"
-	} else {
-		conditionsAndMore += " WHERE status in (1)"
-	}
-
 	var challenges []challengemodel.Challenge
 	limit := paging.Limit
 

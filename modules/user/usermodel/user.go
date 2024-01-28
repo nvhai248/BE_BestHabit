@@ -24,6 +24,7 @@ type User struct {
 	TaskCount       int              `json:"task_count" db:"task_count"`
 	ChallengeCount  int              `json:"challenge_count" db:"challenge_count"`
 	Status          int              `json:"status" db:"status"`
+	DeviceTokens    *common.DvTokens `json:"-" db:"device_tokens"`
 }
 
 func (User) TableName() string {

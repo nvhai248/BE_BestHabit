@@ -55,13 +55,6 @@ func (s *sqlStore) ListTaskByConditions(ctx context.Context,
 		conditionsAndMore += "name LIKE " + "'%" + v + "%'"
 	}
 
-	// add status
-	if len(conditions) > 0 || filter.Name != "" {
-		conditionsAndMore += " AND status <> 'deleted'"
-	} else {
-		conditionsAndMore += " WHERE status <> 'deleted'"
-	}
-
 	var users []usermodel.User
 	limit := paging.Limit
 
