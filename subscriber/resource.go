@@ -55,3 +55,8 @@ type HasHabitInfoUpdate interface {
 	GetEndDate() string
 	GetDays() *common.Days
 }
+
+type HasUserIdAndUserLatestDvToken interface {
+	GetUserId() int
+	GetLatestDvToken() *common.DvToken
+}

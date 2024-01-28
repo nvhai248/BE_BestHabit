@@ -3,6 +3,7 @@ package userbiz
 import (
 	"bestHabit/common"
 	"bestHabit/modules/user/usermodel"
+	"bestHabit/pubsub"
 	"context"
 )
 
@@ -13,11 +14,12 @@ type UpdateDVTokenStore interface {
 }
 
 type updateDVTokenBiz struct {
-	store UpdateDVTokenStore
+	store  UpdateDVTokenStore
+	pubsub pubsub.Pubsub
 }
 
-func NewUpdateDVTokenBiz(store UpdateDVTokenStore) *updateDVTokenBiz {
-	return &updateDVTokenBiz{store: store}
+func NewUpdateDVTokenBiz(store UpdateDVTokenStore, pubsub pubsub.Pubsub) *updateDVTokenBiz {
+	return &updateDVTokenBiz{store: store, pubsub: pubsub}
 }
 
 func (b *updateDVTokenBiz) UpdateDVToken(ctx context.Context,
@@ -41,12 +43,14 @@ func (b *updateDVTokenBiz) UpdateDVToken(ctx context.Context,
 
 	oldData.DeviceTokens.AddNewDvToken(*newInfo)
 
-	err = b.store.UpdateDeviceToken(ctx, userId, &usermodel.UpdateDeviceTokens{
+	if err = b.store.UpdateDeviceToken(ctx, userId, &usermodel.UpdateDeviceTokens{
 		DeviceTokens: oldData.DeviceTokens,
-	})
-
-	if err != nil {
+	}); err != nil {
 		return err
+	}
+
+	if newInfo != nil && newInfo.DeviceToken != "" {
+		b.pubsub.Publish(ctx, common.TopicUserAddNewDvToken, pubsub.NewMessage(oldData))
 	}
 
 	return nil

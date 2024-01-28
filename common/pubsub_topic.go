@@ -11,4 +11,5 @@ const (
 	TopicUserCancelChallenge pubsub.Topic = "TopicUserCancelChallenge"
 	TopicUserUpdateTask      pubsub.Topic = "TopicUserUpdateTask"
 	TopicUserUpdateHabit     pubsub.Topic = "TopicUserUpdateHabit"
+	TopicUserAddNewDvToken   pubsub.Topic = "TopicUserAddNewDvToken"
 )

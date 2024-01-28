@@ -37,6 +37,13 @@ func (user *UserFind) GetId() int {
 	return user.Id
 }
 
+func (user *UserFind) GetLatestDvToken() *common.DvToken {
+	if user.DeviceTokens != nil && len(*user.DeviceTokens) > 0 {
+		return &(*user.DeviceTokens)[len(*user.DeviceTokens)-1]
+	}
+	return nil
+}
+
 func (user *UserFind) GetRole() string {
 	return *user.Role
 }

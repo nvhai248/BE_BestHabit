@@ -27,7 +27,7 @@ func UpdateDeviceToken(appCtx component.AppContext) gin.HandlerFunc {
 		}
 
 		store := userstorage.NewSQLStore(appCtx.GetMainDBConnection())
-		biz := userbiz.NewUpdateDVTokenBiz(store)
+		biz := userbiz.NewUpdateDVTokenBiz(store, appCtx.GetPubSub())
 
 		if err := biz.UpdateDVToken(ctx.Request.Context(), &dvToken,
 			ctx.MustGet(common.CurrentUser).(common.Requester).GetId()); err != nil {

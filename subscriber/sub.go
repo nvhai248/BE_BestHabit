@@ -24,6 +24,12 @@ func NewEngine(appContext component.AppContext) *consumerEngine {
 
 func (engine *consumerEngine) Start() error {
 	engine.startSubTopic(
+		common.TopicUserAddNewDvToken,
+		true,
+		RunCreateNewCronJobAfterUserAddDeviceToken(engine.appCtx),
+	)
+
+	engine.startSubTopic(
 		common.TopicUserCreateNewTask,
 		true,
 		RunIncreaseTaskCountAfterUserCreateNewTask(engine.appCtx),

@@ -52,7 +52,11 @@ func (c *CronJob) CreateNewJobs(notification common.Notification,
 		hour, minute, _ := t.Clock()
 
 		entryID, _ := c.cronJob.AddFunc(fmt.Sprintf("%d %d %d %d *", minute, hour, day, month), func() {
-			sendNoticeFunc(deviceToken, title, body)
+			err := sendNoticeFunc(deviceToken, title, body)
+
+			if err == nil {
+				fmt.Println("Successfully send to user: ", *notification.UserId)
+			}
 		})
 
 		entryIDs = append(entryIDs, entryID)
@@ -83,8 +87,11 @@ func (c *CronJob) CreateNewJobs(notification common.Notification,
 		for date := *startDate; date.Before(*endDate) || date.Equal(*endDate); date = date.AddDate(0, 0, 1) {
 			if c.isNotificationDay(date.Weekday().String(), *notification.Days) {
 				entryId, _ := c.cronJob.AddFunc(fmt.Sprintf("%d %d %d %d *", minute, hour, date.Day(), date.Month()), func() {
-					fmt.Println("Sending updated notification for habit to user:", *notification.UserId)
-					fmt.Println("Info:", notification)
+					err := sendNoticeFunc(deviceToken, title, body)
+
+					if err == nil {
+						fmt.Println("Successfully send to user: ", *notification.UserId)
+					}
 				})
 
 				entryIDs = append(entryIDs, entryId)

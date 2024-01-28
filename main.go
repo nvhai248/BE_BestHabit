@@ -99,19 +99,23 @@ func runServer(db *sqlx.DB,
 		log_and_register.GET("/auth/google/callback", ginuser.HandleGoogleCallback(appCtx))
 	}
 
-	user := routerAPIS.Group("/users", middleware.RequireAuth(appCtx))
+	user := routerAPIS.Group("/users", middleware.RequireAuth(appCtx), middleware.IsVerifiedUser(appCtx))
 	{
 		user.PATCH("/profile", ginuser.UpdateProfile(appCtx))
 		user.GET("/profile", ginuser.GetProfile(appCtx))
 		user.POST("/upload", ginupload.Upload(appCtx))
-		user.POST("/send-verification", ginuser.SendVerification(appCtx))
-		user.PATCH("/verify/:token", middleware.CompareIdBeforeVerify(appCtx), ginuser.Verify(appCtx))
 		user.PATCH("/change-password", ginuser.ChangePassword(appCtx))
 		user.PATCH("/reset-password", ginuser.ResetPassword(appCtx))
 		user.PATCH("/device-token", ginuser.UpdateDeviceToken(appCtx))
 	}
 
-	task := routerAPIS.Group("/tasks", middleware.RequireAuth(appCtx))
+	verifyUser := routerAPIS.Group("/users", middleware.RequireAuth(appCtx))
+	{
+		verifyUser.POST("/send-verification", ginuser.SendVerification(appCtx))
+		verifyUser.PATCH("/verify/:token", middleware.CompareIdBeforeVerify(appCtx), ginuser.Verify(appCtx))
+	}
+
+	task := routerAPIS.Group("/tasks", middleware.RequireAuth(appCtx), middleware.IsVerifiedUser(appCtx))
 	{
 		task.POST("/", gintask.CreateTask(appCtx))
 		task.GET("/", gintask.ListTaskByConditions(appCtx))
@@ -120,7 +124,7 @@ func runServer(db *sqlx.DB,
 		task.DELETE("/:id", gintask.SoftDeleteTask(appCtx))
 	}
 
-	habit := routerAPIS.Group("/habits", middleware.RequireAuth(appCtx))
+	habit := routerAPIS.Group("/habits", middleware.RequireAuth(appCtx), middleware.IsVerifiedUser(appCtx))
 	{
 		habit.POST("/", ginhabit.CreateHabit(appCtx))
 		habit.GET("/", ginhabit.ListHabitByConditions(appCtx))
@@ -130,7 +134,7 @@ func runServer(db *sqlx.DB,
 		habit.PATCH("/:id/confirm-completed", ginhabit.AddCompletedDate(appCtx))
 	}
 
-	challenge := routerAPIS.Group("/challenges", middleware.RequireAuth(appCtx))
+	challenge := routerAPIS.Group("/challenges", middleware.RequireAuth(appCtx), middleware.IsVerifiedUser(appCtx))
 	{
 		challenge.GET("/", ginchallenge.ListChallengeByConditions(appCtx))
 		challenge.GET("/:id", ginchallenge.FindChallenge(appCtx))
