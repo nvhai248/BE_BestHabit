@@ -76,7 +76,7 @@ func runServer(db *sqlx.DB,
 			"Authorization",
 			"Content-Type",
 			"X-Requested-With",
-			"Origin", // Có thể cần thêm tiêu đề 'Origin'
+			"Origin",
 		},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,

@@ -55,6 +55,13 @@ func (s *sqlStore) ListTaskByConditions(ctx context.Context,
 		conditionsAndMore += "name LIKE " + "'%" + v + "%'"
 	}
 
+	// add role
+	if len(conditions) > 0 || filter.Name != "" {
+		conditionsAndMore += " AND role <> 'admin'"
+	} else {
+		conditionsAndMore += " WHERE role <> 'admin'"
+	}
+
 	var users []usermodel.User
 	limit := paging.Limit
 
