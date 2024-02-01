@@ -82,6 +82,11 @@ func runServer(db *sqlx.DB,
 		AllowCredentials: true,
 	}))
 
+	/* config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:3000"} // Add your frontend origin here
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
+	router.Use(cors.New(config)) */
+
 	router.Use(middleware.Recover(appCtx))
 
 	// start subscriber
