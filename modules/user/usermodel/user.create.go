@@ -18,6 +18,7 @@ type UserCreate struct {
 	Salt     string           `json:"-" db:"salt"`
 	Avatar   *common.Image    `json:"avatar" db:"avatar"`
 	Settings *common.Settings `json:"settings" db:"settings"`
+	Status   int              `json:"status" db:"status"`
 	Role     string           `json:"role" db:"role"`
 }
 

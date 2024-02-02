@@ -67,7 +67,7 @@ func runServer(db *sqlx.DB,
 		sendNotificationProvider)
 
 	router := gin.Default()
-	router.Use(cors.New(cors.Config{
+	/* router.Use(cors.New(cors.Config{
 		AllowAllOrigins: true,
 		AllowMethods:    []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders: []string{
@@ -80,12 +80,15 @@ func runServer(db *sqlx.DB,
 		},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
-	}))
+	})) */
 
-	/* config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:3000"} // Add your frontend origin here
-	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
-	router.Use(cors.New(config)) */
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:3000"}
+	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}
+	config.AllowHeaders = []string{"Content-Type", "Origin", "Accept", "Authorization"}
+	config.AllowCredentials = true
+	config.ExposeHeaders = []string{"Content-length"}
+	router.Use(cors.New(config))
 
 	router.Use(middleware.Recover(appCtx))
 
@@ -179,6 +182,7 @@ func runServer(db *sqlx.DB,
 		userAdmin.GET("/:id", ginuser.FindUser(appCtx))
 		userAdmin.PATCH("/:id/banned", ginuser.BannedUser(appCtx))
 		userAdmin.PATCH("/:id/unbanned", ginuser.UnbannedUser(appCtx))
+		userAdmin.DELETE("/:id", ginuser.DeleteUser(appCtx))
 	}
 
 	routerAPIS.GET("/statistical",
