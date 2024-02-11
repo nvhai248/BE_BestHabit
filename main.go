@@ -119,6 +119,11 @@ func runServer(db *sqlx.DB,
 				"message": "Happy new year 2024, Wish everything perfectly good!",
 			})
 		})
+		log_and_register.GET("/mong2", func(ctx *gin.Context) {
+			ctx.JSON(http.StatusOK, gin.H{
+				"message": "Happy new year 2024, wish in new year had a new job!",
+			})
+		})
 		log_and_register.POST("/register", ginuser.BasicRegister(appCtx))
 		log_and_register.POST("/login", ginuser.BasicLogin(appCtx))
 		log_and_register.POST("/users/send-reset-password", ginuser.SenResetPw(appCtx))
