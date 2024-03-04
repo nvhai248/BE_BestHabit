@@ -14,7 +14,6 @@ import (
 	"bestHabit/modules/participant/participanttransport/ginparticipant"
 	"bestHabit/modules/statistical/statisticaltransport/ginstatistical"
 	"bestHabit/modules/task/tasktransport/gintask"
-	"bestHabit/modules/upload/uploadtransport/ginupload"
 	"bestHabit/modules/user/usertransport/ginuser"
 	"bestHabit/pubsub/pblocal"
 	"bestHabit/skio"
@@ -114,21 +113,7 @@ func runServer(db *sqlx.DB,
 		log_and_register.GET("/auth/google/callback", ginuser.HandleGoogleCallback(appCtx))
 	}
 
-	user := routerAPIS.Group("/users", middleware.RequireAuth(appCtx), middleware.IsVerifiedUser(appCtx))
-	{
-		user.PATCH("/profile", ginuser.UpdateProfile(appCtx))
-		user.GET("/profile", ginuser.GetProfile(appCtx))
-		user.POST("/upload", ginupload.Upload(appCtx))
-		user.PATCH("/change-password", ginuser.ChangePassword(appCtx))
-		user.PATCH("/reset-password", ginuser.ResetPassword(appCtx))
-		user.PATCH("/device-token", ginuser.UpdateDeviceToken(appCtx))
-	}
-
-	verifyUser := routerAPIS.Group("/users", middleware.RequireAuth(appCtx))
-	{
-		verifyUser.POST("/send-verification", ginuser.SendVerification(appCtx))
-		verifyUser.PATCH("/verify/:token", middleware.CompareIdBeforeVerify(appCtx), ginuser.Verify(appCtx))
-	}
+	ApisUser(appCtx, routerAPIS, db)
 
 	task := routerAPIS.Group("/tasks", middleware.RequireAuth(appCtx), middleware.IsVerifiedUser(appCtx))
 	{

@@ -14,27 +14,32 @@ type UpdateProfileStore interface {
 	FindById(ctx context.Context, id int) (*usermodel.UserFind, error)
 }
 
-type updateProfileBiz struct {
-	store UpdateProfileStore
+type UpdateUserInfo interface {
+	UpdateUserInfoByGRPC(ctx context.Context, userId int, userUpdate *usermodel.UserUpdate) (*usermodel.User, error)
 }
 
-func NewUpdateProfileBiz(store UpdateProfileStore) *updateProfileBiz {
-	return &updateProfileBiz{store: store}
+type updateProfileBiz struct {
+	store          UpdateProfileStore
+	updateUserInfo UpdateUserInfo
+}
+
+func NewUpdateProfileBiz(store UpdateProfileStore, updateUserInfo UpdateUserInfo) *updateProfileBiz {
+	return &updateProfileBiz{store: store, updateUserInfo: updateUserInfo}
 }
 
 func (b *updateProfileBiz) UpdateProfile(ctx context.Context,
 	newInfo *usermodel.UserUpdate,
-	userId int) error {
+	userId int) (*usermodel.User, error) {
 	oldData, err := b.store.FindById(ctx, userId)
 	if err != nil {
 		if err == common.ErrorNoRows {
-			return common.ErrEntityNotFound(usermodel.EntityName, err)
+			return nil, common.ErrEntityNotFound(usermodel.EntityName, err)
 		}
-		return common.ErrCannotGetEntity(usermodel.EntityName, err)
+		return nil, common.ErrCannotGetEntity(usermodel.EntityName, err)
 	}
 
 	if oldData.Status == common.UserDeleted {
-		return common.ErrEntityDeleted(usermodel.EntityName, nil)
+		return nil, common.ErrEntityDeleted(usermodel.EntityName, nil)
 	}
 
 	if newInfo.Name == nil {
@@ -53,11 +58,13 @@ func (b *updateProfileBiz) UpdateProfile(ctx context.Context,
 		newInfo.Settings = oldData.Settings
 	}
 
-	err = b.store.UpdateInfoById(ctx, newInfo, userId)
+	/* err = b.store.UpdateInfoById(ctx, newInfo, userId) */
+
+	newData, err := b.updateUserInfo.UpdateUserInfoByGRPC(ctx, userId, newInfo)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return newData, nil
 }

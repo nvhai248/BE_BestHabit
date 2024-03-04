@@ -3,12 +3,15 @@ package ginuser
 import (
 	"bestHabit/common"
 	"bestHabit/component"
+	proto "bestHabit/generatedProto/proto/userservice"
 	"bestHabit/modules/user/userbiz"
 	"bestHabit/modules/user/usermodel"
 	"bestHabit/modules/user/userstorage"
+	"bestHabit/modules/user/userstorage/usergrpcclient"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"google.golang.org/grpc"
 )
 
 // @Summary User Update Profile
@@ -23,7 +26,7 @@ import (
 // @Param image formData string true "Image"
 // @Success 200 {object} usermodel.UserUpdate "Update Profile Successfully"
 // @Router /api/users/profile [patch]
-func UpdateProfile(appCtx component.AppContext) gin.HandlerFunc {
+func UpdateProfile(appCtx component.AppContext, cc *grpc.ClientConn) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var newProfile usermodel.UserUpdate
 
@@ -32,13 +35,16 @@ func UpdateProfile(appCtx component.AppContext) gin.HandlerFunc {
 		}
 
 		store := userstorage.NewSQLStore(appCtx.GetMainDBConnection())
-		biz := userbiz.NewUpdateProfileBiz(store)
+		userUpdateInfo := usergrpcclient.NewGRPCClient(proto.NewUserServiceClient(cc))
+		biz := userbiz.NewUpdateProfileBiz(store, userUpdateInfo)
 
-		if err := biz.UpdateProfile(ctx.Request.Context(), &newProfile,
-			ctx.MustGet(common.CurrentUser).(common.Requester).GetId()); err != nil {
+		reponse, err := biz.UpdateProfile(ctx.Request.Context(), &newProfile,
+			ctx.MustGet(common.CurrentUser).(common.Requester).GetId())
+
+		if err != nil {
 			panic(err)
 		}
 
-		ctx.JSON(http.StatusOK, common.SimpleSuccessResponse(newProfile))
+		ctx.JSON(http.StatusOK, common.SimpleSuccessResponse(reponse))
 	}
 }

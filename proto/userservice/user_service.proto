@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package bestHabit;
+
+option go_package = "userproto/";
+
+message Image {
+    int32 id = 1;
+    string url = 2;
+    int32 width = 3;
+    int32 height = 4;
+    string cloud_name = 5;
+    string extension = 6;
+}
+
+message Settings {
+    string theme = 1;
+    string language = 2;
+}
+
+// request
+
+message UserUpdateProfileRequest {
+    int32 userId = 1;
+    string phone = 2;
+    string name = 3;
+    Image avatar = 4;
+    Settings settings = 5;
+}
+
+message UserUploadRequest {
+    int32 userId = 1;
+    Image image = 2;
+}
+
+message UserUpdatePasswordRequest {
+    int32 user_id = 1;
+    string password = 2;
+}
+
+message UserUpdateDeviceTokenRequest {
+    int32 user_id = 1;
+    repeated string device_tokens = 2;
+}
+
+// response
+
+message UserUpdateProfileResponse {
+    int32 userId = 1;
+    string email = 2;
+    string phone = 3;
+    string name = 4;
+    string fb_id = 5;
+    string gg_id = 6;
+    string salt = 7;
+    Image avatar = 8;
+    int32 level = 9;
+    int32 experience = 10;
+    Settings settings = 11;
+    string role = 12;
+    int32 habit_count = 13;
+    int32 task_count = 14;
+    int32 challenge_count = 15;
+    int32 status = 16;
+    repeated string device_tokens = 17;
+}
+
+message UserUploadResponse {
+    Image image = 1;
+}
+
+message UserUpdatePasswordResponse {
+    int32 userId = 1;
+    bool isDone = 2;
+}
+
+message UserUpdateDeviceTokenResponse {
+    int32 userId = 1;
+    bool isDone = 2;
+}
+
+service UserService {
+    rpc UserUpdateProfile(UserUpdateProfileRequest) returns (UserUpdateProfileResponse) {};
+    rpc UserUpload(UserUploadRequest) returns (UserUploadResponse) {};
+    rpc UserUpdatePassword(UserUpdatePasswordRequest) returns (UserUpdatePasswordResponse) {};
+    rpc UserUpdateDeviceToken(UserUpdateDeviceTokenRequest) returns (UserUpdateDeviceTokenResponse) {}; 
+}
