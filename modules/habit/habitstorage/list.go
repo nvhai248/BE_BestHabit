@@ -46,8 +46,14 @@ func (s *sqlStore) ListHabitByConditions(ctx context.Context,
 		}
 	}
 
+	var v string
+
+	if filter != nil {
+		v = filter.Name
+	}
+
 	// add filter conditions
-	if v := filter.Name; v != "" {
+	if v != "" {
 		if len(conditions) > 0 {
 			conditionsAndMore += " AND "
 		} else {
@@ -57,14 +63,14 @@ func (s *sqlStore) ListHabitByConditions(ctx context.Context,
 	}
 
 	// add status
-	if len(conditions) > 0 || filter.Name != "" {
+	if len(conditions) > 0 || v != "" {
 		conditionsAndMore += " AND status in (1)"
 	} else {
 		conditionsAndMore += " WHERE status in (1)"
 	}
 
 	var habits []habitmodel.Habit
-	limit := paging.Limit
+	var limit int
 
 	// count paging
 	var total int64
@@ -75,19 +81,25 @@ func (s *sqlStore) ListHabitByConditions(ctx context.Context,
 		return nil, common.ErrDB(err)
 	}
 
-	paging.Total = total
+	if paging != nil {
+		limit = paging.Limit
+		paging.Total = total
+		v = paging.FakeCursor
+	}
 
 	// update paging
-	if v := paging.FakeCursor; v != "" {
-		if uid, err := common.FromBase58(v); err == nil {
-			conditionsAndMore = conditionsAndMore + fmt.Sprintf(" AND id < %d ", int(uid.GetLocalID())) + "ORDER BY id DESC LIMIT ?"
-			args = append(args, limit)
-		}
-	} else {
-		offset := (paging.Page - 1) * paging.Limit
+	if paging != nil {
+		if v != "" {
+			if uid, err := common.FromBase58(v); err == nil {
+				conditionsAndMore = conditionsAndMore + fmt.Sprintf(" AND id < %d ", int(uid.GetLocalID())) + "ORDER BY id DESC LIMIT ?"
+				args = append(args, limit)
+			}
+		} else {
+			offset := (paging.Page - 1) * paging.Limit
 
-		conditionsAndMore = conditionsAndMore + " ORDER BY id DESC LIMIT ? OFFSET ?"
-		args = append(args, limit, offset)
+			conditionsAndMore = conditionsAndMore + " ORDER BY id DESC LIMIT ? OFFSET ?"
+			args = append(args, limit, offset)
+		}
 	}
 
 	query = db.Rebind(query + conditionsAndMore)

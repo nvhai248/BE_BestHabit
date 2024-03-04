@@ -66,7 +66,7 @@ func runServer(db *sqlx.DB,
 		sendNotificationProvider)
 
 	router := gin.Default()
-	router.Use(cors.New(cors.Config{
+	/* router.Use(cors.New(cors.Config{
 		AllowAllOrigins: true,
 		AllowMethods:    []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders: []string{
@@ -79,7 +79,15 @@ func runServer(db *sqlx.DB,
 		},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
-	}))
+	})) */
+
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:3000"}
+	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}
+	config.AllowHeaders = []string{"Content-Type", "Origin", "Accept", "Authorization"}
+	config.AllowCredentials = true
+	config.ExposeHeaders = []string{"Content-length"}
+	router.Use(cors.New(config))
 
 	router.Use(middleware.Recover(appCtx))
 
@@ -103,6 +111,21 @@ func runServer(db *sqlx.DB,
 		log_and_register.GET("/ping", func(ctx *gin.Context) {
 			ctx.JSON(http.StatusOK, gin.H{
 				"message": "Ping OK!!!!",
+			})
+		})
+		log_and_register.GET("/mong1", func(ctx *gin.Context) {
+			ctx.JSON(http.StatusOK, gin.H{
+				"message": "Happy new year 2024, Wish everything perfectly good!",
+			})
+		})
+		log_and_register.GET("/mong2", func(ctx *gin.Context) {
+			ctx.JSON(http.StatusOK, gin.H{
+				"message": "Happy new year 2024, wish in new year had a new job!",
+			})
+		})
+		log_and_register.GET("/mong3", func(ctx *gin.Context) {
+			ctx.JSON(http.StatusOK, gin.H{
+				"message": "Happy new year 2024, wish in new year had a new job and had a perfect love with girlfriend!",
 			})
 		})
 		log_and_register.POST("/register", ginuser.BasicRegister(appCtx))
@@ -159,6 +182,7 @@ func runServer(db *sqlx.DB,
 		userAdmin.GET("/:id", ginuser.FindUser(appCtx))
 		userAdmin.PATCH("/:id/banned", ginuser.BannedUser(appCtx))
 		userAdmin.PATCH("/:id/unbanned", ginuser.UnbannedUser(appCtx))
+		userAdmin.DELETE("/:id", ginuser.DeleteUser(appCtx))
 	}
 
 	routerAPIS.GET("/statistical",

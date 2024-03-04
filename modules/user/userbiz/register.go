@@ -57,6 +57,7 @@ func (biz *basicRegisterBiz) BasicRegister(ctx context.Context, data *usermodel.
 	data.Salt = salt
 	data.Settings = common.NewDefaultSettings()
 	data.Role = "user" // hard code
+	data.Status = common.UserNotVerified
 
 	if err := biz.store.Create(ctx, data); err != nil {
 		return common.ErrCannotCreateEntity(usermodel.EntityName, err)

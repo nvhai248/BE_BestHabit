@@ -25,6 +25,10 @@ type UserFind struct {
 	DeviceTokens    *common.DvTokens `json:"device_tokens" db:"device_tokens"`
 }
 
+func (u *UserFind) GetUserId() int {
+	return u.Id
+}
+
 func (UserFind) TableName() string {
 	return UserCreate{}.TableName()
 }
