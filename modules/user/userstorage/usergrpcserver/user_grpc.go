@@ -82,7 +82,18 @@ func (r *gRPCServer) UserUpload(ctx context.Context, request *proto.UserUploadRe
 }
 
 func (r *gRPCServer) UserUpdatePassword(ctx context.Context, request *proto.UserUpdatePasswordRequest) (*proto.UserUpdatePasswordResponse, error) {
-	return nil, nil
+	storage := userstorage.NewSQLStore(r.db)
+
+	err := storage.ChangePassword(ctx, request.GetPassword(), int(request.GetUserId()))
+
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "method UserUpdateProfile has something error %s", err)
+	}
+
+	return &proto.UserUpdatePasswordResponse{
+		UserId: request.UserId,
+		IsDone: true,
+	}, nil
 }
 
 func (r *gRPCServer) UserUpdateDeviceToken(ctx context.Context, request *proto.UserUpdateDeviceTokenRequest) (*proto.UserUpdateDeviceTokenResponse, error) {

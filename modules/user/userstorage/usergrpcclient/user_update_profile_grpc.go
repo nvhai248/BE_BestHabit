@@ -8,15 +8,15 @@ import (
 	"fmt"
 )
 
-type gRPCClient struct {
+type gRPCUserUpdateProfileClient struct {
 	client proto.UserServiceClient
 }
 
-func NewGRPCClient(client proto.UserServiceClient) *gRPCClient {
-	return &gRPCClient{client: client}
+func NewGRPCUserUpdateProfileClient(client proto.UserServiceClient) *gRPCUserUpdateProfileClient {
+	return &gRPCUserUpdateProfileClient{client: client}
 }
 
-func (c *gRPCClient) UpdateUserInfoByGRPC(ctx context.Context, userId int, userUpdate *usermodel.UserUpdate) (*usermodel.User, error) {
+func (c *gRPCUserUpdateProfileClient) UpdateUserInfoByGRPC(ctx context.Context, userId int, userUpdate *usermodel.UserUpdate) (*usermodel.User, error) {
 	res, err := c.client.UserUpdateProfile(ctx, &proto.UserUpdateProfileRequest{
 		UserId: int32(userId),
 		Phone:  *userUpdate.Phone,

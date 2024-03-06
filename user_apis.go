@@ -28,7 +28,7 @@ func ApisUser(appCtx component.AppContext, ver *gin.RouterGroup, db *sqlx.DB) {
 		user.PATCH("/profile", ginuser.UpdateProfile(appCtx, cc))
 		user.GET("/profile", ginuser.GetProfile(appCtx))
 		user.POST("/upload", ginupload.Upload(appCtx))
-		user.PATCH("/change-password", ginuser.ChangePassword(appCtx))
+		user.PATCH("/change-password", ginuser.ChangePassword(appCtx, cc))
 		user.PATCH("/reset-password", ginuser.ResetPassword(appCtx))
 		user.PATCH("/device-token", ginuser.UpdateDeviceToken(appCtx))
 	}

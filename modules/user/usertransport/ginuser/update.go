@@ -35,7 +35,7 @@ func UpdateProfile(appCtx component.AppContext, cc *grpc.ClientConn) gin.Handler
 		}
 
 		store := userstorage.NewSQLStore(appCtx.GetMainDBConnection())
-		userUpdateInfo := usergrpcclient.NewGRPCClient(proto.NewUserServiceClient(cc))
+		userUpdateInfo := usergrpcclient.NewGRPCUserUpdateProfileClient(proto.NewUserServiceClient(cc))
 		biz := userbiz.NewUpdateProfileBiz(store, userUpdateInfo)
 
 		reponse, err := biz.UpdateProfile(ctx.Request.Context(), &newProfile,

@@ -76,6 +76,11 @@ func (biz *basicRegisterBiz) BasicRegister(ctx context.Context, data *usermodel.
 			Role:   *user.Role,
 		}
 		token, _err := biz.tokenProvider.Generate(payload, 60*60*24)
+
+		if _err != nil {
+			return
+		}
+
 		email := common.NewEmailVerifyAccount([]string{data.Email}, token.Token)
 		biz.mailSender.SendEmail(email.Subject, email.Content, email.To, email.Cc, email.Bcc, email.AttachFiles)
 	}()

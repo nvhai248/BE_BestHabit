@@ -14,11 +14,16 @@ type ChangePassStore interface {
 	ChangePassword(ctx context.Context, newPw string, userId int) error
 }
 
+type ChangePassGRPCStore interface {
+	UpdatePasswordByGRPC(ctx context.Context, userId int, newPassword string) (*int, error)
+}
+
 type changePassBiz struct {
 	store         ChangePassStore
 	hasher        Hasher
 	mailSender    mailprovider.EmailSender
 	tokenProvider tokenprovider.Provider
+	gRPCStore     ChangePassGRPCStore
 }
 
 func NewChangePassBiz(
@@ -26,8 +31,12 @@ func NewChangePassBiz(
 	hasher Hasher,
 	mailSender mailprovider.EmailSender,
 	tokenProvider tokenprovider.Provider,
+	gRPCStore ChangePassGRPCStore,
 ) *changePassBiz {
-	return &changePassBiz{mailSender: mailSender, hasher: hasher, store: store, tokenProvider: tokenProvider}
+	return &changePassBiz{mailSender: mailSender,
+		hasher: hasher, store: store,
+		tokenProvider: tokenProvider,
+		gRPCStore:     gRPCStore}
 }
 
 func (biz *changePassBiz) ChangePass(ctx context.Context, email string, id int, role string, newPw *usermodel.UpdatePassword) error {
@@ -53,8 +62,14 @@ func (biz *changePassBiz) ChangePass(ctx context.Context, email string, id int, 
 
 	newPass := biz.hasher.Hash(*newPw.NewPassword + *user.Salt)
 
-	if err := biz.store.ChangePassword(ctx, newPass, id); err != nil {
+	/* if err := biz.store.ChangePassword(ctx, newPass, id); err != nil {
 		return common.ErrCannotUpdateEntity(usermodel.EntityName, nil)
+	} */
+
+	_, err = biz.gRPCStore.UpdatePasswordByGRPC(ctx, id, newPass)
+
+	if err != nil {
+		return common.ErrCannotUpdateEntity(usermodel.EntityName, err)
 	}
 
 	go func() {

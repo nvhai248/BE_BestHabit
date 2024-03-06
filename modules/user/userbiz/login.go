@@ -2,7 +2,6 @@ package userbiz
 
 import (
 	"bestHabit/common"
-	"bestHabit/component"
 	"bestHabit/component/tokenprovider"
 	"bestHabit/modules/user/usermodel"
 	"context"
@@ -17,7 +16,6 @@ type TokenConfig interface {
 }
 
 type basicLoginBiz struct {
-	appCtx        component.AppContext
 	storeUser     BasicLoginStorage
 	tokenProvider tokenprovider.Provider
 	hasher        Hasher
