@@ -9,7 +9,7 @@ message Image {
     string url = 2;
     int32 width = 3;
     int32 height = 4;
-    string cloud_name = 5;
+    string cloudName = 5;
     string extension = 6;
 }
 
@@ -34,13 +34,13 @@ message UserUploadRequest {
 }
 
 message UserUpdatePasswordRequest {
-    int32 user_id = 1;
+    int32 userId = 1;
     string password = 2;
 }
 
 message UserUpdateDeviceTokenRequest {
-    int32 user_id = 1;
-    repeated string device_tokens = 2;
+    int32 userId = 1;
+    repeated string deviceTokens = 2;
 }
 
 // response
@@ -50,19 +50,19 @@ message UserUpdateProfileResponse {
     string email = 2;
     string phone = 3;
     string name = 4;
-    string fb_id = 5;
-    string gg_id = 6;
+    string fbId = 5;
+    string ggId = 6;
     string salt = 7;
     Image avatar = 8;
     int32 level = 9;
     int32 experience = 10;
     Settings settings = 11;
     string role = 12;
-    int32 habit_count = 13;
-    int32 task_count = 14;
-    int32 challenge_count = 15;
+    int32 habitCount = 13;
+    int32 taskCount = 14;
+    int32 challengeCount = 15;
     int32 status = 16;
-    repeated string device_tokens = 17;
+    repeated string deviceTokens = 17;
 }
 
 message UserUploadResponse {

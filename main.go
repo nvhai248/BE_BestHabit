@@ -44,7 +44,6 @@ func ConnectToDB(dns string) *sqlx.DB {
 		log.Fatal("Failed to ping the database:", err)
 	}
 	fmt.Println("Connected to the database!")
-
 	return db
 }
 
@@ -66,7 +65,8 @@ func runServer(db *sqlx.DB,
 		sendNotificationProvider)
 
 	router := gin.Default()
-	/* router.Use(cors.New(cors.Config{
+
+	router.Use(cors.New(cors.Config{
 		AllowAllOrigins: true,
 		AllowMethods:    []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders: []string{
@@ -79,15 +79,7 @@ func runServer(db *sqlx.DB,
 		},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
-	})) */
-
-	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:3000"}
-	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}
-	config.AllowHeaders = []string{"Content-Type", "Origin", "Accept", "Authorization"}
-	config.AllowCredentials = true
-	config.ExposeHeaders = []string{"Content-length"}
-	router.Use(cors.New(config))
+	}))
 
 	router.Use(middleware.Recover(appCtx))
 

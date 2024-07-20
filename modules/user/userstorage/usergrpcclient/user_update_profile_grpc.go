@@ -5,7 +5,6 @@ import (
 	proto "bestHabit/generatedProto/proto/userservice"
 	"bestHabit/modules/user/usermodel"
 	"context"
-	"fmt"
 )
 
 type gRPCUserUpdateProfileClient struct {
@@ -35,13 +34,9 @@ func (c *gRPCUserUpdateProfileClient) UpdateUserInfoByGRPC(ctx context.Context, 
 		},
 	})
 
-	fmt.Println("CC 1")
-
 	if err != nil {
 		return nil, common.ErrDB(err)
 	}
-
-	fmt.Println("CC 2")
 
 	return &usermodel.User{
 		SQLModel: common.SQLModel{
